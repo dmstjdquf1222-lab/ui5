@@ -1,0 +1,105 @@
+<mvc:View
+    controllerName="code.cl3.day6extraclass.controller.View000"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox class="sapUiSmallMargin">
+            <Panel headerText="짝수, 홀수 판별기">
+                <HBox>
+                    <Button
+                        text="1부터 5까지 확인하기"
+                        press="onPress"
+                    />
+                </HBox>
+            </Panel>
+            <Panel headerText="점수 등급 판정기">
+                <HBox>
+                    <Input
+                        id="ipt1"
+                        placeholder="점수를 입력하세요."
+                        type="Number"
+                    />
+                    <Button
+                        text="등급 확인"
+                        press="onPress2"
+                    />
+                    <Text id="text1" />
+                </HBox>
+            </Panel>
+            <Panel headerText="과일 리스트 출력하기">
+                <HBox>
+                    <Button
+                        text="과일 출력하기"
+                        press="onPress3"
+                    />
+                </HBox>
+            </Panel>
+            <Panel headerText="객체 반복 출력하기">
+                <HBox>
+                    <Button
+                        text="객체 정보 보기"
+                        press="onPress4"
+                    />
+                </HBox>
+            </Panel>
+            <Panel headerText="JSON Model 만들기">
+            <VBox >
+                <Text text="{/Info/name}" />
+                <Text text="{/Info/age}" />
+                <Text text="{/Info/job}" />
+                </VBox>
+            </Panel>
+            <Panel headerText="데이터 바인딩 뷰어">
+                <HBox>
+                    <Button
+                        text="과일 분류하기"
+                        press="onPress6"
+                    />
+                </HBox>
+            </Panel>
+            <Panel headerText="외부 JSON Model 합격자 조회기">
+                <HBox>
+                    <Button
+                        text="외부 JSON 불러오기"
+                        press="onPress7"
+                    />
+                    <Text text="콘솔에서 합격자 명단을 확인하세요."/>
+                </HBox>
+            </Panel>
+            <Panel headerText="학생 관리 테이블">
+                <HBox>
+                    <Button
+                        text="학생 목록 보기"
+                        press="onPress8"
+                    />
+                    <Text text="콘솔을 확인하세요"/>
+                </HBox>
+            </Panel>
+            <Panel headerText="학생 관리 테이블">
+                <HBox>
+                <Input
+                        id="Name"
+                        placeholder="이름을 입력하세요."
+                    />
+                    <Input
+                        id="Major"
+                        placeholder="학과를 입력하세요."
+                    />
+                    <Input
+                        id="Score"
+                        placeholder="점수를 입력하세요."
+                    />
+
+                    <Button
+                        text="학생 등록"
+                        press="onPress9"
+                    />
+                </HBox>
+            </Panel>
+        </VBox>
+    </Page>
+</mvc:View>

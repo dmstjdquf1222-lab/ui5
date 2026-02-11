@@ -1,0 +1,92 @@
+<!-- 사용할 라이브러리의 주소를 가져옴 -->
+<mvc:View controllerName="code.cl3.day11testui501.controller.Test1View01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+    <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+    <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+    <Panel headerText="1번문제" width="20rem">
+        <!-- VBox 태그를 사용하여 태그 안에 있는 로직을 세로로 정렬-->
+        <VBox >
+            <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+            <HBox >
+                <!-- Input 태그를 사용하여 "ipt1"인 id 속성을 부여 후 Input개체 생성 -->
+                <Input id="ipt1"/>
+            </HBox>
+            <HBox >
+                <!-- Input 태그를 사용하여 "ipt2"인 id 속성을 부여 후 Input개체 생성 -->
+                <Input id="ipt2"/>
+            </HBox>
+        </VBox>
+    </Panel>
+    <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+    <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+    <Panel headerText="2번문제" width="20rem" >
+        <!-- VBox 태그를 사용하여 태그 안에 있는 로직을 세로로 정렬-->  
+        <VBox >
+            <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+            <HBox >
+                <!-- Button 태그를 사용하여 "for,while,forwhile" id속성을 부여 후 버튼 생성 -->
+                <!-- 버튼의 텍스트를 띄워주기 위해 "for,while,for+while" text속성을 부여 -->
+                <!-- 각 버튼마다 눌렀을때에 이벤트를 발생시켜주는 press속성을 부여 해주고 그 이벤트에 맞는 함수를 호출하기 위한 이름 지정 -->
+                <Button id="for" text="for" press="onFor" />
+                <Label text = "　"/>
+                <Button id="while" text="while" press="onWhile"/>
+                <Label text = "　"/>
+                <Button id="forwhile" text="for + while" press="onForwhile"/>
+            </HBox>
+        </VBox>
+    </Panel>
+    <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+    <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+    <Panel headerText="3번문제" width="20rem" >
+        <!-- VBox 태그를 사용하여 태그 안에 있는 로직을 세로로 정렬--> 
+        <VBox >
+            <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+            <HBox >
+                <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 "단 입력"이라는 text 속성을 부여  -->
+                <Label text="단 입력"/>
+                <!-- Input 태그를 사용하여 "ipt3"이라는 id 속성을 부여  -->
+                <Input id="ipt3"/>
+            </HBox>
+            <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+            <HBox >
+                <!-- Button 태그를 사용하여 "Click"이라는 text 속성을 부여후 버튼 생성 -->
+                <!-- 버튼을 눌렀을때 이벤트를 발생시켜주는 "onClick"이라는 press 속성을 부여 -->
+                <Button text="Click" press="onClick"/>
+            </HBox>
+        </VBox>
+    </Panel>
+    <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+    <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+    <Panel headerText="4번문제" width="20rem" >
+        <!-- VBox 태그를 사용하여 태그 안에 있는 로직을 세로로 정렬--> 
+        <VBox >
+            <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+            <HBox >
+                <!-- Button 태그를 사용하여 "Click"이라는 text 속성을 부여후 버튼 생성 -->
+                <!-- 버튼을 눌렀을때 이벤트를 발생시켜주는 "onClick2"이라는 press 속성을 부여 -->
+                <Button text="Click" press="onClick2"/>
+            </HBox>
+        </VBox>
+    </Panel>
+    <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+    <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+    <Panel headerText="5번문제" width="20rem" >
+        <!-- VBox 태그를 사용하여 태그 안에 있는 로직을 세로로 정렬-->
+        <VBox >
+            <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+            <HBox >
+                <!-- Button 태그를 사용하여 "Click"이라는 text 속성을 부여후 버튼 생성 -->
+                <!-- 버튼을 눌렀을때 이벤트를 발생시켜주는 "onClick3"이라는 press 속성을 부여 -->
+                <Button text="Click" press="onClick3"/>
+                <!-- Label 태그를 사용하여 "값"이라는 text 속성, "50px"넓이를 설정해주는 width 속성, 텍스트를
+                정렬 해주는 textAlign 속성도 부여 후 라벨 생성-->
+                <Label text="값" width="50px" textAlign="Center"/>
+                <!-- Text 태그를 사용하여 "txt1"이라는 id 속성을 부여 후 텍스트 생성 -->
+                <Text id="txt1"  />
+            </HBox>
+        </VBox>
+    </Panel>
+    </Page>
+</mvc:View>

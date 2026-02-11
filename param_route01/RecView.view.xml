@@ -1,0 +1,9 @@
+<mvc:View controllerName="code.cl3.paramroute01.controller.RecView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page3" title="{i18n>title}">
+        <Input id="rCarrid" width="5rem" editable="false"/>
+        <Input id="rConnid" width="5rem" editable="false"/>
+        <Button icon="sap-icon://nav-back" text="Back" press="onBack()" type="Emphasized"/>
+    </Page>
+</mvc:View>

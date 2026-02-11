@@ -1,0 +1,7 @@
+<mvc:View controllerName="cl3.mat.matnrcl3ui501.controller.App"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <App id="app">
+    </App>
+</mvc:View>

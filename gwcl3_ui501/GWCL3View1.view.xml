@@ -1,0 +1,377 @@
+<mvc:View
+    controllerName="code.cl3.gwcl3ui501.controller.GWCL3View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:layout="sap.ui.layout"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:m="sap.suite.ui.microchart"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            class="sapUiResponsiveMargin"
+            headerText="Gateway service"
+            width="40rem"
+            expandable="true"
+            expanded="true"
+        >
+            <t:Table
+                id="airline"
+                rows="{/AirlineSet}"
+                selectionMode="None"
+                visibleRowCount="12"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title"
+                            text="Airline master"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            text="Search"
+                            icon="sap-icon://search"
+                            press="onPress"
+                        />
+                        <Input
+                            id="ipt1"
+                            placeholder="Airline name"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="5rem">
+                        <Label text="Airline" />
+                        <t:template>
+                            <Label text="{Carrid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="10rem">
+                        <Label text="Airline name" />
+                        <t:template>
+                            <Label text="{Carrname}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Currency" />
+                        <t:template>
+                            <Label text="{Currcode}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="15rem">
+                        <Label text="Home page" />
+                        <t:template>
+                            <Link
+                                text="{Url}"
+                                href="{Url}"
+                                target="_blank"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+
+        <Panel
+            width="auto"
+            height="15rem"
+        >
+            <content>
+                <Button
+                    text="show chart"
+                    press="onPress1"
+                />
+            </content>
+        </Panel>
+        <dependents>
+            <Popover
+                id="vizPopover"
+                title="차트"
+                contentWidth="20rem"
+                contentHeight="10rem"
+                placement="Auto"
+            >
+                <content>
+                    <Table items="{flight>/PaymentSet}">
+                        <columns>
+                            <Column>
+                                <Text text="항공사" />
+                            </Column>
+                            <Column>
+                                <Text text="가격" />
+                            </Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <ObjectIdentifier title="{flight>Carrid}" />
+                                <ObjectNumber number="{flight>Price}" />
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+
+                    <!-- <FlexBox
+                        width="20rem"
+                        height="10rem"
+                        alignItems="Center"
+                        class="sapUiSmallMargin"
+                        direction="Column"
+                    >
+                        <items>
+                            <m:InteractiveLineChart
+                                id="iLine"
+                                selectionChanged="onLineSelect"
+                                press="onLinePress"
+                                points="{flight>/PaymentSet}"
+                                displayedPoints="8"
+                            >
+                                <m:points>
+                                    <m:InteractiveLineChartPoint
+                                        value="{=parseFloat(${flight>Price})}"
+                                        label="{flight>Carrid}"
+                                    />
+                                </m:points>
+                            </m:InteractiveLineChart>
+                            <m:InteractiveLineChart
+                                id="iLine2"
+                                selectionChanged="onLineSelect"
+                                press="onLinePress"
+                                points="{flight>/PaymentSet}"
+                                displayedPoints="8"
+                            >
+                                <m:points>
+                                    <m:InteractiveLineChartPoint
+                                        value="{=parseFloat(${flight>Paymentsum})}"
+                                        label="{flight>Carrid}"
+                                    />
+                                </m:points>
+                            </m:InteractiveLineChart>
+                        </items>
+                    </FlexBox> -->
+
+                    <!-- <viz:VizFrame
+                        id="vf"
+                        width="420px"
+                        height="260px"
+                        vizType="column"
+                    >
+                        <viz:dataset>
+                            <viz.data:FlattenedDataset
+                                data="{flight>/PaymentSet}"
+                            >
+                                <viz.data:dimensions>
+                                    <viz.data:DimensionDefinition
+                                        name="Carrid"
+                                        value="{Carrid}"
+                                    />
+                                </viz.data:dimensions>
+                                <viz.data:measures>
+                                    <viz.data:MeasureDefinition
+                                        name="Price"
+                                        value="{Price}"
+                                    />
+                                    <viz.data:MeasureDefinition
+                                        name="Paymentsum"
+                                        value="{Paymentsum}"
+                                    />
+                                </viz.data:measures>
+                            </viz.data:FlattenedDataset>
+                        </viz:dataset>
+                        <viz:feeds>
+                            <viz.feeds:FeedItem
+                                uid="color"
+                                type="Dimension"
+                                values="Carrid"
+                            />
+                            <viz.feeds:FeedItem
+                                uid="valueAxis"
+                                type="Measure"
+                                values="Price"
+                            />
+                            <viz.feeds:FeedItem
+                                uid="valueAxis2"
+                                type="Measure"
+                                values="Paymentsum"
+                            />
+                        </viz:feeds>
+                    </viz:VizFrame> -->
+                </content>
+            </Popover>
+        </dependents>
+        <Panel
+            class="sapUiResponsiveMargin"
+            headerText="Flight schedul"
+            width="50rem"
+            expandable="true"
+            expanded="true"
+        >
+            <t:Table
+                id="Schedule"
+                rows="{flight>/FlightSet}"
+                selectionMode="None"
+                visibleRowCount="12"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title2"
+                            text="Schedule master"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            text="Search"
+                            icon="sap-icon://search"
+                            press="onSearch"
+                        />
+                        <Input
+                            id="ipt2"
+                            placeholder="Carrid"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="auto">
+                        <Label text="Airline" />
+                        <t:template>
+                            <Label text="{flight>Carrid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Flight Connerction" />
+                        <t:template>
+                            <Label text="{flight>Connid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Flight date" />
+                        <t:template>
+                            <Label text="{flight>Fldate}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Airfare" />
+                        <t:template>
+                            <Label text="{flight>Price}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Currency" />
+                        <t:template>
+                            <Label text="{flight>Currency}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Aircraft Type" />
+                        <t:template>
+                            <Label text="{flight>Planetype}" />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+        <Panel>
+            <viz:VizFrame
+                id="idVizFrame"
+                uiConfig="{applicationSet:'fiori'}"
+                height='30rem'
+                width="40rem"
+                vizType='scatter'
+            >
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{flight>/PaymentSet}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition
+                                name="Carrid"
+                                value="{Carrid}"
+                            />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition
+                                name="Price"
+                                value="{Price}"
+                            />
+                            <viz.data:MeasureDefinition
+                                name="Paymentsum"
+                                value="{Paymentsum}"
+                            />
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+
+                <viz:feeds>
+                    <viz.feeds:FeedItem
+                        uid="color"
+                        type="Dimension"
+                        values="Carrid"
+                    />
+                    <viz.feeds:FeedItem
+                        uid="valueAxis"
+                        type="Measure"
+                        values="Price"
+                    />
+                    <viz.feeds:FeedItem
+                        uid="valueAxis2"
+                        type="Measure"
+                        values="Paymentsum"
+                    />
+                </viz:feeds>
+                <viz:dependents>
+                    <viz:Popover id="idPopOver" />
+                </viz:dependents>
+            </viz:VizFrame>
+        </Panel>
+        <Panel>
+            <viz:VizFrame
+                id="idVizFram2e"
+                uiConfig="{applicationSet:'fiori'}"
+                height='30rem'
+                width="30rem"
+                vizType='timeseries_scatter'
+            >
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{flight>/FlightSet}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition
+                                name="Date"
+                                value="{Fldate}"
+                                dataType="date"
+                            />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition
+                                name="Carrid"
+                                value="{Carrid}"
+                            />
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+
+                <viz:feeds>
+                    <viz.feeds:FeedItem
+                        uid="valueAxis"
+                        type="Measure"
+                        values="Carrid"
+                    />
+                    <viz.feeds:FeedItem
+                        uid="timeAxis"
+                        type="Dimension"
+                        values="Date"
+                    />
+                </viz:feeds>
+                <viz:dependents>
+                    <viz:Popover id="idPopOver22" />
+                </viz:dependents>
+            </viz:VizFrame>
+        </Panel>
+    </Page>
+</mvc:View>

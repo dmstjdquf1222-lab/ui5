@@ -1,0 +1,24 @@
+<mvc:View
+    controllerName="coe.cl3.day10ui502.controller.FirstView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            class="sapUiResponsiveMargin"
+            expandable="true"
+            expanded="true"
+            headerText="First view"
+            width="12rem"
+        >
+            <Button
+                text="Go Second"
+                icon="sap-icon://cargo-train"
+                press="goSecond()"
+            />
+        </Panel>
+    </Page>
+</mvc:View>

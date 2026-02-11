@@ -1,0 +1,154 @@
+<mvc:View
+    controllerName="code.cl3.day9ui501.controller.Day9View01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.suite.ui.microchart"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel>
+            <HBox>
+                <FlexBox
+                    width="20rem"
+                    height="10rem"
+                    alignItems="Start"
+                    justifyContent="SpaceBetween"
+                >
+                    <items>
+                        <m:InteractiveDonutChart
+                            segments="{/chartSet}"
+                            displayedSegments="6"
+                            selectionChanged="onSelectionChanged"
+                        >
+                            <m:segments>
+                                <m:InteractiveDonutChartSegment
+                                    label="{Age}대"
+                                    value="{=parseFloat(${Answer})}"
+                                    displayedValue="{Answer}%"
+                                />
+                            </m:segments>
+                        </m:InteractiveDonutChart>
+                    </items>
+                </FlexBox>
+                <FlexBox
+                    width="20rem"
+                    height="10rem"
+                    alignItems="Center"
+                    class="sapUiSmallMargin"
+                >
+                    <items>
+                        <m:InteractiveLineChart
+                            selectionChanged="selectionChanged"
+                            press="press"
+                            points="{/chartSet}"
+                            displayedPoints="6"
+                        >
+                            <m:points>
+                                <m:InteractiveLineChartPoint
+                                    value="{=parseFloat(${Answer})}"
+                                    label="{Age}대"
+                                />
+                            </m:points>
+                        </m:InteractiveLineChart>
+                    </items>
+                </FlexBox>
+                <FlexBox
+                    width="20rem"
+                    height="10rem"
+                    alignItems="Center"
+                    class="sapUiSmallMargin"
+                >
+                    <items>
+                        <m:InteractiveBarChart
+                            labelWidth="25%"
+                            selectionChanged="selectionChanged"
+                            press="press"
+                            bars="{/chartSet}"
+                            displayedBars="6"
+                        >
+                            <m:bars>
+                                <m:InteractiveBarChartBar
+                                    label="{Age}대"
+                                    value="{=parseFloat(${Answer})}"
+                                />
+                            </m:bars>
+                        </m:InteractiveBarChart>
+                    </items>
+                </FlexBox>
+            </HBox>
+        </Panel>
+        <Panel headerText="Serch board">
+            <t:Table
+                id="table"
+                selectionMode="None"
+                rows="{air>/airSet}"
+                enableCellFilter="{ui>/cellFilterOn}"
+                filter="filterPrice"
+                ariaLabelledBy="title"
+                visibleRowCount="6"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title"
+                            text="Airline Master"
+                        />
+                        <ToolbarSpacer />
+                        <Button id="btn1" icon="sap-icon://search" press="onWord()"/>
+                        <Input id="id" placeholder="Code" width="10rem" showClearIcon="true"/>
+                        <Input id="name" placeholder="Name" width="10rem" showClearIcon="true"/>
+                        <SearchField
+                            placeholder="Filter"
+                            search="onSearch"
+                            width="auto"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="auto">
+                        <Label text="Airline" />
+                        <t:template>
+                            <Text
+                                text="{air>Carrid}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Airline name" />
+                        <t:template>
+                            <Text
+                                text="{air>Carrname}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Price" />
+                        <t:template>
+                            <Text
+                                text="{air>Price}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Currency" />
+                        <t:template>
+                            <Text
+                                text="{air>Curkey}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+    </Page>
+</mvc:View>

@@ -1,0 +1,17 @@
+<mvc:View
+    controllerName="code.cl3.day10extraclass.controller.Day10ExtraclassSecondView01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.suite.ui.microchart"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+>
+    <Page
+        id="page2"
+        title="{i18n>title}"
+    >
+        <Button text="Go First" press="onPress"/>
+    </Page>
+</mvc:View>

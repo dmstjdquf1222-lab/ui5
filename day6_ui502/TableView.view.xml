@@ -1,0 +1,70 @@
+<mvc:View controllerName="code.cl3.day6ui502.controller.TableView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:u="sap.ui.unified"
+	xmlns:c="sap.ui.core"
+    xmlns:t="sap.ui.table">
+    
+    <Page id="page" title="{i18n>title}">
+
+        <Panel class="sapUiResponsiveMargin" width="auto" >
+            <VBox >
+                <t:Table rows="{/kostlSet}" selectionMode="Single" visibleRowCount="5">
+                    <t:extension>
+                        <OverflowToolbar style="Clear">
+                            <Title id="title" text="Costcenter master"/>
+                        </OverflowToolbar>
+				    </t:extension>
+                    <t:columns>
+                        <t:Column width="11rem">
+                            <Label text="Costcenter Code" />
+                                <t:template>
+                                    <Text text="{kostl}" wrapping="false" />
+                                </t:template>
+					    </t:Column>
+                        <t:Column width="11rem">
+                            <Label text="Costcenter Name" />
+                                <t:template>
+                                    <Text text="{ktext}" wrapping="false" />
+                                </t:template>
+					    </t:Column>
+                        <t:Column width="11rem">
+                            <Label text="Cost element" />
+                                <t:template>
+                                    <Text text="{kstar}" wrapping="false" />
+                                </t:template>
+					    </t:Column>                   
+                    </t:columns>
+                </t:Table>
+                <t:Table rows="{/prctrSet}" selectionMode="Single" visibleRowCount="5">
+                    <t:extension>
+                        <OverflowToolbar style="Clear">
+                            <Title id="title1" text="Propiccenter master"/>
+                        </OverflowToolbar>
+				    </t:extension>
+                    <t:columns>
+                        <t:Column width="11rem">
+                            <Label text="Propiccentr Code" />
+                                <t:template>
+                                    <Text text="{prctr}" wrapping="false" />
+                                </t:template>
+					    </t:Column>
+                        <t:Column width="11rem">
+                            <Label text="Propic Name" />
+                                <t:template>
+                                    <Text text="{gtext}" wrapping="false" />
+                                </t:template>
+					    </t:Column>
+                        <t:Column width="11rem">
+                            <Label text="Propic element" />
+                                <t:template>
+                                    <Text text="{hkont}" wrapping="false" />
+                                </t:template>
+					    </t:Column>                   
+                    </t:columns>
+                </t:Table>
+            </VBox>
+        </Panel>
+
+    </Page>
+</mvc:View>

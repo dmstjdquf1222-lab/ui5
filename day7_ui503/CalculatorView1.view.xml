@@ -1,0 +1,43 @@
+<mvc:View
+    controllerName="code.cl3.day7ui503.controller.CalculatorView1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            headerText="Calculator"
+        >
+            <VBox>
+                <Input id="ipt1" editable="false" width="200px"/>
+                
+                <HBox>
+                    <Button text="7" press="onPress('7')" width="50px" />
+                    <Button text="8" press="onPress('8')" width="50px"/>
+                    <Button text="9" press="onPress('9')" width="50px"/>
+                    <Button text="/" press="onPress('/')" width="50px" type="Accept"/>
+                </HBox>
+                <HBox>
+                    <Button text="4" press="onPress('4')" width="50px"/>
+                    <Button text="5" press="onPress('5')" width="50px"/>
+                    <Button text="6" press="onPress('6')" width="50px"/>
+                    <Button text="x" press="onPress('*')" width="50px" type="Attention"/>
+                </HBox>
+                <HBox>
+                    <Button text="1" press="onPress('1')" width="50px"/>
+                    <Button text="2" press="onPress('2')" width="50px"/>
+                    <Button text="3" press="onPress('3')" width="50px" />
+                    <Button text="-" press="onPress('-')" width="50px" type="Emphasized" />
+                </HBox>
+                <HBox>
+                    <Button text="=" press="onPress('eq')" width="50px" type="Unstyled"/>
+                    <Button text="CLR" press="onPress('')" width="50px" type="Unstyled"/>
+                    <Button text="0" press="onPress('0')" width="50px"/>
+                    <Button text="+" press="onPress('+')" width="50px" type="Accept"/>
+                </HBox>
+            </VBox>
+        </Panel>
+    </Page>
+</mvc:View>

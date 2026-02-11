@@ -1,0 +1,38 @@
+<mvc:View
+    controllerName="code.cl3.day5ui503.controller.JSONView2"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <HBox>
+                <Input id="ipt1" description="if문" width="200px"/>
+                <Button
+                    text="조회"
+                    press="onPress"
+                />
+            </HBox>
+            <HBox>
+                <Input id="ipt2" description="switch문" width="200px"/>
+                <Button
+                    text="조회"
+                    press="onPress2"
+                />
+            </HBox>
+            <HBox>
+                <Text text="User ID" width="100px"/>
+                <Input id="id1" />
+            </HBox>
+            <HBox>
+                <Text text="Pw" width="100px"/>
+                <Input id="pw1" type="Password" />
+            </HBox>
+            <HBox>
+                <Button text="로그인" press="onLogin" type="Default"/>
+            </HBox>
+        </VBox>
+    </Page>
+</mvc:View>

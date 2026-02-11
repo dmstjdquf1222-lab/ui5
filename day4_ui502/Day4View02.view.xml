@@ -1,0 +1,33 @@
+<mvc:View
+    controllerName="code.cl3.day4ui502.controller.Day4View02"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <HBox>
+                <Text text="CARRID" width="150px"/>
+                <Input id="ipt1" width="150px" />
+            </HBox>
+            <HBox>
+                <Text text="CARRNAME" width="150px"/>
+                <Input id="ipt2" width="150px" />
+            </HBox>
+            <HBox>
+                <Text text="CARRCODE" width="150px"/>
+                <Input id="ipt3" width="150px" />
+            </HBox>
+            <HBox>
+                <Text text="URL" width="150px"/>
+                <Input id="ipt4" width="150px" />
+                <Button id="btn_create" text="생성" press="onCreat"/>
+                <Button id="btn_search" text="검색" press="onSearch"/>
+                <Button id="btn_update" text="수정" press="onUpdate"/>
+                <Button id="btn_delete" text="삭제" press="onDelete"/>
+            </HBox>
+        </VBox>
+    </Page>
+</mvc:View>

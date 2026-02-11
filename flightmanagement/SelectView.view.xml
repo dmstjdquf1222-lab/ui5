@@ -1,0 +1,127 @@
+<mvc:View controllerName="code.cl3.flightmanagement.controller.SelectView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core" 
+    xmlns:m="sap.suite.ui.microchart">
+    <!-- <Page id="page2" title="{i18n>title}"> -->
+
+        <VBox class="sapUiSmallMargin" alignItems="Center">
+
+    <Panel class="sapUiResponsiveMargin" width="30rem" headerText="Select a Data">
+        <VBox class="sapUiSmallMargin" alignItems="Center">
+        <Image src="../img/View2img.png" width="25rem" alt="img" class="sapUiMediumMarginBottom"/>
+        <!-- 첫 번째 콤보박스 : 서비스 선택 -->
+        <ComboBox
+            id="servicesComboBox"
+            width="25rem"
+            placeholder="Select a Service"
+            items="{cb>/Services}"
+            selectionChange="onServiceChange"
+            showClearIcon="true">
+            <core:Item key="{cb>Key}" text="{cb>Text}"/>
+        </ComboBox>
+
+        <!-- 두 번째 콤보박스 : 엔터티셋 선택 -->
+        <ComboBox
+            id="entitiesComboBox"
+            width="25rem"
+            placeholder="select an Entity Set"
+            items="{cb>/Entities}"
+            selectionChange="onEntityChange"
+            showClearIcon="true">
+            <core:Item key="{cb>Key}" text="{cb>Text}"/>
+        </ComboBox>
+        </VBox>
+
+        <!--  251113 문은성 미리보기 팝업 / 한지희 수정  -->
+        <VBox class="sapUiSmallMargin" alignItems="Center">
+            <HBox >
+                <Button text="미리보기" press="onPress1" width="12rem" class="sapUiSmallMarginEnd" type="Neutral"/>
+                <Button icon="sap-icon://paper-plane" text="조회하기" press="onSend()" width="12rem" type="Success"/>
+            </HBox>
+            <dependents> <!-- 251113 한지희 수정 : 컨트롤러에서 bindpoints 사용해서 path, template 설정 -->
+                <Popover
+                    id="vizPopover"
+                    title="차트"
+                    contentWidth="auto"
+                    contentHeight="auto"
+                    placement="Auto"
+                >
+                    <content>
+                        <FlexBox
+                            width="auto"
+                            height="20rem"
+                            alignItems="Center"
+                            class="sapUiSmallMargin"
+                            direction="Column"
+                        >
+                        <!-- 1번 콤보 테이블 -->
+                        <Table id="idTable1" visible="false" width="15rem">
+                            <columns>
+                                <Column>
+                                    <Text text="Airline Code" />
+                                </Column>
+                                <Column>
+                                    <Text text="Currency" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <ObjectIdentifier title="{Carrid}" />
+                                    <Text text="{Currcode}" />
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                        <!-- 2번 콤보 테이블 -->
+                        <Table id="idTable2" visible="false" width="15rem">
+                            <columns>
+                                <Column>
+                                    <Text text="Airline Code" />
+                                </Column>
+                                <Column>
+                                    <Text text="Flight Date" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <ObjectIdentifier title="{Carrid}" />
+                                    <Text text="{Fldate}" />
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                        <!-- 3번 콤보 테이블 -->
+                        <Table id="idTable3" visible="false" width="15rem">
+                            <columns>
+                                <Column>
+                                    <Text text="Airline Code" />
+                                </Column>
+                                <Column>
+                                    <Text text="Price" />
+                                </Column>
+                            </columns>
+                            <items>
+                                <ColumnListItem>
+                                    <ObjectIdentifier title="{Carrid}" />
+                                    <Text text="{Price}" />
+                                </ColumnListItem>
+                            </items>
+                        </Table>
+                            <items>
+                                <m:InteractiveLineChart
+                                    id="iLine"
+                                    selectionChanged="onLineSelect"
+                                    press="onLinePress"
+                                    displayedPoints="8"                               
+                                >
+                                </m:InteractiveLineChart>
+                            </items> 
+                        </FlexBox>
+                    </content>
+                </Popover>
+            </dependents>
+        </VBox>
+        
+    </Panel>
+    </VBox>
+    <!-- </Page> -->
+</mvc:View>

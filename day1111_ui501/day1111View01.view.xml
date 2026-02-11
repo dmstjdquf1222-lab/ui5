@@ -1,0 +1,242 @@
+<mvc:View
+    controllerName="code.cl3.day1111ui501.controller.day1111View01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:layout="sap.ui.layout"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:m="sap.suite.ui.microchart"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            class="sapUiResponsiveMargin"
+            headerText="Gateway service"
+            width="40rem"
+            expandable="true"
+            expanded="true"
+        >
+            <t:Table
+                id="airline"
+                rows="{/AirlineSet}"
+                selectionMode="None"
+                visibleRowCount="12"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title"
+                            text="Airline master"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            text="Search"
+                            icon="sap-icon://search"
+                            press="onPress"
+                        />
+                        <Input
+                            id="ipt1"
+                            placeholder="Airline name"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="5rem">
+                        <Label text="Airline" />
+                        <t:template>
+                            <Label text="{Carrid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="10rem">
+                        <Label text="Airline name" />
+                        <t:template>
+                            <Label text="{Carrname}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Local currency" />
+                        <t:template>
+                            <Label text="{Currcode}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="15rem">
+                        <Label text="Airline URL" />
+                        <t:template>
+                            <Link
+                                text="{Url}"
+                                href="{Url}"
+                                target="_blank"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+        <Panel
+            class="sapUiResponsiveMargin"
+            headerText="Flight schedul"
+            width="50rem"
+            expandable="true"
+            expanded="true"
+        >
+            <t:Table
+                id="Schedule"
+                rows="{flight>/ScheduleSet}"
+                selectionMode="None"
+                visibleRowCount="12"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title2"
+                            text="Schedule master"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            text="Search"
+                            icon="sap-icon://search"
+                            press="onSearch"
+                        />
+                        <Input
+                            id="ipt2"
+                            placeholder="Carrid"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                        <Input
+                            id="ipt3"
+                            placeholder="Connid"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="5rem">
+                        <Label text="Carrid" />
+                        <t:template>
+                            <Label text="{flight>Carrid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Connid" />
+                        <t:template>
+                            <Label text="{flight>Connid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Countryfr" />
+                        <t:template>
+                            <Label text="{flight>Countryfr}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="10rem">
+                        <Label text="Cityfrom" />
+                        <t:template>
+                            <Label text="{flight>Cityfrom}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Countryto" />
+                        <t:template>
+                            <Label text="{flight>Countryto}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="10rem">
+                        <Label text="Cityto" />
+                        <t:template>
+                            <Label text="{flight>Cityto}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Fltime" />
+                        <t:template>
+                            <Label text="{flight>Fltime}" />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+        <Panel
+                class="sapUiResponsiveMargin"
+                headerText="FlightSet"
+                width="40rem"
+                expandable="true"
+                expanded="true"
+            >
+                <t:Table
+                id="Flight"
+                rows="{AA>/FlightSet}"
+                selectionMode="None"
+                visibleRowCount="12"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title3"
+                            text="Flight master"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            text="Search"
+                            icon="sap-icon://search"
+                            press="onPress2"
+                        />
+                        <Input  
+                            id="ipt4"
+                            placeholder="Search"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="5rem">
+                        <Label text="Carrid" />
+                        <t:template>
+                            <Label text="{AA>Carrid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Connid" />
+                        <t:template>
+                            <Label text="{AA>Connid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="10rem">
+                        <Label text="Fldate" />
+                        <t:template>
+                            <Label text="{AA>Fldate}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Price" />
+                        <t:template>
+                            <Label text="{AA>Price}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Currency" />
+                        <t:template>
+                            <Label text="{AA>Currency}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="5rem">
+                        <Label text="Planetype" />
+                        <t:template>
+                            <Label text="{AA>Planetype}" />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+            </Panel>
+    </Page>
+</mvc:View>

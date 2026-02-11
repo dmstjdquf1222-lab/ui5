@@ -1,0 +1,15 @@
+<mvc:View controllerName="code.cl3.day5ui501.controller.Day5View01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+    <VBox >
+    <HBox >
+    <Input id="Data" width="200px"/>
+    <Button text="Create" id="btn_create" press = "onCreate"/>
+    <Button text="Delete" id="btn_delete" press = "onDelete"/>
+    <Button text="Search" id="btn_search" press = "onSearch"/>
+    </HBox>
+    <Input id="Result" placeholder = "Result" editable="false"/>
+    </VBox>
+    </Page>
+</mvc:View>

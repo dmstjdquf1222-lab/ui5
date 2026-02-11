@@ -1,0 +1,210 @@
+<mvc:View
+    controllerName="code.cl3.day8ui501.controller.Day8_View01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:t="sap.ui.table"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:layout="sap.ui.layout"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+    xmlns:m="sap.suite.ui.microchart"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <t:Table
+                rows="{/TeamSet}"
+                selectionMode="None"
+                visibleRowCount="7"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title"
+                            text="Baseball Team Master"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="11rem">
+                        <Label text="팀명" />
+                        <t:template>
+                            <Text
+                                text="{Team}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="11rem">
+                        <Label text="창단연도" />
+                        <t:template>
+                            <Text
+                                text="{Year}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="11rem">
+                        <Label text="연고지" />
+                        <t:template>
+                            <Text
+                                text="{Area}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="11rem">
+                        <Label text="우승횟수" />
+                        <t:template>
+                            <Text
+                                text="{Win}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+
+            <HBox>
+                <viz:VizFrame
+                    id="idVizFrame"
+                    uiConfig="{applicationSet:'fiori'}"
+                    height="20rem"
+                    width="20rem"
+                    vizType='donut'
+                    vizProperties="{ title: {text : 'Old', visible : true}}"
+                >
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{Old>/OldSet}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition
+                                    name="City"
+                                    value="{City}"
+                                />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition
+                                    name="Ratio"
+                                    value="{Ratio}"
+                                />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem
+                            uid="size"
+                            type="Measure"
+                            values="Ratio"
+                        />
+                        <viz.feeds:FeedItem
+                            uid="color"
+                            type="Dimension"
+                            values="City"
+                        />
+                    </viz:feeds>
+                    <viz:dependents>
+                        <viz:Popover id="idPopOver" />
+                    </viz:dependents>
+                </viz:VizFrame>
+
+                <viz:VizFrame
+                    id="idVizFrame2"
+                    uiConfig="{applicationSet:'fiori'}"
+                    height="20rem"
+                    width="20rem"
+                    vizType='line'
+                    vizProperties="{ title: {text : 'Old', visible : true}}"
+                >
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{Old>/OldSet}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition
+                                    name="City"
+                                    value="{City}"
+                                />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition
+                                    name="Ratio"
+                                    value="{Ratio}"
+                                />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem
+                            id='valueAxisFeed'
+                            uid="valueAxis"
+                            type="Measure"
+                            values="Ratio"
+                        />
+                        <viz.feeds:FeedItem
+                            id='categoryAxisFeed'
+                            uid="categoryAxis"
+                            type="Dimension"
+                            values="City"
+                        />
+                    </viz:feeds>
+                    <viz:dependents>
+                        <viz:Popover id="idPopOver2" />
+                    </viz:dependents>
+                </viz:VizFrame>
+            </HBox>
+            <Panel width="50rem">
+                <HBox>
+                    <FlexBox
+                        width="20rem"
+                        height="10rem"
+                        alignItems="Center"
+                        class="sapUiSmallMargin"
+                    >
+                        <items>
+                            <m:InteractiveDonutChart
+                                segments="{Pro>/ProfitSet}"
+                                displayedSegments="5"
+                            >
+                                <m:segments>
+                                    <m:InteractiveDonutChartSegment
+                                        label="{Pro>Prdnm}"
+                                        value="{=parseFloat(${Pro>Profit})}"
+                                        displayedValue="{Pro>Profit}%"
+                                    />
+                                    <!-- <m:InteractiveDonutChartSegment
+                            label="Cookie"
+                            value="25"
+                            displayedValue="25%"
+                        />
+                        <m:InteractiveDonutChartSegment
+                            label="Bread"
+                            value="35"
+                            displayedValue="35%"
+                        /> -->
+                                </m:segments>
+                            </m:InteractiveDonutChart>
+                            <m:InteractiveLineChart
+                                selectionChanged="selectionChanged"
+                                press="press"
+                                points="{Pro>/ProfitSet}"
+                                displayedPoints="5"
+                            >
+                                <m:points>
+                                    <m:InteractiveLineChartPoint
+                                        value="{=parseFloat(${Pro>Profit})}"
+                                        label="{Pro>Prdnm}"
+                                        secondaryLabel="{Pro>Prdid}"
+                                    />
+                                </m:points>
+                            </m:InteractiveLineChart>
+                        </items>
+                    </FlexBox>
+                </HBox>
+            </Panel>
+        </VBox>
+    </Page>
+</mvc:View>

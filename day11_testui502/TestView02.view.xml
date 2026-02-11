@@ -1,0 +1,431 @@
+<!-- 사용할 라이브러리의 주소를 가져옴 -->
+<mvc:View
+    controllerName="code.cl3.day11testui502.controller.TestView02"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.suite.ui.microchart"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+        <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+        <Panel
+            headerText="6번 문제"
+            width="20rem"
+        >   
+            <!-- Button 태그를 사용하여 "Click"이라는 text 속성을 부여후 버튼 생성 -->
+            <!-- 버튼을 눌렀을때 이벤트를 발생시켜주는 "onClick"이라는 press 속성을 부여 -->
+            <Button
+                text="Click"
+                press="onClick"
+            />
+        </Panel>
+        <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+        <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+        <Panel
+            headerText="7번 문제"
+            width="auto"
+        >   
+            <!-- Table 태그를 사용하여 id,filter개체,보여지는 컬럼의 개수 등 속성 부여.
+            rows라는 속성을 통해 테이블의 정보를 가져올 주소를 입력 -->
+            <t:Table
+                id="Asset"
+                selectionMode="None"
+                rows="{Asset>/GridSet}"
+                enableCellFilter="{ui>/cellFilterOn}"
+                filter="filterPrice"
+                ariaLabelledBy="title"
+                visibleRowCount="5"
+            >   
+                <t:extension>
+                    <!-- OverFlowToolbar 태그를 사용하여 테이블 위에 Toolbar 생성 -->
+                    <OverflowToolbar style="Clear">
+                        <!-- ToolbarSpacer 태그를 통해 간격을 주어 오른쪽에 SearchField가 생성되도록 설정 -->
+                        <ToolbarSpacer />
+                        <!-- SearchField 태그를 이용하여 검색창에 "Search"가 보이는 속성 placeholder를 부여하고 
+                        search 속성을 통하여 이벤트 발생 -->
+                        <SearchField
+                            placeholder="Search"
+                            search="onSearch"
+                            width="auto"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <!-- columns태그 안에 Column 태그를 사용하여 컬럼들의 정보를 입력 -->
+                <t:columns>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Company code" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Asset>Bukrs}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Fiscal Year" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Asset>Gjahr}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Company name" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Asset>Bktxt}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Asset total" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Asset>Anln1}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+        <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+        <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+        <Panel
+            headerText="8번 문제"
+            width="auto"
+        >
+            <!-- Table 태그를 사용하여 id,filter개체,보여지는 컬럼의 개수 등 속성 부여.
+            rows라는 속성을 통해 테이블의 정보를 가져올 주소를 입력 -->
+            <t:Table
+                id="Company"
+                selectionMode="None"
+                rows="{Company>/DataSet}"
+                enableCellFilter="{ui>/cellFilterOn}"
+                filter="filterPrice"
+                ariaLabelledBy="title"
+                visibleRowCount="6"
+            >
+                <t:extension>
+                    <!-- OverFlowToolbar 태그를 사용하여 테이블 위에 Toolbar 생성 -->
+                    <OverflowToolbar style="Clear">
+                        <!-- ToolbarSpacer 태그를 통해 간격을 주어 오른쪽에 SearchField가 생성되도록 설정 -->
+                        <ToolbarSpacer />
+                        <!-- SearchField 태그를 이용하여 검색창에 "Search"가 보이는 속성 placeholder를 부여하고 
+                        search 속성을 통하여 이벤트 발생 -->
+                        <SearchField
+                            placeholder="Search"
+                            search="onSearch2"
+                            width="auto"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Year" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Company>Year}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Comp" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Company>Comp}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Asset" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Company>Asset}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Gubun" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Company>Gubun}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Total" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Company>Total}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="List" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Company>List}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Rate" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Company>Rate}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <!-- Label 태그를 사용하여 텍스트를 띄워주기 위해 text 속성을 부여  -->
+                        <Label text="Increase" />
+                        <!-- template 태그를 사용해 컬럼 안에 text 속성을 통해 넣어줄 정보를  주소를 입력 -->
+                        <t:template>
+                            <Text
+                                text="{Company>Increase}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+        <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+        <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+        <Panel
+            headerText="9번 문제"
+            width="auto"
+        >   
+            <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+            <HBox>
+                <!-- VizFrame 태그를 사용해 id와 높낮이, Type 속성을 부여 -->
+                <viz:VizFrame
+                    id="idVizFrame"
+                    uiConfig="{applicationSet:'fiori'}"
+                    height='25rem'
+                    width="25rem"
+                    vizType='donut'
+                >
+
+                    <viz:dataset>
+                        <!-- Vizframechart에 사용할 데이터를 가져오는 주소를 입력 -->
+                        <viz.data:FlattenedDataset data="{VizSet>/VizSet}">
+                            <!-- dimensions 값과 measures값을 입력 -->
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition
+                                    name="Player"
+                                    value="{Player}"
+                                />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition
+                                    name="Assist"
+                                    value="{Assist}"
+                                />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+                    <!-- 데이터를 불러와서 데이터셋이 끝난 정보를 feeds태그를 통해 뿌려준다 -->
+                    <viz:feeds>
+                        <viz.feeds:FeedItem
+                            uid="size"
+                            type="Measure"
+                            values="Assist"
+                        />
+                        <viz.feeds:FeedItem
+                            uid="color"
+                            type="Dimension"
+                            values="Player"
+                        />
+                    </viz:feeds>
+                    <viz:dependents>
+                        <viz:Popover id="idPopOver" />
+                    </viz:dependents>
+                </viz:VizFrame>
+                <!-- VizFrame 태그를 사용해 id와 높낮이, Type 속성을 부여 -->
+                <viz:VizFrame
+                    id="idVizFrame2"
+                    uiConfig="{applicationSet:'fiori'}"
+                    height='25rem'
+                    width="25rem"
+                    vizType='line'
+                >
+                    <viz:dataset>
+                        <!-- Vizframechart에 사용할 데이터를 가져오는 주소를 입력 -->
+                        <viz.data:FlattenedDataset data="{VizSet>/VizSet}">
+                            <!-- dimensions 값과 measures값을 입력 -->
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition
+                                    name="Player"
+                                    value="{Player}"
+                                />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition
+                                    name="Assist"
+                                    value="{Assist}"
+                                />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+                    <!-- 데이터를 불러와서 데이터셋이 끝난 정보를 feeds태그를 통해 뿌려준다 -->
+                    <viz:feeds>
+                        <viz.feeds:FeedItem
+                            id='valueAxisFeed'
+                            uid="valueAxis"
+                            type="Measure"
+                            values="Assist"
+                        />
+                        <viz.feeds:FeedItem
+                            id='categoryAxisFeed'
+                            uid="categoryAxis"
+                            type="Dimension"
+                            values="Player"
+                        />
+                    </viz:feeds>
+                    <viz:dependents>
+                        <viz:Popover id="idPopOver2" />
+                    </viz:dependents>
+                </viz:VizFrame>
+            </HBox>
+        </Panel>
+        <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+        <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+        <Panel
+            headerText="10번 문제"
+            width="auto"
+        >   <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+            <HBox>
+                <FlexBox
+                    width="20rem"
+                    height="10rem"
+                    alignItems="Center"
+                    class="sapUiSmallMargin"
+                >
+                    <items>
+                        <m:InteractiveDonutChart
+                            segments="{MicroSet>/MicroSet}"
+                            displayedSegments="6"
+                        >
+                            <m:segments>
+                                <m:InteractiveDonutChartSegment
+                                    label="{MicroSet>Team}"
+                                    value="{=parseFloat(${MicroSet>Hit})}"
+                                    displayedValue="{MicroSet>Hit}개"
+                                />
+                            </m:segments>
+                        </m:InteractiveDonutChart>
+                        <m:InteractiveLineChart
+                            selectionChanged="selectionChanged"
+                            press="press"
+                            points="{MicroSet>/MicroSet}"
+                            displayedPoints="6"
+                        >
+                            <m:points>
+                                <m:InteractiveLineChartPoint
+                                    value="{=parseFloat(${MicroSet>Hit})}"
+                                    label="{MicroSet>Team}"
+                                />
+                            </m:points>
+                        </m:InteractiveLineChart>
+                    </items>
+                </FlexBox>
+            </HBox>
+        </Panel>
+        <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+        <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+        <Panel
+            headerText="11번 문제"
+            width="20rem"
+        >   <!-- VBox 태그를 사용하여 태그 안에 있는 로직을 세로로 정렬 -->
+            <VBox>
+                <Input
+                    id="ipt1"
+                    editable="false"
+                    width="200px"
+                />
+                <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+                <HBox>
+                    <Button text="7" press="onPress('7')" width="50px" />
+                    <Button text="8" press="onPress('8')" width="50px" />
+                    <Button text="9" press="onPress('9')" width="50px" />
+                    <Button text="/" press="onPress('/')" width="50px" type="Accept" />
+                </HBox>
+                <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+                <HBox>
+                    <Button text="4" press="onPress('4')" width="50px" />
+                    <Button text="5" press="onPress('5')" width="50px" />
+                    <Button text="6" press="onPress('6')" width="50px" />
+                    <Button text="x" press="onPress('*')" width="50px" type="Attention" />
+                </HBox>
+                <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+                <HBox>
+                    <Button text="1" press="onPress('1')" width="50px" />
+                    <Button text="2" press="onPress('2')" width="50px" />
+                    <Button text="3" press="onPress('3')" width="50px" />
+                    <Button text="-" press="onPress('-')" width="50px" type="Emphasized" />
+                </HBox>
+                <!-- HBox 태그를 사용하여 태그 안에 있는 로직을 가로로 정렬 -->
+                <HBox>
+                    <Button text="=" press="onPress('eq')" width="50px" type="Unstyled" />
+                    <Button text="CLR" press="onPress('')" width="50px" type="Unstyled" />
+                    <Button text="0" press="onPress('0')" width="50px" />
+                    <Button text="+" press="onPress('+')" width="50px" type="Accept" />
+                </HBox>
+            </VBox>
+        </Panel>
+        <!-- Panel태그를 사용하여 각 문제별 구분, width 속성을 사용하여 넓이 설정 -->
+        <!-- Panel의 제목을 띄워주는 headerText 속성 부여-->
+        <Panel
+            headerText="12번 문제 First view"
+            width="12rem"
+        >
+            <Button
+                text="Go Second view"
+                press="goSecond()"
+            />
+        </Panel>
+    </Page>
+</mvc:View>

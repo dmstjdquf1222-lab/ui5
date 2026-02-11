@@ -1,0 +1,106 @@
+<mvc:View
+    controllerName="code.cl3.day7ui502.controller.ChartView01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:layout="sap.ui.layout"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            class="sapUiResponsiveMargin"
+            width="auto"
+        >
+            <VBox>
+                <viz:VizFrame
+                    id="idVizFrame"
+                    uiConfig="{applicationSet:'fiori'}"
+                    height='30rem'
+                    width="30rem"
+                    vizType='donut'
+                    vizProperties="{ title: {text : 'Air fare', visible : true}}"
+                >
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{/charSet}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition
+                                    name="Airline"
+                                    value="{Carrid}"
+                                />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition
+                                    name="Price"
+                                    value="{Price}"
+                                />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem
+                            uid="size"
+                            type="Measure"
+                            values="Price"
+                        />
+                        <viz.feeds:FeedItem
+                            uid="color"
+                            type="Dimension"
+                            values="Airline"
+                        />
+                    </viz:feeds>
+                    <viz:dependents>
+                        <viz:Popover id="idPopOver" />
+                    </viz:dependents>
+                </viz:VizFrame>
+
+                <viz:VizFrame
+                    id="idVizFrame2"
+                    uiConfig="{applicationSet:'fiori'}"
+                    height="30rem"
+                    width="30rem"
+                    vizType='area'
+                    vizProperties="{ title: {text : 'Profit by product', visible : true}}"
+                >
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{/ProfitSet}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition
+                                    name="Prdname"
+                                    value="{Prdnm}"
+                                />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition
+                                    name="Profit"
+                                    value="{Profit}"
+                                />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem
+                            id='valueAxisFeed'
+                            uid="valueAxis"
+                            type="Measure"
+                            values="Profit"
+                        />
+                        <viz.feeds:FeedItem
+                            uid="categoryAxis"
+                            type="Dimension"
+                            values="Prdname"
+                        />
+                    </viz:feeds>
+                    <viz:dependents>
+                        <viz:Popover id="idPopOver2" />
+                    </viz:dependents>
+                </viz:VizFrame>
+            </VBox>
+        </Panel>
+    </Page>
+</mvc:View>

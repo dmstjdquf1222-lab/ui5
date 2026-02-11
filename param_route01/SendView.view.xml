@@ -1,0 +1,14 @@
+<mvc:View controllerName="code.cl3.paramroute01.controller.SendView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page2" title="{i18n>title}">
+        <VBox >
+            <Panel class="sapUiResponsiveMargin" headerText="Send">
+                <Input id="Carrid" description="Airline code" width="9rem" fieldWidth="3rem"/>
+                <Input id="Connid" description="Flight Connection Number" width="16rem" fieldWidth="4rem"/>
+                <Button icon="sap-icon://paper-plane" text="Send" press="onSend()"/>
+                <Button icon="sap-icon://nav-back" text="Back" press="onBack()" type="Emphasized"/>
+            </Panel>
+        </VBox>
+    </Page>
+</mvc:View>

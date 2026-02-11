@@ -1,0 +1,124 @@
+<mvc:View
+    controllerName="code.cl3.day10extraclass.controller.Day10ExtraclassView01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.suite.ui.microchart"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel>
+            <t:Table
+                id="table"
+                selectionMode="None"
+                rows="{/flights}"
+                enableCellFilter="{ui>/cellFilterOn}"
+                filter="filterPrice"
+                ariaLabelledBy="title"
+                visibleRowCount="5"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <!-- <Button
+                            id="btn1"
+                            icon="sap-icon://search"
+                            press="onWord()"
+                        /> -->
+                        <Input
+                            id="CONTRYFR"
+                            placeholder="Country From"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                        <Input
+                            id="CONTRYTO"
+                            placeholder="Country TO"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                        <SearchField
+                            placeholder="CarrID"
+                            search="onSearch"
+                            width="auto"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            text="To Second"
+                            press="goSecond"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="auto">
+                        <Label text="CARRID" />
+                        <t:template>
+                            <Text
+                                text="{CARRID}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="CONNID" />
+                        <t:template>
+                            <Text
+                                text="{CONNID}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="CONTRYFR" />
+                        <t:template>
+                            <Text
+                                text="{CONTRYFR}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="CITYFROM" />
+                        <t:template>
+                            <Text
+                                text="{CITYFROM}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="AIRFROM" />
+                        <t:template>
+                            <Text
+                                text="{AIRFROM}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="CONRTYTO" />
+                        <t:template>
+                            <Text
+                                text="{CONTRYTO}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="CITYTO" />
+                        <t:template>
+                            <Text
+                                text="{CITYTO}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+    </Page>
+</mvc:View>

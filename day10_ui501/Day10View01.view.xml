@@ -1,0 +1,88 @@
+<mvc:View
+    controllerName="code.cl3.day10ui501.controller.Day10View01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.suite.ui.microchart"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel >
+            <t:Table
+                id="table"
+                selectionMode="None"
+                rows="{/kostlSet}"
+                enableCellFilter="{ui>/cellFilterOn}"
+                filter="filterPrice"
+                ariaLabelledBy="title"
+                visibleRowCount="6"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title"
+                            text="KOSTL Master"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            id="btn1"
+                            icon="sap-icon://search"
+                            press="onWord()"
+                        />
+                        <Input
+                            id="KOSTL"
+                            placeholder="KOSTL"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                        <Input
+                            id="KTEXT"
+                            placeholder="KTEXT"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                        <SearchField
+                            placeholder="Filter"
+                            search="onSearch"
+                            width="auto"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="auto">
+                        <Label text="Kostl" />
+                        <t:template>
+                            <Text
+                                text="{kostl}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Ktext" />
+                        <t:template>
+                            <Text
+                                text="{ktext}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Kstar" />
+                        <t:template>
+                            <Text
+                                text="{kstar}"
+                                wrapping="false"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+    </Page>
+</mvc:View>

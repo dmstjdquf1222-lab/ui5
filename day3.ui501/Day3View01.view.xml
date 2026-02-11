@@ -1,0 +1,44 @@
+<mvc:View
+    controllerName="code.cl3.day3.ui501.controller.Day3View01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <HBox>
+                <Input
+                    id="num1"
+                    placeholder="While"
+                    type="Number"
+                    width="200px"
+                />
+                <Button
+                    text="Click"
+                    press="onPress"
+                />
+            </HBox>
+            <HBox>
+                <Input
+                    id="num2"
+                    placeholder="Do While"
+                    type="Number"
+                    width="200px"
+                    description="Test"
+                    showClearIcon="true"
+                />
+                <Button
+                    text="Click"
+                    press="onClick"
+                />
+            </HBox>
+
+            <Input id="value1" width="700px"/>
+            <Button id="btn1" text="Button" press="onChange()" icon="sap-icon://accelerated"/>
+            
+            
+        </VBox>
+    </Page>
+</mvc:View>

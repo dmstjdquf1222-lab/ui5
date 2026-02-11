@@ -1,0 +1,90 @@
+<mvc:View xmlns:table="sap.ui.table" controllerName="code.cl3.flightmanagement.controller.TC1View"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:t="sap.ui.table"
+	xmlns:u="sap.ui.unified"
+	xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+	
+    <!-- <Page id="page3" title="{i18n>title}"> -->
+        <!-- <Button icon="sap-icon://theater" text="Click" press="onFinally()" />
+        -->
+        <MenuButton
+		text="Select EntitySet"
+		icon="sap-icon://menu2"
+		useDefaultActionOnly="false"
+		menu="{
+			path: '',
+			templateShareable: false
+		}">
+		<menu>
+			<Menu>
+				<items>
+					<MenuItem text="FlightSet" icon="sap-icon://suitcase" press=".onFlightSet"/>
+					<MenuItem text="PaymentSet" icon="sap-icon://credit-card" press=".onPaymentSet"/>
+				</items>
+			</Menu>
+		</menu>
+	</MenuButton>
+	<Button icon="sap-icon://paper-plane" text="Select Service" press="onBack()" />
+
+	<VBox alignItems="Center">
+        <Panel width="40rem" height="30rem" class="sapUiResponsiveMargin">
+			<t:Table
+				id="table1"
+				selectionMode="None"
+				rows="{localFlight>/AirlineSet}">
+				<t:extension>
+					<OverflowToolbar style="Clear">
+						<Title id="title1" text="Airline List"/>
+						<ToolbarSpacer/>
+						<ToolbarSeparator/>
+						<SearchField
+							placeholder="Airline name"
+							search="onSearch"
+							width="10rem"/>
+						<OverflowToolbarMenuButton>
+							<menu>
+								<Menu itemSelected="onMenuAction">
+									<MenuItem text="Export to Excel" icon="sap-icon://excel-attachment" />
+								</Menu>
+							</menu>
+						</OverflowToolbarMenuButton>
+					</OverflowToolbar>
+				</t:extension>
+				<t:columns>
+					<t:Column
+						width="5rem" sortProperty="Carrid">
+						<Label text="Airline" />
+						<t:template>
+							<Text text="{localFlight>Carrid}" wrapping="false" />
+						</t:template>
+					</t:Column>
+					<t:Column
+						width="11rem"
+						filterProperty="Carrname">
+						<Label text="Airline name" />
+						<t:template>
+							<Text text="{localFlight>Carrname}" wrapping="false" />
+						</t:template>
+					</t:Column>
+					<t:Column
+						width="5rem">
+						<Label text="Currency" />
+						<t:template>
+							<Text text="{localFlight>Currcode}" wrapping="false" />
+						</t:template>
+					</t:Column>
+					<t:Column
+						width="15rem">
+						<Label text="Home page" />
+						<t:template>
+							<Link text="{localFlight>Url}" href="{localFlight>Url}" target="_blank" />
+						</t:template>
+					</t:Column>                                                            
+				</t:columns>
+			</t:Table>                 			
+        </Panel> 
+
+			</VBox>             
+    <!-- </Page> -->
+</mvc:View>

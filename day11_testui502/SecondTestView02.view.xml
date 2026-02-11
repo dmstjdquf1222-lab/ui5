@@ -1,0 +1,28 @@
+<mvc:View
+    controllerName="code.cl3.day11testui502.controller.SecondTestView02"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    xmlns:m="sap.suite.ui.microchart"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+>
+    <Page
+        id="page2"
+        title="{i18n>title}"
+    >
+        <Panel
+            headerText="12번 문제 Second view"
+            width="12rem"
+        >
+            <Button
+                text="Go Third view"
+                press="goThird()"
+            />
+        </Panel>
+    </Page>
+</mvc:View>

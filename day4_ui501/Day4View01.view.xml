@@ -1,0 +1,84 @@
+<mvc:View
+    controllerName="code.cl3.day4ui501.controller.Day4View01"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <Panel
+                headerText="Number"
+                width="500px"
+            >
+                <HBox>
+                    <Text text="Number" />
+                    <Input
+                        id="num1"
+                        type="Number"
+                        placeholder="Enter Number"
+                    />
+                </HBox>
+                <Button
+                    text="입력 체크"
+                    press="input_check()"
+                />
+            </Panel>
+            <HBox />
+            <Panel
+                headerText="Click"
+                width="200px"
+            >
+                <HBox>
+                    <Button
+                        id="btn1"
+                        text="Click"
+                        press="onClick()"
+                    />
+                    <Input
+                        id="text1"
+                        editable="false"
+                    />
+                    <Button
+                        icon="sap-icon://clear-all"
+                        press="onClear"
+                    />
+                </HBox>
+            </Panel>
+            <Panel
+                headerText="Continue"
+                width="100px"
+            >
+                <HBox>
+                    <Button
+                        text="Continue"
+                        press="cont_check"
+                    />
+                </HBox>
+            </Panel>
+            <Panel
+                headerText="liveCange"
+                width="200px"
+            >
+                <Input
+                    id="input1"
+                    width="100px"
+                    liveChange="onChange"
+                />
+                <HBox />
+            </Panel>
+            <Panel headerText="Push, Shift, Pop" >
+            <HBox >
+                <Input id="aval1" width="100px"/>
+                <!-- <Input id="aval2" width="70px"/> -->
+                <Button text="Append" press="onAppend()"/>
+                <Button text="Pop(del)" press="onRemove()"/>
+                <Button text="Shift(del)" press="onShift()"/>
+                <Button text="Length(del)" press="onLength()"/>
+                <Button text="Splice(del)" press="onSplice()"/>
+            </HBox>
+            </Panel>
+        </VBox>
+    </Page>
+</mvc:View>

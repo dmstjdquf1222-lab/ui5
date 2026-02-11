@@ -1,0 +1,77 @@
+<mvc:View
+    controllerName="code.cl3.airlinecl3ui501.controller.GWServiceView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            class="sapUiResponsiveMargin"
+            headerText="Gateway service"
+            width="auto"
+        >
+            <t:Table
+                id="airline"
+                rows="{/AirlineSet}"
+                selectionMode="None"
+                visibleRowCount="12"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title"
+                            text="Airline master"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            text="Search"
+                            icon="sap-icon://search"
+                            press="onPress"
+                        />
+                        <Input
+                            id="ipt1"
+                            placeholder="Search"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="auto">
+                        <Label text="Airline" />
+                        <t:template>
+                            <Label text="{Carrid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Airline name" />
+                        <t:template>
+                            <Label text="{Carrname}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Local currency" />
+                        <t:template>
+                            <Label text="{Currcode}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Airline URL" />
+                        <t:template>
+                            <Link
+                                text="{Url}"
+                                href="{Url}"
+                                target="_blank"
+                            />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+    </Page>
+</mvc:View>

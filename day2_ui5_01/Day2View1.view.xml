@@ -1,0 +1,17 @@
+<mvc:View
+    controllerName="code.cl3.day2ui501.controller.Day2View1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <HBox>
+            <Input id="num1" placeholder="Enter First number"/>
+            <Text text="+"/>
+            <Input id="num2" placeholder="Enter Second number"/>
+            <Button text="Calcul" press="onPress()"/>
+        </HBox>
+    </Page>
+</mvc:View>

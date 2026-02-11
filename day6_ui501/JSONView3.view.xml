@@ -1,0 +1,147 @@
+<mvc:View
+    xmlns:table="sap.ui.table"
+    controllerName="code.cl3.day6ui501.controller.JSONView3"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:t="sap.ui.table"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <!-- <VBox>
+            <HBox>
+                <Panel
+                    headerText="{panel>/panelSet/header}"
+                    width="{panel>/panelSet/width}"
+                    height="{panel>/panelSet/height}"
+                >
+                    <Label
+                        text="{/labelSet/text}"
+                        width="{/labelSet/width}"
+                        vAlign="{/labelSet/vAlign}"
+                    />
+                    <Input
+                        value="{/inputSet/value}"
+                        placeholder="{/inputSet/holder}"
+                        width="{/inputSet/width}"
+                        description="{/inputSet/desc}"
+                    />
+                    <Button
+                        text="{/buttonSet/text}"
+                        type="{/buttonSet/type}"
+                        press="{/buttonSet/press}"
+                        icon="{/buttonSet/icon}"
+                    />
+                </Panel>
+            </HBox>
+        </VBox> -->
+
+        <Panel
+            headerText="{file>/panelSet/header}"
+            width="{file>/panelSet/width}"
+            height="{file>/panelSet/height}"
+        >
+            <VBox>
+                <HBox>
+                    <Label
+                        text="{file>/labelSet/text}"
+                        width="{file>/labelSet/width}"
+                        vAlign="{file>/labelSet/vAlign}"
+                    />
+                    <Input
+                        value="{file>/inputSet/value}"
+                        placeholder="{file>/inputSet/holder}"
+                        width="{file>/inputSet/width}"
+                        description="{file>/inputSet/desc}"
+                    />
+                    <Button
+                        text="{file>/buttonSet/text}"
+                        type="{file>/buttonSet/type}"
+                        icon="{file>/buttonSet/icon}"
+                    />
+                </HBox>
+                <Button
+                    text="Array"
+                    press="onArray()"
+                />
+            </VBox>
+        </Panel>
+        <Panel
+            class="sapUiResponsiveMargin"
+            width="auto"
+        >
+            <VBox>
+                <t:Table
+                    rows="{air>/airlineSet}"
+                    selectionMode="None"
+                    paste="onPaste"
+                    ariaLabelledBy="title"
+                >
+                    <t:extension>
+                        <OverflowToolbar style="Clear">
+                            <Title
+                                id="title"
+                                text="Airline master"
+                            />
+                        </OverflowToolbar>
+                    </t:extension>
+
+                    <t:columns>
+                        <t:Column
+                            width="11rem"
+                            hAlign="Center"
+                        >
+                            <Label text="Airline Code" />
+                            <t:template>
+                                <Text
+                                    text="{air>Aircd}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column
+                            width="11rem"
+                            hAlign="Center"
+                        >
+                            <Label text="Airline name" />
+                            <t:template>
+                                <Text text="{air>Airline}" />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column
+                            width="11rem"
+                            hAlign="Center"
+                        >
+                            <Label text="URL" />
+                            <t:template>
+                                <Link
+
+                                    text="{air>URL}"
+                                    href="{air>/airlinSet/URL}"
+                                />
+                            </t:template>
+                        </t:Column>
+
+                        <t:Column
+                            width="11rem"
+                            hAlign="Center"
+                        >
+                            <Label text="Currency" />
+                            <t:template>
+                                <Text
+                                    text="{air>Curr}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                    </t:columns>
+                </t:Table>
+            </VBox>
+        </Panel>
+    </Page>
+</mvc:View>

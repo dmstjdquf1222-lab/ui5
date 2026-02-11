@@ -1,0 +1,161 @@
+<mvc:View
+    controllerName="cl3.purch.ekkocl3ui501.controller.PuchasingView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:layout="sap.ui.layout"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <Panel
+                class="sapUiResponsiveMargin"
+                headerText="Purchase list"
+                width="55rem"
+            >
+                <t:Table
+                    id="Table"
+                    rows="{/PurchSet}"
+                    selectionMode="None"
+                    visibleRowCount="5"
+                >
+                    <t:extension>
+                        <OverflowToolbar style="Clear">
+                            <Title text="Purchase list" />
+                            <ToolbarSpacer />
+                            <Button
+                                icon="sap-icon://search"
+                                press="onSearch()"
+                                text="Search"
+                                type="Neutral"
+                            />
+                            <Input
+                                id="type"
+                                width="10rem"
+                                showClearIcon="true"
+                                placeholder="Doc.Type"
+                            />
+                        </OverflowToolbar>
+                    </t:extension>
+
+                    <t:columns>
+                        <t:Column width="10rem">
+                            <Label text="Document Number" />
+                            <t:template>
+                                <Text
+                                    text="{ebeln}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="10rem">
+                            <Label text="Company Code" />
+                            <t:template>
+                                <Text
+                                    text="{bukrs}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="10rem">
+                            <Label text="Document Category" />
+                            <t:template>
+                                <Text
+                                    text="{bstyp}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="10rem">
+                            <Label text="Document Type" />
+                            <t:template>
+                                <Text
+                                    text="{bsart}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="10rem">
+                            <Label text="Control indicator" />
+                            <t:template>
+                                <Text
+                                    text="{bsakz}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                    </t:columns>
+                </t:Table>
+            </Panel>
+            <Panel
+                class="sapUiResponsiveMargin"
+                headerText="flight data"
+                width="auto"
+            >
+                <viz:VizFrame
+                    id="idVizFrame"
+                    uiConfig="{applicationSet:'fiori'}"
+                    height='30rem'
+                    width="auto"
+                    vizType='bubble'
+                >
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset
+                            data="{Schedule>/ScheduleSet}"
+                        >
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition
+                                    name="Carrid"
+                                    value="{Schedule>carrid}"
+                                />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition
+                                    name="Seatsocc"
+                                    value="{Schedule>seatsocc}"
+                                />
+                                <viz.data:MeasureDefinition
+                                    name="Seatsmax"
+                                    value="{Schedule>seatsmax}"
+                                />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
+
+                    <viz:feeds>
+                        <viz.feeds:FeedItem
+                            uid="valueAxis"
+                            type="Measure"
+                            values="Seatsocc"
+                        />
+                        <viz.feeds:FeedItem
+                            uid="valueAxis2"
+                            type="Measure"
+                            values="Seatsmax"
+                        />
+                        <viz.feeds:FeedItem
+                            uid="bubbleWidth"
+                            type="Measure"
+                            values="Seatsmax"
+                        />
+                        <viz.feeds:FeedItem
+                            uid="color"
+                            type="Dimension"
+                            values="Carrid"
+                        />
+                    </viz:feeds>
+                    <viz:dependents>
+                        <viz:Popover id="idPopOver" />
+                    </viz:dependents>
+                </viz:VizFrame>
+            </Panel>
+        </VBox>
+    </Page>
+</mvc:View>

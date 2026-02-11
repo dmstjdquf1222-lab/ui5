@@ -1,0 +1,62 @@
+<mvc:View
+    controllerName="code.cl3.day5ui502.controller.JsonView1"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <HBox>
+                <Panel
+                    headerText="{panel>/header/text}"
+                    width="{panel>/header/wid}"
+                    height="{panel>/header/hei}"
+                >
+                <Input
+                    value="{/input1/val}"
+                    description="{/input1/desc}"
+                    width="{/input1/wid}"
+                />
+                <Input
+                    value="{/input2/val}"
+                    description="{/input2/desc}"
+                    width="{/input2/wid}"
+                />
+                <Input
+                    value="{/input3/val}"
+                    description="{/input3/desc}"
+                    width="{/input3/wid}"
+                />
+                </Panel>
+            </HBox>
+        </VBox>
+        <!--VBox>
+            <HBox>
+                <Button
+                    text="{/buttonSet/text}"
+                    type="{/buttonSet/type}"
+                    icon="{/buttonSet/icon}"
+                />
+                <Input
+                    value="{/inputSet/value}"
+                    placeholder="{/inputSet/holder}"
+                    width="{/inputSet/width}"
+                    description="{/inputSet/desc}"
+                />
+            </HBox>
+        </VBox-->
+
+        <!--Button
+            text="Say Hello"
+            press=".onShowHello"
+        />
+        <Input
+            value="{/inputSet/value}"
+            description="Hello {/recipient/name}"
+            valueLiveUpdate="true"
+            width="60%"
+        /-->
+    </Page>
+</mvc:View>

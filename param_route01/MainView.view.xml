@@ -1,0 +1,7 @@
+<mvc:View controllerName="code.cl3.paramroute01.controller.MainView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <Page id="page" title="{i18n>title}">
+        <Button text="Begin param routing" press="onBegin()"/>
+    </Page>
+</mvc:View>

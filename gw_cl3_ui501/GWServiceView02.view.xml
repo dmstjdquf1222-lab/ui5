@@ -1,0 +1,97 @@
+<mvc:View
+    controllerName="code.cl3.gwcl3ui501.controller.GWServiceView02"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            class="sapUiResponsiveMargin"
+            headerText="Gateway service"
+            width="auto"
+        >
+            <t:Table
+                id="airline"
+                rows="{/ScheduleSet}"
+                selectionMode="None"
+                visibleRowCount="12"
+            >
+                <t:extension>
+                    <OverflowToolbar style="Clear">
+                        <Title
+                            id="title"
+                            text="Schedule master"
+                        />
+                        <ToolbarSpacer />
+                        <Button
+                            text="Search"
+                            icon="sap-icon://search"
+                            press="onPress"
+                        />
+                        <Input
+                            id="ipt1"
+                            placeholder="Carrid"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                        <Input
+                            id="ipt2"
+                            placeholder="Connid"
+                            width="10rem"
+                            showClearIcon="true"
+                        />
+                    </OverflowToolbar>
+                </t:extension>
+                <t:columns>
+                    <t:Column width="auto">
+                        <Label text="Carrid" />
+                        <t:template>
+                            <Label text="{Carrid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Connid" />
+                        <t:template>
+                            <Label text="{Connid}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Countryfr" />
+                        <t:template>
+                            <Label text="{Countryfr}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Cityfrom" />
+                        <t:template>
+                            <Label text="{Cityfrom}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Countryto" />
+                        <t:template>
+                            <Label text="{Countryto}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Cityto" />
+                        <t:template>
+                            <Label text="{Cityto}" />
+                        </t:template>
+                    </t:Column>
+                    <t:Column width="auto">
+                        <Label text="Fltime" />
+                        <t:template>
+                            <Label text="{Fltime}" />
+                        </t:template>
+                    </t:Column>
+                </t:columns>
+            </t:Table>
+        </Panel>
+    </Page>
+</mvc:View>

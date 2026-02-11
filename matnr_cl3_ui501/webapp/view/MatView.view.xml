@@ -1,0 +1,81 @@
+<mvc:View
+    controllerName="cl3.mat.matnrcl3ui501.controller.MatView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <Panel
+                class="sapUiResponsiveMargin"
+                headerText="Material list"
+                width="55rem"
+                expandable="true"
+            >
+                <t:Table
+                    rows="{/MatSet}"
+                    selectionMode="None"
+                >
+                    <t:extension>
+                        <OverflowToolbar style="Clear">
+                            <Title text="Material list" />
+                        </OverflowToolbar>
+                    </t:extension>
+
+                    <t:columns>
+                        <t:Column width="10rem">
+                            <Label text="Material code" />
+                            <t:template>
+                                <Text
+                                    text="{matnr}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="10rem">
+                            <Label text="Material name" />
+                            <t:template>
+                                <Text
+                                    text="{maktx}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="10rem">
+                            <Label text="Complete material" />
+                            <t:template>
+                                <Text
+                                    text="{vpsta}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="10rem">
+                            <Label text="Material Type" />
+                            <t:template>
+                                <Text
+                                    text="{mtart}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="10rem">
+                            <Label text="Material Group" />
+                            <t:template>
+                                <Text
+                                    text="{matkl}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                    </t:columns>
+                </t:Table>
+            </Panel>
+        </VBox>
+    </Page>
+</mvc:View>
