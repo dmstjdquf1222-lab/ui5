@@ -1,0 +1,101 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "c1.mm.zuic1mm0023",
+    "type": "application",
+    "i18n": {
+      "bundleUrl": "i18n/i18n.properties",
+      "supportedLocales": [""],
+      "fallbackLocale": ""
+    },
+    "applicationVersion": { "version": "0.0.1" },
+    "title": "입고 품질판정",
+    "description": "RAP OData V4 기반 입고 품질판정 프로그램",
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_c1_mm_0023_bind/srvd/sap/zsd_c1_mm_0023_srv/0001/",
+        "type": "OData",
+        "settings": {
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "deviceTypes": { "desktop": true, "tablet": true, "phone": false }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.120.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.tnt": {},
+        "sap.f": {},
+        "sap.ui.layout": {},
+        "sap.uxap": {}
+      }
+    },
+    "contentDensities": { "compact": true, "cozy": false },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "c1.mm.zuic1mm0023.i18n.i18n",
+          "supportedLocales": [""],
+          "fallbackLocale": ""
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "ui": {
+        "type": "sap.ui.model.json.JSONModel",
+        "settings": { "data": {} }
+      }
+    },
+    "resources": {
+      "css": [{ "uri": "css/style.css" }]
+    },
+    "rootView": {
+      "viewName": "c1.mm.zuic1mm0023.view.App",
+      "type": "XML",
+      "id": "app",
+      "async": true
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "type": "View",
+        "viewType": "XML",
+        "path": "c1.mm.zuic1mm0023.view",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "async": true
+      },
+      "routes": [
+        {
+          "name": "RouteQualityInspection",
+          "pattern": "",
+          "target": "TargetQualityInspection"
+        }
+      ],
+      "targets": {
+        "TargetQualityInspection": {
+          "viewName": "QualityInspection",
+          "viewId": "QualityInspection"
+        }
+      }
+    }
+  }
+}

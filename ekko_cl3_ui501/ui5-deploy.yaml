@@ -17,7 +17,7 @@ builder:
           url: http://bgissap1.bgissap.co.kr:8000
           client: '100'
         app:
-          name: ZCL3PURCH01
+          name: ZCL3PUR
           description: UI5 Purchase list
           package: ZCL312
           transport: EFXK902220

@@ -1,0 +1,7 @@
+<mvc:View controllerName="code1.cl312.airlinesplit12.controller.App"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m">
+    <App id="app">
+    </App>
+</mvc:View>

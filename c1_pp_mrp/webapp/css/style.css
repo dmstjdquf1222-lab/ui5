@@ -1,0 +1,211 @@
+﻿html,
+body,
+#content,
+#container,
+#container-uiarea,
+.sapUiComponentContainer,
+.sapMApp,
+.sapMPage,
+.sapMPage > section {
+  height: 100%;
+}
+
+#container {
+  display: block;
+}
+.mrpPage { height: 100% !important; min-height: 0; }
+.mrpPage .sapFDynamicPageContent {
+  background: var(--mrp-page-background);
+}
+/* 검색조건 헤더: SAP Fiori shell 느낌의 연한 배경과 하단 경계선을 준다. */
+.mrpShellLikeHeader {
+  background: var(--mrp-header-background);
+  border-bottom: 1px solid var(--mrp-border-color);
+}
+.mrpFilterBar { gap: 0.75rem; }
+/* KPI 카드 줄: 카드가 4개보다 많거나 화면이 좁으면 wrap으로 다음 줄에 배치된다. */
+.mrpKpiStrip { gap: 0.5rem; align-items: stretch; }
+/* KPI 카드: ObjectNumber의 수량/단위가 잘리지 않도록 카드와 숫자 영역 모두 overflow를 풀어둔다. */
+.mrpKpi {
+  flex: 0 0 12rem;
+  min-width: 12rem;
+  min-height: 4.75rem;
+  box-sizing: border-box;
+  overflow: visible;
+  padding: 0.75rem;
+  border: 1px solid var(--mrp-border-color);
+  border-radius: 0.25rem;
+  background: var(--mrp-content-background);
+}
+.mrpKpiNumber {
+  display: inline-flex;
+  width: 100%;
+  min-height: 2rem;
+  align-items: baseline;
+  gap: 0.2rem;
+  overflow: visible;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+.mrpKpiNumber .sapMObjectNumberText,
+.mrpKpiNumber .sapMObjectNumberUnit {
+  display: inline-block;
+  overflow: visible;
+  white-space: nowrap;
+}
+.mrpKpiNumber .sapMObjectNumberText { line-height: 1.4; }
+.mrpKpiNumber .sapMObjectNumberUnit {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1;
+  vertical-align: baseline;
+}
+.mrpChartArea { gap: 1rem; width: 100%; align-items: stretch; }
+.mrpChartPanel {
+  width: 100%;
+  min-width: 20rem;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid var(--mrp-border-color);
+  background: var(--mrp-content-background);
+}
+.mrpChartWide { flex: 1 1 100%; }
+.mrpChartTitle { padding: 0.75rem 1rem 0; }
+.mrpChartSubtitle {
+  padding: 0.25rem 1rem 0;
+  color: var(--mrp-label-color);
+}
+/* 실행 목록과 결과 목록을 세로로 쌓는 작업 영역이다. 각 Panel이 같은 폭을 갖도록 100% 기준으로 잡는다. */
+.mrpWorkArea { gap: 1rem; width: 100%; }
+.mrpPanel {
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid var(--mrp-border-color);
+  background: var(--mrp-content-background);
+}
+.mrpPanel .sapUiTable { width: 100% !important; }
+/* 테이블 셀 안의 커버리지 요약: 좁은 칸에서도 소요/부족 상태를 짧은 막대로 보여준다. */
+.mrpCoverageSummary {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 0.3rem;
+  padding: 0.3rem 0.15rem;
+  box-sizing: border-box;
+}
+.mrpCoverageBar {
+  display: flex;
+  width: 100%;
+  height: 0.5rem;
+  overflow: hidden;
+  box-sizing: border-box;
+  border-radius: 0.25rem;
+  background: var(--mrp-field-background);
+}
+.mrpCoverageCovered,
+.mrpCoverageShort {
+  min-width: 0;
+}
+.mrpCoverageCovered { background: var(--mrp-positive-color); }
+.mrpCoverageShort { background: var(--mrp-negative-color); }
+.mrpCoverageCaption {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+  color: var(--mrp-label-color);
+  font-size: 0.68rem;
+  line-height: 0.9rem;
+  white-space: nowrap;
+}
+.mrpCoverageCaption span:first-child {
+  flex: 0 0 auto;
+  font-weight: 600;
+  color: var(--mrp-text-color);
+}
+.mrpCoverageCaption span:last-child {
+  min-width: 0;
+  overflow: hidden;
+  text-align: right;
+  text-overflow: ellipsis;
+}
+.mrpDetailBox {
+  border: 1px solid var(--mrp-border-color);
+  background: var(--mrp-content-background);
+}
+.mrpDetailHeader {
+  border-bottom: 1px solid var(--mrp-border-color);
+  padding: 1rem;
+}
+/* 상세 커버리지 영역: 선택 자재의 커버/부족 수량을 큰 막대와 숫자 카드로 다시 보여준다. */
+.mrpMiniCoverage {
+  padding: 1rem;
+  border-bottom: 1px solid var(--mrp-border-color);
+}
+.mrpMiniCoverageMeta {
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+.mrpMiniMetric {
+  min-width: 10rem;
+}
+.mrpMiniBarShell {
+  max-width: 48rem;
+}
+.mrpMiniBar {
+  display: flex;
+  width: 100%;
+  height: 1.25rem;
+  overflow: hidden;
+  border: 1px solid var(--mrp-field-border-color);
+  border-radius: 0.25rem;
+  background: var(--mrp-field-background);
+}
+.mrpMiniBarCovered,
+.mrpMiniBarShort {
+  min-width: 0;
+}
+.mrpMiniBarCovered { background: var(--mrp-positive-color); }
+.mrpMiniBarShort { background: var(--mrp-negative-color); }
+.mrpMiniValues {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(10rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  color: var(--mrp-text-color);
+}
+.mrpMiniValues div {
+  min-width: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--mrp-border-color);
+  border-radius: 0.25rem;
+  background: var(--mrp-content-background);
+}
+.mrpMiniValues span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--mrp-label-color);
+  font-size: 0.75rem;
+}
+.mrpMiniValues strong {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  margin-top: 0.15rem;
+  font-size: 1rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.mrpMiniValues i {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+}
+.mrpMiniLegendCovered { background: var(--mrp-positive-color); }
+.mrpMiniLegendShort { background: var(--mrp-negative-color); }
+

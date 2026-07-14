@@ -1,0 +1,388 @@
+﻿<mvc:View
+  controllerName="c1.pp.c1ppmrp.controller.c1_pp_mrp"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m"
+  xmlns:f="sap.f"
+  xmlns:table="sap.ui.table"
+  xmlns:core="sap.ui.core">
+
+  <f:DynamicPage
+    id="dynamicPage"
+    class="mrpPage"
+    headerExpanded="true"
+    toggleHeaderOnTitleClick="false">
+
+    <!--
+      화면 제목 영역
+      - MRP 결과 조회 프로그램의 제목, 설명, 새로고침 버튼을 배치한다.
+      - 새로고침은 현재 검색조건을 유지한 채 실행 목록/결과 목록 데이터를 다시 읽는다.
+    -->
+    <f:title>
+      <f:DynamicPageTitle>
+        <f:heading>
+          <Title text="MRP 결과 조회"/>
+        </f:heading>
+        <f:expandedContent>
+          <Text text="MRP 실행 결과와 부족 자재를 조회합니다."/>
+        </f:expandedContent>
+        <f:actions>
+          <Button
+            text="새로고침"
+            icon="sap-icon://refresh"
+            type="Transparent"
+            press=".onRefresh"/>
+        </f:actions>
+      </f:DynamicPageTitle>
+    </f:title>
+
+    <!--
+      검색 조건 영역
+      - 플랜트, MRP 실행 ID, 자재 조건을 입력한다.
+      - 조회 시 실행 목록과 부족 자재 결과 목록 양쪽에 필터가 적용된다.
+    -->
+    <f:header>
+      <f:DynamicPageHeader class="mrpShellLikeHeader">
+        <OverflowToolbar class="mrpFilterBar">
+          <Label text="플랜트" labelFor="werksInput"/>
+          <Input id="werksInput" width="8rem" value="TS00"/>
+
+          <Label text="MRP 실행 ID" labelFor="mrpRunInput"/>
+          <Input id="mrpRunInput" width="10rem"/>
+
+          <Label text="자재" labelFor="materialInput"/>
+          <Input id="materialInput" width="10rem"/>
+
+          <ToolbarSpacer/>
+          <Button
+            text="실행"
+            type="Emphasized"
+            icon="sap-icon://search"
+            press=".onSearch"/>
+          <Button
+            text="필터 초기화"
+            type="Transparent"
+            press=".onResetFilter"/>
+        </OverflowToolbar>
+      </f:DynamicPageHeader>
+    </f:header>
+
+    <f:content>
+      <VBox class="sapUiSmallMargin">
+
+        <!--
+          KPI 요약 영역
+          - 현재 필터 조건 기준으로 실행 건수, 부족 자재, PR 생성, 커버 완료 건수를 보여준다.
+          - 결과 목록 KPI는 테이블 표시 건수만으로 부족해서 별도 count 요청으로 계산한다.
+        -->
+        <HBox class="mrpKpiStrip sapUiSmallMarginBottom" renderType="Bare" wrap="Wrap">
+          <VBox class="mrpKpi">
+            <Text text="MRP 실행"/>
+            <ObjectNumber number="{view>/totalRuns}" unit="건" class="mrpKpiNumber"/>
+          </VBox>
+          <VBox class="mrpKpi">
+            <Text text="부족 자재"/>
+            <ObjectNumber number="{view>/shortageItems}" unit="건" state="Error" class="mrpKpiNumber"/>
+          </VBox>
+          <VBox class="mrpKpi">
+            <Text text="PR 생성"/>
+            <ObjectNumber number="{view>/criticalItems}" unit="건" state="Warning" class="mrpKpiNumber"/>
+          </VBox>
+          <VBox class="mrpKpi">
+            <Text text="정상/처리완료"/>
+            <ObjectNumber number="{view>/coveredItems}" unit="건" state="Success" class="mrpKpiNumber"/>
+          </VBox>
+        </HBox>
+
+        <VBox class="mrpWorkArea" renderType="Bare">
+
+          <!--
+            MRP 실행 결과 목록
+            - /MrpRuns 엔티티를 기준으로 실행 ID별 상태와 실행 일시를 보여준다.
+            - 행을 선택하면 선택한 MrpRunId가 검색조건에 들어가고, 아래 결과 목록이 해당 실행 건으로 좁혀진다.
+          -->
+          <VBox width="100%" class="mrpPanel">
+            <OverflowToolbar>
+              <Title text="MRP 실행 결과" level="H3"/>
+              <ToolbarSpacer/>
+              <Button
+                text="MRP ID 정렬"
+                type="Transparent"
+                icon="sap-icon://sort"
+                press=".onSortRuns"/>
+            </OverflowToolbar>
+
+            <IconTabBar expandable="false" select=".onRunTabSelect">
+              <items>
+                <IconTabFilter key="ALL" text="전체"/>
+                <IconTabFilter key="CONFIRMED" text="확정"/>
+                <IconTabFilter key="OPEN" text="미확정"/>
+              </items>
+            </IconTabBar>
+
+            <table:Table
+              id="mrpRunTable"
+              rows="{/MrpRuns}"
+              selectionMode="Single"
+              selectionBehavior="RowOnly"
+              rowSelectionChange=".onRunSelectionChange"
+              visibleRowCountMode="Fixed"
+              visibleRowCount="6"
+              enableBusyIndicator="true">
+              <table:columns>
+                <table:Column width="10rem">
+                  <Label text="MRP 실행 ID"/>
+                  <table:template>
+                    <ObjectIdentifier title="{MrpRunId}"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="5rem">
+                  <Label text="상태"/>
+                  <table:template>
+                    <ObjectStatus
+                      text="{MrpStatusText}"
+                      state="{path: 'MrpStatus', formatter: '.formatter.runState'}"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="5rem">
+                  <Label text="플랜트"/>
+                  <table:template>
+                    <Text text="{Werks}" tooltip="{Werks}"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="13rem">
+                  <Label text="플랜트명"/>
+                  <table:template>
+                    <Text text="{PlantName}" tooltip="{PlantName}" wrapping="false"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="7.5rem">
+                  <Label text="실행일"/>
+                  <table:template>
+                    <Text text="{RunDate}" wrapping="false"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="7.5rem">
+                  <Label text="실행시간"/>
+                  <table:template>
+                    <Text text="{RunTime}" wrapping="false"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="8.5rem">
+                  <Label text="생성자"/>
+                  <table:template>
+                    <Text text="{CreatedBy}" tooltip="{CreatedBy}" wrapping="false"/>
+                  </table:template>
+                </table:Column>
+              </table:columns>
+            </table:Table>
+          </VBox>
+
+          <!--
+            MRP 부족 자재 결과 목록
+            - /MrpResults 엔티티를 기준으로 소요수량, 재고, 부족수량, PR/생산오더 연결 상태를 보여준다.
+            - 탭을 바꾸면 전체/부족/PR 생성 조건이 controller에서 필터로 변환된다.
+            - 행을 선택하면 아래 커버리지 상세 영역이 갱신된다.
+          -->
+          <VBox id="resultPanel" width="100%" class="mrpPanel">
+            <OverflowToolbar>
+              <Title
+                text="{= '부족 자재 상세 (' + ${view>/totalResultItems} + '건)' }"
+                level="H3"/>
+              <ToolbarSpacer/>
+              <Button text="테이블" type="Transparent" press=".onTableViewPress"/>
+              <Button
+                text="상세"
+                type="Transparent"
+                icon="sap-icon://detail-view"
+                press=".onDetailPress"/>
+              <Button
+                text="EXCEL 다운로드"
+                type="Transparent"
+                icon="sap-icon://excel-attachment"
+                press=".onExport"/>
+            </OverflowToolbar>
+
+            <IconTabBar
+              id="resultTabBar"
+              expandable="false"
+              selectedKey="ALL"
+              select=".onResultTabSelect">
+              <items>
+                <IconTabFilter key="ALL" text="전체"/>
+                <IconTabFilter key="SHORTAGE" text="부족"/>
+                <IconTabFilter key="PR_TARGET" text="PR 생성"/>
+              </items>
+            </IconTabBar>
+
+            <table:Table
+              id="mrpResultTable"
+              rows="{path: '/MrpResults', parameters: {$count: true}}"
+              selectionMode="Single"
+              selectionBehavior="RowOnly"
+              rowSelectionChange=".onResultSelectionChange"
+              cellClick=".onResultSelectionChange"
+              visibleRowCountMode="Fixed"
+              visibleRowCount="10"
+              threshold="50"
+              rowHeight="44"
+              enableBusyIndicator="true">
+              <table:columns>
+                <table:Column width="9.5rem">
+                  <Label text="MRP 실행 ID"/>
+                  <table:template>
+                    <Text text="{MrpRunId}" tooltip="{MrpRunId}" wrapping="false"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="3.5rem">
+                  <Label text="Item"/>
+                  <table:template>
+                    <Text text="{MrpItemNo}" wrapping="false"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="10rem">
+                  <Label text="자재"/>
+                  <table:template>
+                    <ObjectIdentifier
+                      title="{Material}"
+                      text="{MaterialText}"
+                      titleActive="false"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="6.5rem" hAlign="End">
+                  <Label text="소요수량"/>
+                  <table:template>
+                    <ObjectNumber
+                      number="{parts: ['RequiredQty', 'BaseUnit'], formatter: '.formatter.quantity'}"
+                      unit="{BaseUnit}"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="6.5rem" hAlign="End">
+                  <Label text="가용재고"/>
+                  <table:template>
+                    <ObjectNumber
+                      number="{parts: ['StockQty', 'BaseUnit'], formatter: '.formatter.quantity'}"
+                      unit="{BaseUnit}"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="6.5rem" hAlign="End">
+                  <Label text="부족수량"/>
+                  <table:template>
+                    <ObjectNumber
+                      number="{parts: ['ShortQty', 'BaseUnit'], formatter: '.formatter.quantity'}"
+                      unit="{BaseUnit}"
+                      state="{parts: ['CoverageState', 'ShortQty'], formatter: '.formatter.coverageState'}"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="8.75rem">
+                  <Label text="커버리지 요약"/>
+                  <table:template>
+                    <core:HTML
+                      content="{parts: ['RequiredQty', 'ShortQty'], formatter: '.formatter.coverageSummaryHtml'}"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="5.5rem">
+                  <Label text="PR 상태"/>
+                  <table:template>
+                    <ObjectStatus
+                      text="{parts: ['PrCreateYn', 'PrNo', 'ShortQty', 'MaterialType'], formatter: '.formatter.prText'}"
+                      state="{parts: ['PrCreateYn', 'PrNo', 'ShortQty', 'MaterialType'], formatter: '.formatter.prState'}"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="7rem">
+                  <Label text="PR 번호"/>
+                  <table:template>
+                    <Text text="{PrNo}" tooltip="{PrNo}" wrapping="false"/>
+                  </table:template>
+                </table:Column>
+                <table:Column width="7.5rem">
+                  <Label text="생산오더"/>
+                  <table:template>
+                    <Text text="{OrderNo}" tooltip="{OrderNo}" wrapping="false"/>
+                  </table:template>
+                </table:Column>
+              </table:columns>
+            </table:Table>
+          </VBox>
+        </VBox>
+
+        <!--
+          선택 자재 커버리지 상세
+          - 결과 목록에서 선택한 자재의 소요수량 대비 커버수량/부족수량을 시각화한다.
+          - 미니 막대 HTML은 controller의 _buildMiniCoverageHtml에서 생성한다.
+        -->
+        <VBox id="detailBox" class="mrpDetailBox sapUiSmallMarginTop">
+          <VBox class="mrpDetailHeader">
+            <Title text="자재 커버리지" level="H3"/>
+            <Text
+              text="{= ${view>/detail/Material}
+                ? ${view>/detail/Material} + ' - ' + ${view>/detail/MaterialText}
+                : 'MRP 실행 결과에서 자재 행을 선택하면 커버리지가 표시됩니다.' }"/>
+          </VBox>
+
+          <VBox class="mrpMiniCoverage" visible="{= !!${view>/detail/Material} }">
+            <HBox class="mrpMiniCoverageMeta" renderType="Bare" wrap="Wrap">
+              <VBox class="mrpMiniMetric">
+                <Label text="MRP 실행 ID"/>
+                <Text text="{view>/detail/MrpRunId}"/>
+              </VBox>
+              <VBox class="mrpMiniMetric">
+                <Label text="Item"/>
+                <Text text="{view>/detail/MrpItemNo}"/>
+              </VBox>
+              <VBox class="mrpMiniMetric">
+                <Label text="커버리지율"/>
+                <ObjectNumber number="{view>/coverage/CoveredPercentText}" unit="%"/>
+              </VBox>
+            </HBox>
+            <core:HTML content="{view>/coverage/Html}"/>
+          </VBox>
+
+          <HBox class="sapUiSmallMargin" renderType="Bare" wrap="Wrap">
+            <VBox width="12rem">
+              <Label text="커버리지 상태"/>
+              <ObjectStatus
+                text="{view>/detail/CoverageStatusText}"
+                state="{view>/detail/CoverageState}"/>
+            </VBox>
+            <VBox width="12rem">
+              <Label text="커버수량"/>
+              <ObjectNumber
+                number="{parts: ['view>/coverage/CoveredQty', 'view>/detail/BaseUnit'], formatter: '.formatter.quantity'}"
+                unit="{view>/detail/BaseUnit}"
+                state="Success"/>
+            </VBox>
+            <VBox width="12rem">
+              <Label text="소요수량"/>
+              <ObjectNumber
+                number="{parts: ['view>/detail/RequiredQty', 'view>/detail/BaseUnit'], formatter: '.formatter.quantity'}"
+                unit="{view>/detail/BaseUnit}"/>
+            </VBox>
+            <VBox width="12rem">
+              <Label text="가용재고"/>
+              <ObjectNumber
+                number="{parts: ['view>/detail/StockQty', 'view>/detail/BaseUnit'], formatter: '.formatter.quantity'}"
+                unit="{view>/detail/BaseUnit}"/>
+            </VBox>
+            <VBox width="12rem">
+              <Label text="부족수량"/>
+              <ObjectNumber
+                number="{parts: ['view>/detail/ShortQty', 'view>/detail/BaseUnit'], formatter: '.formatter.quantity'}"
+                unit="{view>/detail/BaseUnit}"
+                state="Error"/>
+            </VBox>
+            <VBox width="12rem">
+              <Label text="PR 번호"/>
+              <Text text="{view>/detail/PrNo}"/>
+            </VBox>
+            <VBox width="12rem">
+              <Label text="생산오더"/>
+              <Text text="{view>/detail/OrderNo}"/>
+            </VBox>
+          </HBox>
+        </VBox>
+      </VBox>
+    </f:content>
+  </f:DynamicPage>
+</mvc:View>
+
+

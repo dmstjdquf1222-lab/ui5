@@ -1,0 +1,215 @@
+<mvc:View
+    controllerName="testcl312.cl3.testcl312.controller.TestView"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:t="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:c="sap.ui.core"
+    xmlns:f="sap.ui.layout.form"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <VBox>
+            <Panel
+                class="sapUiResponsiveMargin"
+                headerText="Shopping master"
+                width="auto"
+            >
+                <t:Table
+                    rows="{/shoppingSet}"
+                    selectionMode="Single"
+                    id="shopping"
+                >
+                    <t:extension>
+                        <OverflowToolbar style="Clear">
+
+                            <Button
+                                icon="sap-icon://search"
+                                press="onSearch()"
+                                text="Search"
+                            />
+                            <Input
+                                id="Remark2"
+                                width="10rem"
+                                showClearIcon="true"
+                                placeholder="Remark"
+                            />
+                            <Input
+                                id="Documentno"
+                                width="10rem"
+                                showClearIcon="true"
+                                placeholder="Document number"
+                            />
+                        </OverflowToolbar>
+                    </t:extension>
+
+                    <t:columns>
+                        <t:Column width="auto">
+                            <Label text="Fiscal Year" />
+                            <t:template>
+                                <Text
+                                    text="{Ryear}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="auto">
+                            <Label text="Company Code" />
+                            <t:template>    
+                                <Text
+                                    text="{Rbukrs}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="auto">
+                            <Label text="Document Number" />
+                            <t:template>
+                                <Text
+                                    text="{Belnr}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="auto">
+                            <Label text="Account Number" />
+                            <t:template>
+                                <Text
+                                    text="{Racct}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="auto">
+                            <Label text="Remark" />
+                            <t:template>
+                                <Text
+                                    text="{Remark}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="auto">
+                            <Label text="Amount" />
+                            <t:template>
+                                <Text
+                                    text="{parts:[{path:'Hsl'},{path:'Rtcur'}],
+	                                type: 'sap.ui.model.type.Currency',
+	                                formatOptions: {showMeasure: true }}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                        <t:Column width="auto">
+                            <Label text="Posting indicator" />
+                            <t:template>
+                                <Text
+                                    text="{PostYn}"
+                                    wrapping="false"
+                                />
+                            </t:template>
+                        </t:Column>
+                    </t:columns>
+                </t:Table>
+            </Panel>
+
+            <Panel
+                class="sapUiResponsiveMargin"
+                width="auto"
+            >
+                <OverflowToolbar>
+                    <ToolbarSpacer />
+                    <Text text="Contents" />
+                    <Button
+                        text="Clear"
+                        icon="sap-icon://clear-all"
+                        press="onClear"
+                    />
+                    <Button
+                        text="Display"
+                        icon="sap-icon://display"
+                        press="onDisplay"
+                    />
+                    <Button
+                        text="Create"
+                        icon="sap-icon://create"
+                        press="onCreate"
+                    />
+                    <Button
+                        text="Edit"
+                        icon="sap-icon://edit"
+                        press="onEdit"
+                    />
+                    <Button
+                        text="Delete"
+                        icon="sap-icon://delete"
+                        press="onDelete"
+                    />
+                </OverflowToolbar>
+                <f:SimpleForm
+                    layout="ResponsiveGridLayout"
+                    title="Data CRUD"
+                >
+                    <f:content>
+                        <Label text="Company" />
+                        <Input
+                            id="Rbukrs"
+                            width="10rem"
+                            placeholder="Company"
+                        />
+                        <Label text="Fiscal year" />
+                        <Input
+                            id="Ryear"
+                            width="10rem"
+                            placeholder="Year"
+                        />
+                        <Label text="Document number" />
+                        <Input
+                            id="Belnr"
+                            width="10rem"
+                            placeholder="Document no"
+
+                        />
+                        <Label text="Account Number" />
+                        <Input
+                            id="Racct"
+                            width="10rem"
+                            placeholder="Account Number"
+
+                        />
+                        <Label text="Text" />
+                        <Input
+                            id="Remark"
+                            width="10rem"
+                            placeholder="Text"
+
+                        />
+                        <Label text="Amount" />
+                        <Input
+                            id="Hsl"
+                            width="10rem"
+                            placeholder="Amount"
+
+                        />
+                        <Label text="Currency" />
+                        <Input
+                            id="Rtcur"
+                            width="10rem"
+                            placeholder="Currency"
+
+                        />
+                        <Label text="Posting indicator" />
+                        <Input
+                            id="PostYn"
+                            width="10rem"
+                            placeholder="PostYn"
+
+                        />
+                    </f:content>
+                </f:SimpleForm>
+            </Panel>
+        </VBox>
+    </Page>
+</mvc:View>

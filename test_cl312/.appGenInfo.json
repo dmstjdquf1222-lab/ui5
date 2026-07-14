@@ -1,0 +1,23 @@
+{
+  "generationParameters": {
+    "generationDate": "Wed Mar 04 2026 14:29:19 GMT+0900 (Korean Standard Time)",
+    "generatorPlatform": "Visual Studio Code",
+    "serviceType": "SAP System (ABAP On-Premise)",
+    "metadataFilename": "",
+    "serviceUrl": "http://bgissap1.bgissap.co.kr:8000/sap/opu/odata/sap/ZGWCL312_09_SRV",
+    "appName": "test_cl312",
+    "appTitle": "Test",
+    "appDescription": "Test",
+    "appNamespace": "test_cl312.cl3",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.120.0",
+    "enableEslint": false,
+    "enableTypeScript": false,
+    "showMockDataInfo": true,
+    "generatorVersion": "1.20.2",
+    "template": "Basic V2",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [],
+    "launchText": "To launch the generated application, run the following from the generated application root folder:\n\n```\n    npm start\n```"
+  }
+}

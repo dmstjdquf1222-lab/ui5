@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+        <edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Namespace="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001" Alias="SAP__self">
+            <Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
+            <EntityType Name="OperationConfirmationsType">
+                <Key>
+                    <PropertyRef Name="ConfirmationNo"/>
+                </Key>
+                <Property Name="ConfirmationNo" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="OrderNo" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="OrderItemNo" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="RoutingNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="OperationNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="OperationText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="Material" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="MaterialText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="PostingDate" Type="Edm.Date"/>
+                <Property Name="YieldQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="ScrapQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="BaseUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="MachineTime" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="LaborTime" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="TimeUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="FinalFlag" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="CreatedDate" Type="Edm.Date"/>
+                <Property Name="CreatedTime" Type="Edm.TimeOfDay" Nullable="false"/>
+                <Property Name="CreatedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="ChangedDate" Type="Edm.Date"/>
+                <Property Name="ChangedTime" Type="Edm.TimeOfDay" Nullable="false"/>
+                <Property Name="ChangedBy" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="__EntityControl" Type="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.EntityControl"/>
+                <Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.SAP__Message)" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="RoutingOperationsType">
+                <Key>
+                    <PropertyRef Name="RoutingNo"/>
+                    <PropertyRef Name="OperationNo"/>
+                    <PropertyRef Name="Plant"/>
+                </Key>
+                <Property Name="RoutingNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="OperationNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="OperationText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+            </EntityType>
+            <EntityType Name="WorkCentersType">
+                <Key>
+                    <PropertyRef Name="Plant"/>
+                    <PropertyRef Name="WorkCenter"/>
+                </Key>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="WorkCenterName" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="CostCenter" Type="Edm.String" Nullable="false" MaxLength="10"/>
+            </EntityType>
+            <EntityType Name="ProductionOrderOperationsType">
+                <Key>
+                    <PropertyRef Name="OrderNo"/>
+                    <PropertyRef Name="OperationNo"/>
+                    <PropertyRef Name="OrderItemNo"/>
+                </Key>
+                <Property Name="OrderNo" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="OperationNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="OrderItemNo" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="OrderQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="WeekNo" Type="Edm.String" Nullable="false" MaxLength="2"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PlantName" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="Material" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="MaterialText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="RoutingNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="OperationText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="WorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="CostCenter" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="BasicStartDate" Type="Edm.Date"/>
+                <Property Name="BasicEndDate" Type="Edm.Date"/>
+                <Property Name="ConfirmedYieldQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="ConfirmedScrapQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="BaseUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="LastPostingDate" Type="Edm.Date"/>
+                <Property Name="FinalFlag" Type="Edm.String" Nullable="false" MaxLength="1"/>
+                <Property Name="OperationStatus" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="OperationStatusText" Type="Edm.String" Nullable="false" MaxLength="20"/>
+            </EntityType>
+            <EntityType Name="ProductionOrderMonitorType">
+                <Key>
+                    <PropertyRef Name="OrderNo"/>
+                    <PropertyRef Name="OrderItemNo"/>
+                </Key>
+                <Property Name="OrderNo" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="OrderItemNo" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="OrderType" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PlantName" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="Material" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="MaterialText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="BasicStartDate" Type="Edm.Date"/>
+                <Property Name="BasicEndDate" Type="Edm.Date"/>
+                <Property Name="ProductionStatus" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="ProductionStatusText" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="CurrentOperationNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="CurrentOperationText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="CurrentWorkCenter" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="CurrentOperationStatus" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="CurrentOperationStatusText" Type="Edm.String" Nullable="false" MaxLength="20"/>
+                <Property Name="OrderQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="ConfirmedYieldQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="ConfirmedScrapQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="BaseUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="LastPostingDate" Type="Edm.Date"/>
+                <Property Name="TotalOperationCount" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="CompletedOperationCount" Type="Edm.Byte" Nullable="false"/>
+            </EntityType>
+            <EntityType Name="ProductionOrdersType">
+                <Key>
+                    <PropertyRef Name="OrderNo"/>
+                </Key>
+                <Property Name="OrderNo" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="PlanId" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="PlanItemNo" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="OrderType" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="PlantName" Type="Edm.String" Nullable="false" MaxLength="30"/>
+                <Property Name="MrpRunId" Type="Edm.String" Nullable="false" MaxLength="13"/>
+                <Property Name="Material" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="MaterialText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="BomId" Type="Edm.String" Nullable="false" MaxLength="10"/>
+                <Property Name="RoutingNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="BasicStartDate" Type="Edm.Date"/>
+                <Property Name="BasicEndDate" Type="Edm.Date"/>
+                <Property Name="ProductionStatus" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="ProductionStatusText" Type="Edm.String" Nullable="false" MaxLength="20"/>
+            </EntityType>
+            <EntityType Name="OrderComponentsType">
+                <Key>
+                    <PropertyRef Name="OrderNo"/>
+                    <PropertyRef Name="OrderItemNo"/>
+                    <PropertyRef Name="ComponentItemNo"/>
+                </Key>
+                <Property Name="OrderNo" Type="Edm.String" Nullable="false" MaxLength="12"/>
+                <Property Name="OrderItemNo" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="ComponentItemNo" Type="Edm.String" Nullable="false" MaxLength="4"/>
+                <Property Name="OperationNo" Type="Edm.String" Nullable="false" MaxLength="8"/>
+                <Property Name="Component" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="ComponentText" Type="Edm.String" Nullable="false" MaxLength="40"/>
+                <Property Name="RequiredQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="ConsumedQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="RemainingQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+                <Property Name="BaseUnit" Type="Edm.String" Nullable="false" MaxLength="3"/>
+                <Property Name="StorageLocation" Type="Edm.String" Nullable="false" MaxLength="4"/>
+            </EntityType>
+            <ComplexType Name="EntityControl">
+                <Property Name="Deletable" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="Updatable" Type="Edm.Boolean" Nullable="false"/>
+            </ComplexType>
+            <ComplexType Name="SAP__Message">
+                <Property Name="code" Type="Edm.String" Nullable="false"/>
+                <Property Name="message" Type="Edm.String" Nullable="false"/>
+                <Property Name="target" Type="Edm.String"/>
+                <Property Name="additionalTargets" Type="Collection(Edm.String)" Nullable="false"/>
+                <Property Name="transition" Type="Edm.Boolean" Nullable="false"/>
+                <Property Name="numericSeverity" Type="Edm.Byte" Nullable="false"/>
+                <Property Name="longtextUrl" Type="Edm.String"/>
+            </ComplexType>
+            <EntityContainer Name="Container">
+                <EntitySet Name="OperationConfirmations" EntityType="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.OperationConfirmationsType"/>
+                <EntitySet Name="OrderComponents" EntityType="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.OrderComponentsType"/>
+                <EntitySet Name="ProductionOrderMonitor" EntityType="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.ProductionOrderMonitorType"/>
+                <EntitySet Name="ProductionOrderOperations" EntityType="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.ProductionOrderOperationsType"/>
+                <EntitySet Name="ProductionOrders" EntityType="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.ProductionOrdersType"/>
+                <EntitySet Name="RoutingOperations" EntityType="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.RoutingOperationsType"/>
+                <EntitySet Name="WorkCenters" EntityType="com.sap.gateway.srvd.zrap_c1_pp_0002_srv.v0001.WorkCentersType"/>
+            </EntityContainer>
+            <Annotations Target="SAP__self.OperationConfirmationsType/ConfirmationNo">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="확정 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/OrderItemNo">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="생산오더 품목 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/RoutingNo">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="라우팅 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/OperationNo">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="공정 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/WorkCenter">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="작업장 코드"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/Material">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="자재 번호"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 자재 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/YieldQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+                <Annotation Term="SAP__common.Label" String="양품 수량"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/ScrapQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+                <Annotation Term="SAP__common.Label" String="불량 수량"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/BaseUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="기본단위"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/MachineTime">
+                <Annotation Term="SAP__measures.Unit" Path="TimeUnit"/>
+                <Annotation Term="SAP__common.Label" String="실제 기계시간(분)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/LaborTime">
+                <Annotation Term="SAP__measures.Unit" Path="TimeUnit"/>
+                <Annotation Term="SAP__common.Label" String="실제 노무시간(분)"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/TimeUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="시간 단위"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/ChangedBy">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Changed By"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Name of Person Who Changed Object"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/__EntityControl">
+                <Annotation Term="SAP__core.Computed"/>
+                <Annotation Term="SAP__UI.HiddenFilter"/>
+                <Annotation Term="SAP__UI.Hidden"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType">
+                <Annotation Term="SAP__common.Label" String="Operation Confirmation History"/>
+                <Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/OperationConfirmations">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonFilterableProperties">
+                            <Collection>
+                                <PropertyPath>__EntityControl</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SortRestrictions">
+                    <Record>
+                        <PropertyValue Property="NonSortableProperties">
+                            <Collection>
+                                <PropertyPath>__EntityControl</PropertyPath>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Path="__EntityControl/Deletable"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Path="__EntityControl/Updatable"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.Container">
+                <Annotation Term="SAP__CodeList.UnitsOfMeasure">
+                    <Record>
+                        <PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="CollectionPath" String="UnitsOfMeasure"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__aggregation.ApplySupported">
+                    <Record>
+                        <PropertyValue Property="Transformations">
+                            <Collection>
+                                <String>aggregate</String>
+                                <String>groupby</String>
+                                <String>filter</String>
+                            </Collection>
+                        </PropertyValue>
+                        <PropertyValue Property="Rollup" EnumMember="SAP__aggregation.RollupType/None"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+                <Annotation Term="SAP__capabilities.FilterFunctions">
+                    <Collection>
+                        <String>eq</String>
+                        <String>ne</String>
+                        <String>gt</String>
+                        <String>ge</String>
+                        <String>lt</String>
+                        <String>le</String>
+                        <String>and</String>
+                        <String>or</String>
+                        <String>contains</String>
+                        <String>startswith</String>
+                        <String>endswith</String>
+                        <String>any</String>
+                        <String>all</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.SupportedFormats">
+                    <Collection>
+                        <String>application/json</String>
+                        <String>application/pdf</String>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="SAP__PDF.Features">
+                    <Record>
+                        <PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+                        <PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+                        <PropertyValue Property="ArchiveFormat" Bool="true"/>
+                        <PropertyValue Property="Border" Bool="true"/>
+                        <PropertyValue Property="CoverPage" Bool="true"/>
+                        <PropertyValue Property="FitToPage" Bool="true"/>
+                        <PropertyValue Property="FontName" Bool="true"/>
+                        <PropertyValue Property="FontSize" Bool="true"/>
+                        <PropertyValue Property="Margin" Bool="true"/>
+                        <PropertyValue Property="Padding" Bool="true"/>
+                        <PropertyValue Property="Signature" Bool="true"/>
+                        <PropertyValue Property="HeaderFooter" Bool="true"/>
+                        <PropertyValue Property="ResultSizeDefault" Int="20000"/>
+                        <PropertyValue Property="ResultSizeMaximum" Int="20000"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+                <Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+            </Annotations>
+            <Annotations Target="SAP__self.RoutingOperationsType/RoutingNo">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="라우팅 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.RoutingOperationsType/OperationNo">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="공정 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.RoutingOperationsType/Plant">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="플랜트"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 플랜트"/>
+            </Annotations>
+            <Annotations Target="SAP__self.RoutingOperationsType/WorkCenter">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="작업장 코드"/>
+            </Annotations>
+            <Annotations Target="SAP__self.RoutingOperationsType">
+                <Annotation Term="SAP__common.Label" String="Value Help Routing Operation"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/RoutingOperations">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkCentersType/Plant">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="플랜트"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 플랜트"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkCentersType/WorkCenter">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="작업장 코드"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkCentersType/CostCenter">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="원가 센터"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkCentersType">
+                <Annotation Term="SAP__common.Label" String="Value Help Work Center"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/WorkCenters">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/OperationNo">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="공정 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/OrderItemNo">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="생산오더 품목 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/OrderQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+                <Annotation Term="SAP__common.Label" String="오더 수량"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/WeekNo">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="주"/>
+                <Annotation Term="SAP__common.QuickInfo" String="주차별 계획"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/Plant">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="플랜트"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 플랜트"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/Material">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="자재 번호"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 자재 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/RoutingNo">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="라우팅 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/WorkCenter">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="작업장 코드"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/CostCenter">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="Cost Center"/>
+                <Annotation Term="SAP__common.Heading" String="Cost Ctr"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/ConfirmedYieldQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/ConfirmedScrapQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/BaseUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="기본단위"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType">
+                <Annotation Term="SAP__common.Label" String="Production Order Operation Performance"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ProductionOrderOperations">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="OrderQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ConfirmedYieldQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ConfirmedScrapQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/OrderItemNo">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="생산오더 품목 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/OrderType">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="오더 유형"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/Plant">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="플랜트"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 플랜트"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/Material">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="자재 번호"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 자재 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/ProductionStatus">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="오더 상태"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/CurrentWorkCenter">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="작업장 코드"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/OrderQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+                <Annotation Term="SAP__common.Label" String="오더 수량"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/ConfirmedYieldQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/ConfirmedScrapQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/BaseUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="기본단위"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType">
+                <Annotation Term="SAP__common.Label" String="Production Order Monitor"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ProductionOrderMonitor">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="OrderQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ConfirmedYieldQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ConfirmedScrapQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/PlanItemNo">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="생산계획 행 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/OrderType">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="오더 유형"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/Plant">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="플랜트"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 플랜트"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/Material">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="자재 번호"/>
+                <Annotation Term="SAP__common.QuickInfo" String="[Taesan] 자재 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/BomId">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="BOM ID"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/RoutingNo">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="라우팅 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/ProductionStatus">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="오더 상태"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType">
+                <Annotation Term="SAP__common.Label" String="Production Order Header"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/ProductionOrders">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/OrderItemNo">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="생산오더 품목 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/ComponentItemNo">
+                <Annotation Term="SAP__common.IsDigitSequence"/>
+                <Annotation Term="SAP__common.Label" String="구성품 품목 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/OperationNo">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="공정 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/Component">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="구성품 자재 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/RequiredQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+                <Annotation Term="SAP__common.Label" String="소요 수량"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/ConsumedQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+                <Annotation Term="SAP__common.Label" String="출고 수량"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/RemainingQty">
+                <Annotation Term="SAP__measures.Unit" Path="BaseUnit"/>
+                <Annotation Term="SAP__common.Label" String="잔여 수량"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/BaseUnit">
+                <Annotation Term="SAP__common.IsUnit"/>
+                <Annotation Term="SAP__common.Label" String="기본단위"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/StorageLocation">
+                <Annotation Term="SAP__common.IsUpperCase"/>
+                <Annotation Term="SAP__common.Label" String="출고 저장위치"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType">
+                <Annotation Term="SAP__common.Label" String="Order Component Consumption"/>
+            </Annotations>
+            <Annotations Target="SAP__self.Container/OrderComponents">
+                <Annotation Term="SAP__capabilities.SearchRestrictions">
+                    <Record>
+                        <PropertyValue Property="Searchable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.InsertRestrictions">
+                    <Record>
+                        <PropertyValue Property="Insertable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.DeleteRestrictions">
+                    <Record>
+                        <PropertyValue Property="Deletable" Bool="false"/>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.UpdateRestrictions">
+                    <Record>
+                        <PropertyValue Property="Updatable" Bool="false"/>
+                        <PropertyValue Property="QueryOptions">
+                            <Record>
+                                <PropertyValue Property="SelectSupported" Bool="true"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="SAP__core.OptimisticConcurrency">
+                    <Collection/>
+                </Annotation>
+                <Annotation Term="SAP__capabilities.FilterRestrictions">
+                    <Record>
+                        <PropertyValue Property="FilterExpressionRestrictions">
+                            <Collection>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="RequiredQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="ConsumedQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                                <Record>
+                                    <PropertyValue Property="Property" PropertyPath="RemainingQty"/>
+                                    <PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+                                </Record>
+                            </Collection>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/OrderNo">
+                <Annotation Term="SAP__common.Label" String="생산오더 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/OperationText">
+                <Annotation Term="SAP__common.Label" String="공정명"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/MaterialText">
+                <Annotation Term="SAP__common.Label" String="Material Description"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/PostingDate">
+                <Annotation Term="SAP__common.Label" String="확정일"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/FinalFlag">
+                <Annotation Term="SAP__common.Label" String="최종확정 여부"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/CreatedDate">
+                <Annotation Term="SAP__common.Label" String="Created On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Record Creation Date"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/CreatedTime">
+                <Annotation Term="SAP__common.Label" String="Time"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Entry time"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/CreatedBy">
+                <Annotation Term="SAP__common.Label" String="Created by"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Entered by external system user"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/ChangedDate">
+                <Annotation Term="SAP__common.Label" String="Changed On"/>
+                <Annotation Term="SAP__common.Heading" String="Chngd On"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Last Changed On"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/ChangedTime">
+                <Annotation Term="SAP__common.Label" String="Changed at"/>
+                <Annotation Term="SAP__common.Heading" String="TimeOfChng"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Time last change was made"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/__EntityControl/Deletable">
+                <Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
+                <Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OperationConfirmationsType/__EntityControl/Updatable">
+                <Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
+                <Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+            </Annotations>
+            <Annotations Target="SAP__self.RoutingOperationsType/OperationText">
+                <Annotation Term="SAP__common.Label" String="공정명"/>
+            </Annotations>
+            <Annotations Target="SAP__self.WorkCentersType/WorkCenterName">
+                <Annotation Term="SAP__common.Label" String="작업장명"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/OrderNo">
+                <Annotation Term="SAP__common.Label" String="생산오더 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/PlantName">
+                <Annotation Term="SAP__common.Label" String="플랜트명"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/MaterialText">
+                <Annotation Term="SAP__common.Label" String="Material Description"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/OperationText">
+                <Annotation Term="SAP__common.Label" String="공정명"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/BasicStartDate">
+                <Annotation Term="SAP__common.Label" String="계획 시작일"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderOperationsType/BasicEndDate">
+                <Annotation Term="SAP__common.Label" String="계획 종료일"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/OrderNo">
+                <Annotation Term="SAP__common.Label" String="생산오더 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/PlantName">
+                <Annotation Term="SAP__common.Label" String="플랜트명"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/MaterialText">
+                <Annotation Term="SAP__common.Label" String="Material Description"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/BasicStartDate">
+                <Annotation Term="SAP__common.Label" String="계획 시작일"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/BasicEndDate">
+                <Annotation Term="SAP__common.Label" String="계획 종료일"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrderMonitorType/CurrentOperationText">
+                <Annotation Term="SAP__common.Label" String="공정명"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/OrderNo">
+                <Annotation Term="SAP__common.Label" String="생산오더 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/PlanId">
+                <Annotation Term="SAP__common.Label" String="생산계획 식별자"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/PlantName">
+                <Annotation Term="SAP__common.Label" String="플랜트명"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/MrpRunId">
+                <Annotation Term="SAP__common.Label" String="MRP 실행 식별자"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/MaterialText">
+                <Annotation Term="SAP__common.Label" String="Material Description"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/BasicStartDate">
+                <Annotation Term="SAP__common.Label" String="계획 시작일"/>
+            </Annotations>
+            <Annotations Target="SAP__self.ProductionOrdersType/BasicEndDate">
+                <Annotation Term="SAP__common.Label" String="계획 종료일"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/OrderNo">
+                <Annotation Term="SAP__common.Label" String="생산오더 번호"/>
+            </Annotations>
+            <Annotations Target="SAP__self.OrderComponentsType/ComponentText">
+                <Annotation Term="SAP__common.Label" String="Material Description"/>
+            </Annotations>
+            <Annotations Target="SAP__self.EntityControl/Deletable">
+                <Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
+                <Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+            </Annotations>
+            <Annotations Target="SAP__self.EntityControl/Updatable">
+                <Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
+                <Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
+                <Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
