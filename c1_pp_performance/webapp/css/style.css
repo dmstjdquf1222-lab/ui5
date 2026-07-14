@@ -1,0 +1,141 @@
+﻿.performancePage .sapFDynamicPageTitle {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+/* 상단 필터 헤더: DynamicPageHeader 내부의 여백을 줄여 다른 PP 화면과 높이를 맞춘다. */
+.performanceFilterHeader {
+    padding-bottom: 0.5rem;
+}
+
+.performanceFilterBar {
+    border-radius: 0.5rem;
+}
+
+/* KPI 카드 줄: 상태별 공정 건수를 카드 형태로 보여주고 화면이 좁으면 줄바꿈한다. */
+.performanceKpiStrip {
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+/* KPI 카드: 숫자와 단위가 위아래로 잘리지 않도록 최소 높이와 overflow를 지정한다. */
+.performanceKpi {
+    flex: 0 0 12rem;
+    min-width: 12rem;
+    min-height: 4.75rem;
+    box-sizing: border-box;
+    overflow: visible;
+    padding: 0.75rem;
+    border: 1px solid var(--sapGroup_ContentBorderColor, #d9e0e7);
+    border-radius: 0.25rem;
+    background: var(--sapGroup_ContentBackground, #fff);
+}
+
+.performanceKpiNumber {
+    display: inline-flex;
+    width: 100%;
+    min-height: 2rem;
+    align-items: baseline;
+    gap: 0.2rem;
+    overflow: visible;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.performanceKpiNumber .sapMObjectNumberText,
+.performanceKpiNumber .sapMObjectNumberUnit {
+    display: inline-block;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+.performanceKpiNumber .sapMObjectNumberText {
+    line-height: 1.4;
+}
+
+.performanceKpiNumber .sapMObjectNumberUnit {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1;
+    vertical-align: baseline;
+}
+
+.performanceWorkArea .sapMPanel {
+    border-radius: 0.5rem;
+}
+
+/* 필터 필드 묶음: 여러 검색조건이 한 줄에 배치되고 공간이 부족하면 다음 줄로 흐른다. */
+.performanceFilterFields {
+    width: 100%;
+    gap: 0.75rem;
+}
+
+.performanceFilterField {
+    width: 10.5rem;
+}
+
+.performanceFilterFieldWide {
+    width: 13rem;
+}
+
+.performanceStatusFilterField {
+    width: 8rem;
+}
+
+.performanceFilterField .sapMInputBase,
+.performanceFilterField .sapMSlt {
+    width: 100%;
+}
+
+.performanceFilterActions {
+    min-height: 3.25rem;
+    margin-left: auto;
+}
+/* 공정 목록 행 높이: 오더/자재명이 있는 행도 너무 눌리지 않도록 최소 높이를 확보한다. */
+.performanceOperationTable .sapMListTblRow {
+    height: 4rem;
+}
+
+.performanceOperationTable .sapMListTblCell {
+    vertical-align: middle;
+}
+
+.performanceOperationTable .sapMObjectIdentifierTitle,
+.performanceOperationTable .sapMObjectIdentifierText,
+.performanceOperationTable .sapMText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.performanceOperationTable .sapMListTblSubCnt {
+    display: none;
+}
+/* 좁은 컬럼은 압축하되, 오더/자재/공정명 영역은 말줄임 처리해서 테이블 폭이 과하게 늘어나지 않게 한다. */
+.performanceOperationTable .sapMListTblHeaderCell,
+.performanceOperationTable .sapMListTblCell {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.performanceMailPanel {
+    border-radius: 0.5rem;
+}
+
+.performanceMailTable .sapMListTblRow {
+    height: 3.5rem;
+}
+
+.performanceMailTable .sapMListTblCell {
+    vertical-align: middle;
+}
+
+.performanceMailTable .sapMObjectIdentifierTitle,
+.performanceMailTable .sapMObjectIdentifierText,
+.performanceMailTable .sapMText {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

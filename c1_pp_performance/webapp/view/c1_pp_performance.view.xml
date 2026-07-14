@@ -1,0 +1,319 @@
+﻿<mvc:View
+    controllerName="c1.pp.c1ppperformance.controller.c1_pp_performance"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core">
+    <f:DynamicPage
+        id="dynamicPage"
+        class="performancePage"
+        headerExpanded="true"
+        toggleHeaderOnTitleClick="false">
+
+        <!--
+            전체 화면 구조
+            - 상단 Header: 생산오더/주차/플랜트/자재/작업장/공정/상태 검색조건.
+            - KPI Strip: 현재 조건 기준 전체/대기/진행/완료 공정 건수.
+            - 공정 목록: /ProductionOrderOperations에서 공정별 계획/실적/상태 조회.
+            - 공정 상세: 선택 행의 view>/selected 데이터를 표시하고 실적 입력 팝업을 연다.
+            - MM 알림 대상: CNF 상태이면서 MailSent가 미처리인 생산오더 메일 발송.
+        -->
+
+        <!--
+            화면 제목 영역
+            - 생산 실적 관리 화면의 제목과 전체 새로고침 버튼을 배치한다.
+            - 새로고침은 현재 필터를 유지한 채 공정 목록과 KPI만 다시 읽는다.
+        -->
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <HBox alignItems="Center" renderType="Bare">
+                        <VBox>
+                            <Title text="생산 실적 관리" level="H2" />
+                            <Text text="공정별 실적 조회, 현장 입력, 최종 확정을 한 화면에서 처리합니다." />
+                        </VBox>
+                    </HBox>
+                </f:heading>
+                <f:actions>
+                    <Button text="새로고침" icon="sap-icon://refresh" type="Transparent" press=".onRefresh" />
+                </f:actions>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!--
+            검색조건 영역
+            - 모든 입력값은 view>/filters 아래에 저장되고, 조회 시 _buildOperationFilters에서 OData Filter로 변환된다.
+            - 생산오더/플랜트/자재/작업장/공정은 서치헬프를 제공한다.
+            - 상태 Select는 WAIT/RUN/DONE 코드값으로 공정 상태를 필터링한다.
+        -->
+        <f:header>
+            <f:DynamicPageHeader class="performanceFilterHeader">
+                <HBox class="performanceFilterFields" wrap="Wrap" alignItems="End" renderType="Bare">
+                    <VBox class="performanceFilterField">
+                        <Label text="생산오더" labelFor="orderNoFilter" />
+                        <Input id="orderNoFilter" value="{view>/filters/orderNo}" placeholder="생산오더 번호" showValueHelp="true" valueHelpRequest=".onOrderValueHelp" submit=".onApplyFilters" />
+                    </VBox>                    <VBox class="performanceFilterField performanceWeekFilterField">
+                        <Label text="생산 주차" labelFor="weekNoFilter" />
+                        <Input id="weekNoFilter" value="{view>/filters/weekNo}" placeholder="01" maxLength="2" submit=".onApplyFilters" />
+                    </VBox>
+                    <VBox class="performanceFilterField">
+                        <Label text="플랜트" labelFor="plantFilter" />
+                        <Input id="plantFilter" value="{view>/filters/plant}" placeholder="코드 또는 플랜트명" showValueHelp="true" valueHelpRequest=".onPlantValueHelp" submit=".onApplyFilters" />
+                    </VBox>
+                    <VBox class="performanceFilterField performanceFilterFieldWide">
+                        <Label text="자재" labelFor="materialFilter" />
+                        <Input id="materialFilter" value="{view>/filters/material}" placeholder="자재 번호 또는 명칭" showValueHelp="true" valueHelpRequest=".onMaterialValueHelp" submit=".onApplyFilters" />
+                    </VBox>
+                    <VBox class="performanceFilterField">
+                        <Label text="작업장" labelFor="workCenterFilter" />
+                        <Input id="workCenterFilter" value="{view>/filters/workCenter}" placeholder="작업장 코드" showValueHelp="true" valueHelpRequest=".onWorkCenterValueHelp" submit=".onApplyFilters" />
+                    </VBox>
+                    <VBox class="performanceFilterField">
+                        <Label text="공정" labelFor="operationFilter" />
+                        <Input id="operationFilter" value="{view>/filters/operation}" placeholder="번호 또는 공정명" showValueHelp="true" valueHelpRequest=".onOperationValueHelp" submit=".onApplyFilters" />
+                    </VBox>
+                    <VBox class="performanceFilterField performanceStatusFilterField">
+                        <Label text="상태" labelFor="statusSelect" />
+                        <Select id="statusSelect" selectedKey="{view>/filters/status}">
+                            <core:Item key="ALL" text="전체" />
+                            <core:Item key="WAIT" text="대기" />
+                            <core:Item key="RUN" text="진행" />
+                            <core:Item key="DONE" text="완료" />
+                        </Select>
+                    </VBox>
+                    <HBox class="performanceFilterActions" alignItems="End" renderType="Bare">
+                        <Button text="조회" icon="sap-icon://search" type="Emphasized" press=".onApplyFilters" />
+                        <Button text="초기화" icon="sap-icon://clear-filter" type="Transparent" press=".onResetFilters" class="sapUiTinyMarginBegin" />
+                    </HBox>
+                </HBox>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <!--
+            조회 결과 영역
+            - 상단 KPI는 현재 검색조건 기준의 공정 상태별 건수를 보여준다.
+            - 왼쪽 목록에서 공정을 선택하면 오른쪽 상세 패널이 열리고 실적 입력 버튼이 활성화된다.
+        -->
+        <f:content>
+            <VBox width="100%" class="sapUiSmallMargin">
+                <!--
+                    KPI 요약 카드
+                    - 전체/대기/진행/완료 공정 건수를 한눈에 보여준다.
+                    - 숫자는 테이블 바인딩 길이가 아니라 controller의 _refreshKpiCounts에서 별도로 계산한다.
+                -->
+                <HBox wrap="Wrap" class="performanceKpiStrip sapUiTinyMarginBottom" renderType="Bare">
+                    <VBox class="performanceKpi">
+                        <Text text="전체 공정" />
+                        <ObjectNumber number="{view>/kpi/total}" unit="건" emphasized="true" class="performanceKpiNumber" />
+                    </VBox>
+                    <VBox class="performanceKpi">
+                        <Text text="대기" />
+                        <ObjectNumber number="{view>/kpi/wait}" unit="건" state="Warning" emphasized="true" class="performanceKpiNumber" />
+                    </VBox>
+                    <VBox class="performanceKpi">
+                        <Text text="진행" />
+                        <ObjectNumber number="{view>/kpi/run}" unit="건" state="Information" emphasized="true" class="performanceKpiNumber" />
+                    </VBox>
+                    <VBox class="performanceKpi">
+                        <Text text="완료" />
+                        <ObjectNumber number="{view>/kpi/done}" unit="건" state="Success" emphasized="true" class="performanceKpiNumber" />
+                    </VBox>
+                </HBox>
+
+                <!--
+                    작업 영역
+                    - 왼쪽은 생산오더 공정 목록, 오른쪽은 선택 공정 상세와 실적 입력 버튼이다.
+                    - detailVisible 값에 따라 왼쪽 목록 폭을 줄이고 오른쪽 상세 패널을 보여준다.
+                -->
+                <HBox width="100%" renderType="Bare" class="performanceWorkArea">
+                    <VBox width="{= %{view>/detailVisible} ? 'calc(100% - 31rem)' : '100%' }" class="sapUiTinyMarginEnd">
+                        <Panel backgroundDesign="Solid" height="calc(100vh - 19rem)">
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    <Title text="생산오더 공정 실적" level="H3" />
+                                    <ToolbarSpacer />
+                                    <ObjectStatus text="{= ${view>/kpi/total} + '건' }" icon="sap-icon://table-view" />
+                                </OverflowToolbar>
+                            </headerToolbar>
+
+                            <!--
+                                공정 목록 테이블
+                                - /ProductionOrderOperations 엔티티에서 공정별 계획수량, 실적수량, 상태를 조회한다.
+                                - growingScrollToLoad=true라 스크롤을 내리면 다음 데이터가 자동으로 추가 조회된다.
+                                - 행을 선택하면 onOperationPress가 selected 모델을 갱신한다.
+                            -->
+                            <ScrollContainer height="calc(100vh - 22.5rem)" vertical="true" horizontal="false">
+                                <Table
+                                    id="operationTable"
+                                    class="performanceOperationTable"
+                                    mode="None"
+                                    growing="true"
+                                    growingThreshold="40"
+                                    growingScrollToLoad="true"
+                                    fixedLayout="Strict"
+                                    sticky="ColumnHeaders"
+                                    itemPress=".onOperationPress"
+                                    updateFinished=".onOperationsUpdated"
+                                    items="{path: '/ProductionOrderOperations', parameters: {$count: true, $select: 'OrderNo,OrderItemNo,WeekNo,OperationNo,OperationText,RoutingNo,Plant,WorkCenter,Material,MaterialText,OrderQty,BaseUnit,ConfirmedYieldQty,ConfirmedScrapQty,FinalFlag,OperationStatus,OperationStatusText,LastPostingDate,StdMachineTime,StdLaborTime,StdBaseQty'}}">
+                                    <columns>
+                                        <Column width="8.5rem"><Text text="오더/작업장" /></Column>
+                                        <Column width="3.25rem" hAlign="Center"><Text text="주차" /></Column>
+                                        <Column width="3.5rem" hAlign="Center"><Text text="공정" /></Column>
+                                        <Column width="12.5rem"><Text text="공정명" /></Column>
+                                        <Column width="12.5rem" minScreenWidth="Tablet" demandPopin="true"><Text text="자재" /></Column>
+                                        <Column hAlign="End" width="6.5rem"><Text text="계획수량" /></Column>
+                                        <Column hAlign="End" width="5rem"><Text text="양품" /></Column>
+                                        <Column hAlign="End" width="5rem"><Text text="불량" /></Column>
+                                        <Column width="4rem"><Text text="상태" /></Column>
+                                        <Column width="6.5rem"><Text text="최종일" /></Column>
+                                        <Column visible="false"><Text text="품목" /></Column>
+                                    </columns>
+                                    <items>
+                                        <ColumnListItem type="Active" highlight="{ path: 'OperationStatus', formatter: '.formatHighlight' }">
+                                            <cells>
+                                                <ObjectIdentifier title="{OrderNo}" text="{Plant} · {WorkCenter}" tooltip="{= ${OrderNo} + ' / ' + ${Plant} + ' / ' + ${WorkCenter} }" />
+                                                <Text text="{= ${WeekNo} ? ${WeekNo} + '주차' : '-' }" />
+                                                <Text text="{OperationNo}" />
+                                                <ObjectIdentifier title="{OperationText}" text="{RoutingNo}" tooltip="{= ${OperationText} + ' / ' + ${RoutingNo} }" />
+                                                <ObjectIdentifier title="{MaterialText}" text="{Material}" tooltip="{= ${MaterialText} + ' / ' + ${Material} }" />
+                                                <ObjectNumber number="{path: 'OrderQty', formatter: '.formatQuantityInteger'}" unit="{BaseUnit}" tooltip="{= ${OrderQty} + ' ' + ${BaseUnit} }" emphasized="false" />
+                                                <ObjectNumber number="{path: 'ConfirmedYieldQty', formatter: '.formatQuantityInteger'}" unit="{BaseUnit}" emphasized="false" />
+                                                <ObjectNumber number="{path: 'ConfirmedScrapQty', formatter: '.formatQuantityInteger'}" unit="{BaseUnit}" state="Error" emphasized="false" />
+                                                <ObjectStatus text="{OperationStatusText}" state="{ path: 'OperationStatus', formatter: '.formatStatusState' }" />
+                                                <Text text="{LastPostingDate}" />
+                                                <Text text="{OrderItemNo}" />
+                                            </cells>
+                                        </ColumnListItem>
+                                    </items>
+                                </Table>
+                            </ScrollContainer>
+                        </Panel>
+                    </VBox>
+
+                    <!--
+                        선택 공정 상세 패널
+                        - 선택된 행의 오더/자재/작업장/계획기간/누적 실적을 표시한다.
+                        - 최종확정된 공정은 실적 입력 버튼을 비활성화해서 추가 입력을 막는다.
+                    -->
+                    <VBox width="30rem" visible="{view>/detailVisible}">
+                        <Panel backgroundDesign="Solid" height="calc(100vh - 19rem)">
+                            <headerToolbar>
+                                <OverflowToolbar>
+                                    <Title text="공정 상세" level="H3" />
+                                    <ToolbarSpacer />
+                                    <Button text="실적 입력" icon="sap-icon://add-activity" type="Emphasized" enabled="{= ${view>/hasSelection} &amp;&amp; ${view>/selected/FinalFlag} !== 'X' }" press=".onOpenCreateDialog" />
+                                    <Button icon="sap-icon://decline" type="Transparent" tooltip="상세 닫기" press=".onCloseDetail" />
+                                </OverflowToolbar>
+                            </headerToolbar>
+
+                            <!-- 선택한 공정의 상세 정보가 길어질 경우 이 영역만 스크롤 -->
+                            <ScrollContainer height="calc(100vh - 22.5rem)" vertical="true" horizontal="false">
+                                <VBox visible="{view>/hasSelection}" class="sapUiSmallMargin">
+                                    <ObjectStatus text="{view>/selected/OperationNo} · {view>/selected/OperationText}" state="{ path: 'view>/selected/OperationStatus', formatter: '.formatStatusState' }" />
+                                    <Title text="{view>/selected/OrderNo}" level="H2" wrapping="false" class="sapUiTinyMarginTop" />
+                                    <Text text="자재: {view>/selected/MaterialText} ({view>/selected/Material})" class="sapUiTinyMarginTop" />
+                                    <Text text="작업장: {view>/selected/WorkCenter}" />
+                                    <Text text="라우팅: {view>/selected/RoutingNo}" />
+                                    <Text text="계획일: {view>/selected/BasicStartDate} ~ {view>/selected/BasicEndDate}" />
+                                    <Text text="생산 주차: {= %{view>/selected/WeekNo} ? %{view>/selected/WeekNo} + '주차' : '-' }" />
+
+                                    <HBox class="sapUiSmallMarginTop sapUiSmallMarginBottom" renderType="Bare">
+                                        <Panel width="8.5rem" backgroundDesign="Translucent" class="sapUiTinyMarginEnd">
+                                            <VBox>
+                                                <Text text="계획 수량" />
+                                                <ObjectNumber number="{view>/selected/OrderQty}" unit="{view>/selected/BaseUnit}" emphasized="true" />
+                                            </VBox>
+                                        </Panel>
+                                        <Panel width="8.5rem" backgroundDesign="Translucent" class="sapUiTinyMarginEnd">
+                                            <VBox>
+                                                <Text text="누적 양품" />
+                                                <ObjectNumber number="{view>/selected/ConfirmedYieldQty}" unit="{view>/selected/BaseUnit}" state="Success" emphasized="true" />
+                                            </VBox>
+                                        </Panel>
+                                        <Panel width="8.5rem" backgroundDesign="Translucent">
+                                            <VBox>
+                                                <Text text="누적 불량" />
+                                                <ObjectNumber number="{view>/selected/ConfirmedScrapQty}" unit="{view>/selected/BaseUnit}" state="Error" emphasized="true" />
+                                            </VBox>
+                                        </Panel>
+                                    </HBox>
+
+                                    <List headerText="관리 포인트" showSeparators="Inner">
+                                        <StandardListItem title="최종 실적일" description="{view>/selected/LastPostingDate}" icon="sap-icon://calendar" />
+                                        <StandardListItem
+                                            title="최종확정 여부"
+                                            description="{= ${view>/selected/FinalFlag} === 'X' ? '최종확정' : '미확정' }"
+                                            info="{= ${view>/selected/FinalFlag} === 'X' ? '확정' : '미확정' }"
+                                            infoState="{= ${view>/selected/FinalFlag} === 'X' ? 'Success' : 'None' }"
+                                            icon="sap-icon://flag" />
+                                        <StandardListItem title="플랜트 코드" description="{view>/selected/Plant}" icon="sap-icon://factory" />
+                                        <StandardListItem title="플랜트명" description="{view>/selected/PlantName}" icon="sap-icon://building" />
+                                    </List>
+                                </VBox>
+
+                                <IllustratedMessage
+                                    visible="{= !%{view>/hasSelection} }"
+                                    illustrationType="sapIllus-AddColumn"
+                                    title="공정을 선택하세요"
+                                    description="왼쪽 목록의 행을 누르면 상세 정보와 실적 입력 버튼이 열립니다." />
+                            </ScrollContainer>
+                        </Panel>
+                    </VBox>
+                </HBox>
+                <!--
+                    MM 알림 대상
+                    - 생산실적 완료로 CNF 상태가 되었고 아직 메일 발송 처리되지 않은 생산오더를 조회한다.
+                    - 선택한 생산오더에 대해 SendMmMail RAP Action을 호출해 MM 담당자에게 후속 입고 요청 메일을 발송한다.
+                -->
+                <Panel backgroundDesign="Solid" class="performanceMailPanel sapUiSmallMarginTop">
+                    <headerToolbar>
+                        <OverflowToolbar>
+                            <Title text="MM 알림 대상" level="H3" />
+                            <ObjectStatus text="{= ${view>/mailTargets}.length + '건' }" icon="sap-icon://email" />
+                            <ToolbarSpacer />
+                            <Button text="대상 새로고침" icon="sap-icon://refresh" type="Transparent" press="._refreshMailTargets" enabled="{= !${view>/mailBusy} }" />
+                            <Button text="첨부 미리보기" icon="sap-icon://attachment-html" type="Transparent" press=".onPreviewMmMail" enabled="{= ${view>/mailSelectedCount} > 0 &amp;&amp; !${view>/mailBusy} }" />
+                            <Button text="메일 발송" icon="sap-icon://email" type="Emphasized" press=".onSendMmMail" enabled="{= ${view>/mailSelectedCount} > 0 &amp;&amp; !${view>/mailBusy} }" />
+                        </OverflowToolbar>
+                    </headerToolbar>
+                    <Table
+                        id="mailTable"
+                        class="performanceMailTable"
+                        mode="MultiSelect"
+                        busy="{view>/mailBusy}"
+                        selectionChange=".onMailSelectionChange"
+                        noDataText="메일 발송 대상 생산오더가 없습니다."
+                        items="{view>/mailTargets}">
+                        <columns>
+                            <Column width="9rem"><Text text="생산오더" /></Column>
+                            <Column width="12rem"><Text text="자재" /></Column>
+                            <Column width="10rem"><Text text="플랜트" /></Column>
+                            <Column width="8rem"><Text text="계획 시작일" /></Column>
+                            <Column width="8rem"><Text text="계획 종료일" /></Column>
+                            <Column width="6rem"><Text text="오더 상태" /></Column>
+                            <Column width="6rem"><Text text="메일" /></Column>
+                        </columns>
+                        <items>
+                            <ColumnListItem>
+                                <cells>
+                                    <ObjectIdentifier title="{view>OrderNo}" text="{view>ProductionStatusText}" />
+                                    <ObjectIdentifier title="{view>MaterialText}" text="{view>Material}" />
+                                    <ObjectIdentifier title="{view>PlantName}" text="{view>Plant}" />
+                                    <Text text="{view>BasicStartDate}" />
+                                    <Text text="{view>BasicEndDate}" />
+                                    <ObjectStatus text="{view>ProductionStatus}" state="Success" />
+                                    <ObjectStatus text="{path: 'view>MailSent', formatter: '.formatMailSentText'}" state="{path: 'view>MailSent', formatter: '.formatMailSentState'}" />
+                                </cells>
+                            </ColumnListItem>
+                        </items>
+                    </Table>
+                </Panel>
+            </VBox>
+        </f:content>
+    </f:DynamicPage>
+</mvc:View>
+
+
+
+
+
