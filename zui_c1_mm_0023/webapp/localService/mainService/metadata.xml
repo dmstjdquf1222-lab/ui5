@@ -1,0 +1,859 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx" xmlns="http://docs.oasis-open.org/odata/ns/edm" Version="4.0">
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="SAP__common"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="Org.OData.Measures.V1" Alias="SAP__measures"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CORE',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="Org.OData.Core.V1" Alias="SAP__core"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="SAP__capabilities"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="SAP__aggregation"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="Org.OData.Validation.V1" Alias="SAP__validation"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="SAP__UI"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HTML5',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.HTML5.v1" Alias="SAP__HTML5"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PDF',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.PDF.v1" Alias="SAP__PDF"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_SESSION',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.Session.v1" Alias="SAP__session"/>
+</edmx:Reference>
+<edmx:Reference Uri="/sap/opu/odata/IWFND/CATALOGSERVICE;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_HIERARCHY',Version='0001',SAP__Origin='LOCAL')/$value">
+<edmx:Include Namespace="com.sap.vocabularies.Hierarchy.v1" Alias="SAP__hierarchy"/>
+</edmx:Reference>
+<edmx:DataServices>
+<Schema Namespace="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001" Alias="SAP__self">
+<Annotation Term="SAP__core.SchemaVersion" String="1.0.0"/>
+<EntityType Name="QualityResultType">
+<Key>
+<PropertyRef Name="Prueflos"/>
+<PropertyRef Name="Vorglfnr"/>
+<PropertyRef Name="Merknr"/>
+</Key>
+<Property Name="Prueflos" Type="Edm.String" Nullable="false" MaxLength="12"/>
+<Property Name="Vorglfnr" Type="Edm.String" Nullable="false" MaxLength="8"/>
+<Property Name="Merknr" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Kurztext" Type="Edm.String" Nullable="false" MaxLength="40"/>
+<Property Name="Sollwert" Type="Edm.Double" Nullable="false"/>
+<Property Name="ZtolLow" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+<Property Name="ZtolUp" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+<Property Name="Zuom" Type="Edm.String" Nullable="false" MaxLength="3"/>
+<Property Name="Pruefumf" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+<Property Name="Zresult" Type="Edm.String" Nullable="false" MaxLength="20"/>
+<Property Name="ZcheckVal" Type="Edm.String" Nullable="false" MaxLength="1"/>
+<Property Name="Mblnr" Type="Edm.String" Nullable="false" MaxLength="10"/>
+<Property Name="Zeile" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Erdat" Type="Edm.Date"/>
+<Property Name="Erzet" Type="Edm.TimeOfDay" Nullable="false"/>
+<Property Name="Ernam" Type="Edm.String" Nullable="false" MaxLength="12"/>
+<Property Name="Aedat" Type="Edm.Date"/>
+<Property Name="Aezet" Type="Edm.TimeOfDay" Nullable="false"/>
+<Property Name="Aenam" Type="Edm.String" Nullable="false" MaxLength="12"/>
+<Property Name="__EntityControl" Type="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.EntityControl"/>
+<Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.SAP__Message)" Nullable="false"/>
+<NavigationProperty Name="_Header" Type="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.QualityLotType" Nullable="false" Partner="_Results">
+<ReferentialConstraint Property="Prueflos" ReferencedProperty="Prueflos"/>
+</NavigationProperty>
+</EntityType>
+<EntityType Name="QualityMoveHistType">
+<Key>
+<PropertyRef Name="Mblnr"/>
+<PropertyRef Name="Mjahr"/>
+<PropertyRef Name="Zeile"/>
+</Key>
+<Property Name="Mblnr" Type="Edm.String" Nullable="false" MaxLength="10"/>
+<Property Name="Mjahr" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Zeile" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Prueflos" Type="Edm.String" Nullable="false" MaxLength="12"/>
+<Property Name="Bwart" Type="Edm.String" Nullable="false" MaxLength="3"/>
+<Property Name="MoveType" Type="Edm.String" Nullable="false" MaxLength="18"/>
+<Property Name="Shkzg" Type="Edm.String" Nullable="false" MaxLength="1"/>
+<Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="40"/>
+<Property Name="Maktx" Type="Edm.String" Nullable="false" MaxLength="40"/>
+<Property Name="Werks" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Lgort" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Umwrk" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Umlgo" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Charg" Type="Edm.String" Nullable="false" MaxLength="10"/>
+<Property Name="Ebeln" Type="Edm.String" Nullable="false" MaxLength="10"/>
+<Property Name="Ebelp" Type="Edm.String" Nullable="false" MaxLength="5"/>
+<Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="5"/>
+<Property Name="LifnrName" Type="Edm.String" Nullable="false" MaxLength="35"/>
+<Property Name="Menge" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+<Property Name="Meins" Type="Edm.String" Nullable="false" MaxLength="3"/>
+<Property Name="Budat" Type="Edm.Date"/>
+<Property Name="Bldat" Type="Edm.Date"/>
+<Property Name="Usnam" Type="Edm.String" Nullable="false" MaxLength="12"/>
+<Property Name="Xblnr" Type="Edm.String" Nullable="false" MaxLength="16"/>
+<Property Name="Sgtxt" Type="Edm.String" Nullable="false" MaxLength="50"/>
+</EntityType>
+<EntityType Name="QualityLotType">
+<Key>
+<PropertyRef Name="Prueflos"/>
+</Key>
+<Property Name="Prueflos" Type="Edm.String" Nullable="false" MaxLength="12"/>
+<Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="40"/>
+<Property Name="Maktx" Type="Edm.String" Nullable="false" MaxLength="40"/>
+<Property Name="Werks" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Charg" Type="Edm.String" Nullable="false" MaxLength="10"/>
+<Property Name="Ebeln" Type="Edm.String" Nullable="false" MaxLength="10"/>
+<Property Name="Ebelp" Type="Edm.String" Nullable="false" MaxLength="5"/>
+<Property Name="Bsart" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Lifnr" Type="Edm.String" Nullable="false" MaxLength="5"/>
+<Property Name="LifnrName" Type="Edm.String" Nullable="false" MaxLength="35"/>
+<Property Name="Mblnr" Type="Edm.String" Nullable="false" MaxLength="10"/>
+<Property Name="Mjahr" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Zeile" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="GrBwart" Type="Edm.String" Nullable="false" MaxLength="3"/>
+<Property Name="GrBudat" Type="Edm.Date"/>
+<Property Name="GrBldat" Type="Edm.Date"/>
+<Property Name="QILgort" Type="Edm.String" Nullable="false" MaxLength="4"/>
+<Property Name="Lmengeist" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+<Property Name="Meins" Type="Edm.String" Nullable="false" MaxLength="3"/>
+<Property Name="Stat31" Type="Edm.String" Nullable="false" MaxLength="1"/>
+<Property Name="ZfinalUd" Type="Edm.String" Nullable="false" MaxLength="1"/>
+<Property Name="WorkStatus" Type="Edm.String" Nullable="false" MaxLength="7"/>
+<Property Name="Erdat" Type="Edm.Date"/>
+<Property Name="Erzet" Type="Edm.TimeOfDay" Nullable="false"/>
+<Property Name="Ernam" Type="Edm.String" Nullable="false" MaxLength="12"/>
+<Property Name="Aedat" Type="Edm.Date"/>
+<Property Name="Aezet" Type="Edm.TimeOfDay" Nullable="false"/>
+<Property Name="Aenam" Type="Edm.String" Nullable="false" MaxLength="12"/>
+<Property Name="__EntityControl" Type="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.EntityControl"/>
+<Property Name="__OperationControl" Type="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.QualityLotOperationControl"/>
+<Property Name="SAP__Messages" Type="Collection(com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.SAP__Message)" Nullable="false"/>
+<NavigationProperty Name="_Results" Type="Collection(com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.QualityResultType)" Partner="_Header">
+<OnDelete Action="Cascade"/>
+</NavigationProperty>
+</EntityType>
+<ComplexType Name="QualityLotOperationControl">
+<Property Name="ConfirmUsageDecision" Type="Edm.Boolean" Nullable="false"/>
+</ComplexType>
+<ComplexType Name="EntityControl">
+<Property Name="Updatable" Type="Edm.Boolean" Nullable="false"/>
+</ComplexType>
+<ComplexType Name="SAP__Message">
+<Property Name="code" Type="Edm.String" Nullable="false"/>
+<Property Name="message" Type="Edm.String" Nullable="false"/>
+<Property Name="target" Type="Edm.String"/>
+<Property Name="additionalTargets" Type="Collection(Edm.String)" Nullable="false"/>
+<Property Name="transition" Type="Edm.Boolean" Nullable="false"/>
+<Property Name="numericSeverity" Type="Edm.Byte" Nullable="false"/>
+<Property Name="longtextUrl" Type="Edm.String"/>
+</ComplexType>
+<Action Name="ConfirmUsageDecision" EntitySetPath="_it" IsBound="true">
+<Parameter Name="_it" Type="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.QualityLotType" Nullable="false"/>
+<Parameter Name="ZfinalUd" Type="Edm.String" Nullable="false" MaxLength="1"/>
+<Parameter Name="PassQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+<Parameter Name="HoldQty" Type="Edm.Decimal" Nullable="false" Precision="13" Scale="3"/>
+<ReturnType Type="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.QualityLotType" Nullable="false"/>
+</Action>
+<EntityContainer Name="Container">
+<EntitySet Name="QualityLot" EntityType="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.QualityLotType">
+<NavigationPropertyBinding Path="_Results" Target="QualityResult"/>
+</EntitySet>
+<EntitySet Name="QualityMoveHist" EntityType="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.QualityMoveHistType"/>
+<EntitySet Name="QualityResult" EntityType="com.sap.gateway.srvd.zsd_c1_mm_0023_srv.v0001.QualityResultType">
+<NavigationPropertyBinding Path="_Header" Target="QualityLot"/>
+</EntitySet>
+</EntityContainer>
+<Annotations Target="SAP__self.QualityResultType/Prueflos">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Inspection Lot"/>
+<Annotation Term="SAP__common.Heading" String="Insp. Lot"/>
+<Annotation Term="SAP__common.QuickInfo" String="Inspection Lot Number"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Vorglfnr">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Current Node No."/>
+<Annotation Term="SAP__common.Heading" String="Node"/>
+<Annotation Term="SAP__common.QuickInfo" String="Current Node Number from Order Counter"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Merknr">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Insp. Characteristic"/>
+<Annotation Term="SAP__common.Heading" String="Charc"/>
+<Annotation Term="SAP__common.QuickInfo" String="Inspection Characteristic Number"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Kurztext">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Short Text"/>
+<Annotation Term="SAP__common.Heading" String="Short text for the characteristic"/>
+<Annotation Term="SAP__common.QuickInfo" String="Short Text for the Inspection Characteristic"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Sollwert">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Target Value"/>
+<Annotation Term="SAP__common.Heading" String="TargVal."/>
+<Annotation Term="SAP__common.QuickInfo" String="Target Value for a Quantitative Characteristic"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/ZtolLow">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="하한오차"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/ZtolUp">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="상한오차"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Zuom">
+<Annotation Term="SAP__common.IsUnit"/>
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Base Unit of Measure"/>
+<Annotation Term="SAP__common.Heading" String="BUn"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Pruefumf">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__measures.Unit" Path="Zuom"/>
+<Annotation Term="SAP__common.Label" String="Inspection Quantity"/>
+<Annotation Term="SAP__common.Heading" String="Insp. Quantity"/>
+<Annotation Term="SAP__common.QuickInfo" String="Quantity to Be Inspected"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Zresult">
+<Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+<Annotation Term="SAP__common.Label" String="실측값"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/ZcheckVal">
+<Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="특성판정"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Mblnr">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="자재문서번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Zeile">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Material Doc.Item"/>
+<Annotation Term="SAP__common.Heading" String="Item"/>
+<Annotation Term="SAP__common.QuickInfo" String="Item in Material Document"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Erdat">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Created On"/>
+<Annotation Term="SAP__common.QuickInfo" String="Record Creation Date"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Erzet">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Time"/>
+<Annotation Term="SAP__common.QuickInfo" String="Entry time"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Ernam">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Created by"/>
+<Annotation Term="SAP__common.QuickInfo" String="Entered by external system user"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Aedat">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Changed On"/>
+<Annotation Term="SAP__common.Heading" String="Chngd On"/>
+<Annotation Term="SAP__common.QuickInfo" String="Last Changed On"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Aezet">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Changed at"/>
+<Annotation Term="SAP__common.Heading" String="TimeOfChng"/>
+<Annotation Term="SAP__common.QuickInfo" String="Time last change was made"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/Aenam">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="Changed By"/>
+<Annotation Term="SAP__common.QuickInfo" String="Name of Person Who Changed Object"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/__EntityControl">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__UI.HiddenFilter"/>
+<Annotation Term="SAP__UI.Hidden"/>
+</Annotations>
+<Annotations Target="SAP__self.Container/QualityResult">
+<Annotation Term="SAP__capabilities.NavigationRestrictions">
+<Record>
+<PropertyValue Property="RestrictedProperties">
+<Collection>
+<Record>
+<PropertyValue Property="NavigationProperty" NavigationPropertyPath="_Header"/>
+<PropertyValue Property="InsertRestrictions">
+<Record>
+<PropertyValue Property="Insertable" Bool="false"/>
+</Record>
+</PropertyValue>
+</Record>
+</Collection>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.SearchRestrictions">
+<Record>
+<PropertyValue Property="Searchable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.FilterRestrictions">
+<Record>
+<PropertyValue Property="NonFilterableProperties">
+<Collection>
+<PropertyPath>__EntityControl</PropertyPath>
+</Collection>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.SortRestrictions">
+<Record>
+<PropertyValue Property="NonSortableProperties">
+<Collection>
+<PropertyPath>__EntityControl</PropertyPath>
+</Collection>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.InsertRestrictions">
+<Record>
+<PropertyValue Property="Insertable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.DeleteRestrictions">
+<Record>
+<PropertyValue Property="Deletable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.UpdateRestrictions">
+<Record>
+<PropertyValue Property="Updatable" Path="__EntityControl/Updatable"/>
+<PropertyValue Property="QueryOptions">
+<Record>
+<PropertyValue Property="SelectSupported" Bool="true"/>
+</Record>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__core.OptimisticConcurrency">
+<Collection/>
+</Annotation>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType">
+<Annotation Term="SAP__common.Label" String="품질검사 특성결과 - Projection View"/>
+<Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+</Annotations>
+<Annotations Target="SAP__self.Container">
+<Annotation Term="SAP__CodeList.UnitsOfMeasure">
+<Record>
+<PropertyValue Property="Url" String="../../../../default/iwbep/common/0001/$metadata"/>
+<PropertyValue Property="CollectionPath" String="UnitsOfMeasure"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__aggregation.ApplySupported">
+<Record>
+<PropertyValue Property="Transformations">
+<Collection>
+<String>aggregate</String>
+<String>groupby</String>
+<String>filter</String>
+</Collection>
+</PropertyValue>
+<PropertyValue Property="Rollup" EnumMember="SAP__aggregation.RollupType/None"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__common.ApplyMultiUnitBehaviorForSortingAndFiltering" Bool="true"/>
+<Annotation Term="SAP__capabilities.FilterFunctions">
+<Collection>
+<String>eq</String>
+<String>ne</String>
+<String>gt</String>
+<String>ge</String>
+<String>lt</String>
+<String>le</String>
+<String>and</String>
+<String>or</String>
+<String>contains</String>
+<String>startswith</String>
+<String>endswith</String>
+<String>any</String>
+<String>all</String>
+</Collection>
+</Annotation>
+<Annotation Term="SAP__capabilities.SupportedFormats">
+<Collection>
+<String>application/json</String>
+<String>application/pdf</String>
+</Collection>
+</Annotation>
+<Annotation Term="SAP__PDF.Features">
+<Record>
+<PropertyValue Property="DocumentDescriptionReference" String="../../../../default/iwbep/common/0001/$metadata"/>
+<PropertyValue Property="DocumentDescriptionCollection" String="MyDocumentDescriptions"/>
+<PropertyValue Property="ArchiveFormat" Bool="true"/>
+<PropertyValue Property="Border" Bool="true"/>
+<PropertyValue Property="CoverPage" Bool="true"/>
+<PropertyValue Property="FitToPage" Bool="true"/>
+<PropertyValue Property="FontName" Bool="true"/>
+<PropertyValue Property="FontSize" Bool="true"/>
+<PropertyValue Property="Margin" Bool="true"/>
+<PropertyValue Property="Padding" Bool="true"/>
+<PropertyValue Property="Signature" Bool="true"/>
+<PropertyValue Property="HeaderFooter" Bool="true"/>
+<PropertyValue Property="ResultSizeDefault" Int="20000"/>
+<PropertyValue Property="ResultSizeMaximum" Int="20000"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.KeyAsSegmentSupported"/>
+<Annotation Term="SAP__capabilities.AsynchronousRequestsSupported"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Mblnr">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="자재문서번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Mjahr">
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Material Doc. Year"/>
+<Annotation Term="SAP__common.Heading" String="MatYr"/>
+<Annotation Term="SAP__common.QuickInfo" String="Material Document Year"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Zeile">
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Material Doc.Item"/>
+<Annotation Term="SAP__common.Heading" String="Item"/>
+<Annotation Term="SAP__common.QuickInfo" String="Item in Material Document"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Bwart">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="Movement Type"/>
+<Annotation Term="SAP__common.Heading" String="MvT"/>
+<Annotation Term="SAP__common.QuickInfo" String="Movement Type (Inventory Management)"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Shkzg">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="Debit/Credit Ind."/>
+<Annotation Term="SAP__common.Heading" String="D/C"/>
+<Annotation Term="SAP__common.QuickInfo" String="Debit/Credit Indicator"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Matnr">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="자재 번호"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 자재 번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Werks">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="플랜트"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 플랜트"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Lgort">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="저장위치"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Umwrk">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="플랜트"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 플랜트"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Umlgo">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="저장위치"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Charg">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="배치번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Ebeln">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="PO number"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 구매오더 번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Ebelp">
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="PO Item NO"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Lifnr">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="공급업체 계정 번호"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 공급업체 계정 번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/LifnrName">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="공급업체명"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Menge">
+<Annotation Term="SAP__measures.Unit" Path="Meins"/>
+<Annotation Term="SAP__common.Label" String="Quantity"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Meins">
+<Annotation Term="SAP__common.IsUnit"/>
+<Annotation Term="SAP__common.Label" String="Base Unit of Measure"/>
+<Annotation Term="SAP__common.Heading" String="BUn"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Usnam">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="User Name"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Xblnr">
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="거래처 송장 번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType">
+<Annotation Term="SAP__common.Label" String="품질판정 이동이력 조회"/>
+</Annotations>
+<Annotations Target="SAP__self.Container/QualityMoveHist">
+<Annotation Term="SAP__capabilities.SearchRestrictions">
+<Record>
+<PropertyValue Property="Searchable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.InsertRestrictions">
+<Record>
+<PropertyValue Property="Insertable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.DeleteRestrictions">
+<Record>
+<PropertyValue Property="Deletable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.UpdateRestrictions">
+<Record>
+<PropertyValue Property="Updatable" Bool="false"/>
+<PropertyValue Property="QueryOptions">
+<Record>
+<PropertyValue Property="SelectSupported" Bool="true"/>
+</Record>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__core.OptimisticConcurrency">
+<Collection/>
+</Annotation>
+<Annotation Term="SAP__capabilities.FilterRestrictions">
+<Record>
+<PropertyValue Property="FilterExpressionRestrictions">
+<Collection>
+<Record>
+<PropertyValue Property="Property" PropertyPath="Menge"/>
+<PropertyValue Property="AllowedExpressions" String="MultiValue"/>
+</Record>
+</Collection>
+</PropertyValue>
+</Record>
+</Annotation>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Prueflos">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Inspection Lot"/>
+<Annotation Term="SAP__common.Heading" String="Insp. Lot"/>
+<Annotation Term="SAP__common.QuickInfo" String="Inspection Lot Number"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Matnr">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="자재 번호"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 자재 번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Maktx">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Material Description"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Werks">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="플랜트"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 플랜트"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Charg">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="배치번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Ebeln">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="Purchasing Document"/>
+<Annotation Term="SAP__common.Heading" String="Pur. Doc."/>
+<Annotation Term="SAP__common.QuickInfo" String="Purchasing Document Number"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Ebelp">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Item"/>
+<Annotation Term="SAP__common.QuickInfo" String="Item Number of Purchasing Document"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Bsart">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="구매문서유형"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 구매문서유형"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Lifnr">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="공급업체 계정 번호"/>
+<Annotation Term="SAP__common.QuickInfo" String="[Taesan] 공급업체 계정 번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/LifnrName">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="공급업체명"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Mblnr">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="자재문서번호"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Mjahr">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Material Doc. Year"/>
+<Annotation Term="SAP__common.Heading" String="MatYr"/>
+<Annotation Term="SAP__common.QuickInfo" String="Material Document Year"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Zeile">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsDigitSequence"/>
+<Annotation Term="SAP__common.Label" String="Material Doc.Item"/>
+<Annotation Term="SAP__common.Heading" String="Item"/>
+<Annotation Term="SAP__common.QuickInfo" String="Item in Material Document"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/GrBwart">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="Movement Type"/>
+<Annotation Term="SAP__common.Heading" String="MvT"/>
+<Annotation Term="SAP__common.QuickInfo" String="Movement Type (Inventory Management)"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/GrBudat">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Posting Date"/>
+<Annotation Term="SAP__common.Heading" String="Pstng Date"/>
+<Annotation Term="SAP__common.QuickInfo" String="Posting Date in the Document"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/GrBldat">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Document Date"/>
+<Annotation Term="SAP__common.Heading" String="Doc. Date"/>
+<Annotation Term="SAP__common.QuickInfo" String="Document Date in Document"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/QILgort">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="저장위치"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Lmengeist">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__measures.Unit" Path="Meins"/>
+<Annotation Term="SAP__common.Label" String="Actual lot quantity"/>
+<Annotation Term="SAP__common.Heading" String="Act. lot qty"/>
+<Annotation Term="SAP__common.QuickInfo" String="Actual Lot Quantity"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Meins">
+<Annotation Term="SAP__common.IsUnit"/>
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Base Unit of Measure"/>
+<Annotation Term="SAP__common.Heading" String="BUn"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Stat31">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="Man. sample calc."/>
+<Annotation Term="SAP__common.Heading" String="MS"/>
+<Annotation Term="SAP__common.QuickInfo" String="Trigger Sample Calculation Manually"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/ZfinalUd">
+<Annotation Term="SAP__common.FieldControl" EnumMember="SAP__common.FieldControlType/Mandatory"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="최종판정"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/WorkStatus">
+<Annotation Term="SAP__core.Computed"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Erdat">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Created On"/>
+<Annotation Term="SAP__common.QuickInfo" String="Record Creation Date"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Erzet">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Time"/>
+<Annotation Term="SAP__common.QuickInfo" String="Entry time"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Ernam">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Created by"/>
+<Annotation Term="SAP__common.QuickInfo" String="Entered by external system user"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Aedat">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Changed On"/>
+<Annotation Term="SAP__common.Heading" String="Chngd On"/>
+<Annotation Term="SAP__common.QuickInfo" String="Last Changed On"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Aezet">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.Label" String="Changed at"/>
+<Annotation Term="SAP__common.Heading" String="TimeOfChng"/>
+<Annotation Term="SAP__common.QuickInfo" String="Time last change was made"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/Aenam">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__common.IsUpperCase"/>
+<Annotation Term="SAP__common.Label" String="Changed By"/>
+<Annotation Term="SAP__common.QuickInfo" String="Name of Person Who Changed Object"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/__EntityControl">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__UI.HiddenFilter"/>
+<Annotation Term="SAP__UI.Hidden"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/__OperationControl">
+<Annotation Term="SAP__core.Computed"/>
+<Annotation Term="SAP__UI.HiddenFilter"/>
+<Annotation Term="SAP__UI.Hidden"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/_Results">
+<Annotation Term="SAP__common.Composition"/>
+</Annotations>
+<Annotations Target="SAP__self.Container/QualityLot">
+<Annotation Term="SAP__capabilities.NavigationRestrictions">
+<Record>
+<PropertyValue Property="RestrictedProperties">
+<Collection>
+<Record>
+<PropertyValue Property="NavigationProperty" NavigationPropertyPath="_Results"/>
+<PropertyValue Property="InsertRestrictions">
+<Record>
+<PropertyValue Property="Insertable" Bool="false"/>
+</Record>
+</PropertyValue>
+</Record>
+</Collection>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.SearchRestrictions">
+<Record>
+<PropertyValue Property="Searchable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.FilterRestrictions">
+<Record>
+<PropertyValue Property="NonFilterableProperties">
+<Collection>
+<PropertyPath>__EntityControl</PropertyPath>
+<PropertyPath>__OperationControl</PropertyPath>
+</Collection>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.SortRestrictions">
+<Record>
+<PropertyValue Property="NonSortableProperties">
+<Collection>
+<PropertyPath>__EntityControl</PropertyPath>
+<PropertyPath>__OperationControl</PropertyPath>
+</Collection>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.InsertRestrictions">
+<Record>
+<PropertyValue Property="Insertable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.DeleteRestrictions">
+<Record>
+<PropertyValue Property="Deletable" Bool="false"/>
+</Record>
+</Annotation>
+<Annotation Term="SAP__capabilities.UpdateRestrictions">
+<Record>
+<PropertyValue Property="Updatable" Path="__EntityControl/Updatable"/>
+<PropertyValue Property="QueryOptions">
+<Record>
+<PropertyValue Property="SelectSupported" Bool="true"/>
+</Record>
+</PropertyValue>
+</Record>
+</Annotation>
+<Annotation Term="SAP__core.OptimisticConcurrency">
+<Collection/>
+</Annotation>
+</Annotations>
+<Annotations Target="SAP__self.ConfirmUsageDecision(SAP__self.QualityLotType)">
+<Annotation Term="SAP__core.OperationAvailable" Path="_it/__OperationControl/ConfirmUsageDecision"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType">
+<Annotation Term="SAP__common.Label" String="품질검사 헤더 - Projection View"/>
+<Annotation Term="SAP__common.Messages" Path="SAP__Messages"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityResultType/__EntityControl/Updatable">
+<Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
+<Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
+<Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Maktx">
+<Annotation Term="SAP__common.Label" String="Material Description"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Budat">
+<Annotation Term="SAP__common.Label" String="Posting Date"/>
+<Annotation Term="SAP__common.Heading" String="Pstng Date"/>
+<Annotation Term="SAP__common.QuickInfo" String="Posting Date in the Document"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Bldat">
+<Annotation Term="SAP__common.Label" String="Document Date"/>
+<Annotation Term="SAP__common.Heading" String="Doc. Date"/>
+<Annotation Term="SAP__common.QuickInfo" String="Document Date in Document"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityMoveHistType/Sgtxt">
+<Annotation Term="SAP__common.Label" String="Text"/>
+<Annotation Term="SAP__common.QuickInfo" String="Item Text"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/__EntityControl/Updatable">
+<Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
+<Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
+<Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotType/__OperationControl/ConfirmUsageDecision">
+<Annotation Term="SAP__common.Label" String="Dyn. Action Control"/>
+<Annotation Term="SAP__common.Heading" String="Dynamic Action Control"/>
+<Annotation Term="SAP__common.QuickInfo" String="Dynamic Action Property"/>
+</Annotations>
+<Annotations Target="SAP__self.QualityLotOperationControl/ConfirmUsageDecision">
+<Annotation Term="SAP__common.Label" String="Dyn. Action Control"/>
+<Annotation Term="SAP__common.Heading" String="Dynamic Action Control"/>
+<Annotation Term="SAP__common.QuickInfo" String="Dynamic Action Property"/>
+</Annotations>
+<Annotations Target="SAP__self.EntityControl/Updatable">
+<Annotation Term="SAP__common.Label" String="Dyn. Method Control"/>
+<Annotation Term="SAP__common.Heading" String="Dynamic Method Control"/>
+<Annotation Term="SAP__common.QuickInfo" String="Dynamic Method Property"/>
+</Annotations>
+<Annotations Target="SAP__self.ConfirmUsageDecision(SAP__self.QualityLotType)/ZfinalUd">
+<Annotation Term="SAP__common.Label" String="최종판정"/>
+</Annotations>
+</Schema>
+</edmx:DataServices>
+</edmx:Edmx>

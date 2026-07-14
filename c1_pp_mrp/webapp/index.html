@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>MRP Result Query</title>
+    <style>
+        html, body, #content {
+            height: 100%;
+            margin: 0;
+        }
+    </style>
+    <script
+        id="sap-ui-bootstrap"
+        src="resources/sap-ui-core.js"
+        data-sap-ui-theme="sap_horizon"
+        data-sap-ui-resource-roots='{"c1.pp.c1ppmrp":"./"}'
+        data-sap-ui-compat-version="edge"
+        data-sap-ui-async="true"
+        data-sap-ui-frame-options="trusted">
+    </script>
+    <script>
+        sap.ui.getCore().attachInit(function () {
+            sap.ui.require(["sap/ui/core/ComponentContainer"], function (ComponentContainer) {
+                new ComponentContainer({
+                    name: "c1.pp.c1ppmrp",
+                    async: true,
+                    height: "100%",
+                    settings: {
+                        id: "c1.pp.c1ppmrp"
+                    }
+                }).placeAt("content");
+            });
+        });
+    </script>
+</head>
+<body class="sapUiBody sapUiSizeCompact" id="content"></body>
+</html>

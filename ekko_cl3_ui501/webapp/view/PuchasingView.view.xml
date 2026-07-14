@@ -24,7 +24,6 @@
                     id="Table"
                     rows="{/PurchSet}"
                     selectionMode="None"
-                    visibleRowCount="5"
                 >
                     <t:extension>
                         <OverflowToolbar style="Clear">

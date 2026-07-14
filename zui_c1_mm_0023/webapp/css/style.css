@@ -1,0 +1,872 @@
+/* ═══════════════════════════════════════════════
+   TAESAN ERP · 입고 품질판정  –  style.css
+   Fiori-flat, compact density, no gradients
+═══════════════════════════════════════════════ */
+
+/* ── Design tokens ── */
+:root {
+  --z-primary : #0064d9;
+  --z-success : #107e3e;
+  --z-warning : #c44400;
+  --z-error   : #bb0000;
+  --z-pending : #0070f2;
+  --z-border  : #d9d9d9;
+  --z-bg      : #f5f6f7;
+  --z-card    : #ffffff;
+  --z-hdr     : #f0f2f5;
+  --z-sel-bg  : #e8f1fb;
+  --z-sel-bar : #0064d9;
+  --z-text1   : #1d2d3e;
+  --z-text2   : #556b82;
+  --z-text3   : #8696a9;
+  --z-mono    : 'Courier New', Courier, monospace;
+}
+
+/* ══════════════════ FULL-HEIGHT CHAIN ══════════════════ */
+/* 라우팅(App) → ToolPage → NavContainer → Page → 콘텐츠 까지 100% 전파 보장.
+   하나라도 height 가 끊기면 하단이 잘리거나 스크롤이 사라짐. */
+html, body, .sapUiBody { height: 100%; margin: 0; }
+/* sap.m.App 은 NavContainer 자체(=한 DOM 요소). 페이지 래퍼는 그 직속 .sapMNavItem 이다.
+   여기에 height:100% 가 안 걸리면 아래 전체 높이 체인이 끊겨 하단이 잘린다. */
+.sapMApp { height: 100%; }
+.sapMApp > .sapMNavItem { height: 100%; }
+/* 라우팅으로 들어온 XML View 루트도 100% */
+.sapMApp > .sapMNavItem > .sapUiView { height: 100%; }
+/* sap.tnt.ToolPage: 루트만 100% 로 채우고(=View 루트 높이),
+   내부 wrapper/main 은 테마의 flex(헤더+본문)를 유지한 채 min-height:0 만 부여해
+   본문이 넘칠 때 내부 스크롤되도록 한다. wrapper 에 height:100% 를 강제하면
+   헤더 높이만큼 본문이 밀려 하단이 잘리므로 강제하지 않는다. */
+.sapTntToolPage { height: 100%; }
+.sapTntToolPageContentWrapper,
+.sapTntToolPageMainContent,
+.sapTntToolPageMain { min-height: 0; }
+
+/* ══════════════════ KPI STRIP ══════════════════ */
+.zKpiStrip {
+  display: flex;
+  align-items: stretch;
+  background: var(--z-card);
+  border-bottom: 1px solid var(--z-border);
+  flex-shrink: 0;
+  height: 52px;
+  overflow-x: auto;        /* 좁은 화면에서 셀이 가로 스크롤되어 레이아웃이 깨지지 않게 */
+  overflow-y: hidden;
+}
+.zKpiCell { flex: 1 0 auto; }   /* 넓을 땐 균등 분배, 좁을 땐 최소폭 유지 */
+.zKpiCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border-right: 1px solid var(--z-border);
+  min-width: 90px;
+  cursor: default;
+}
+.zKpiCell:last-child { border-right: none; }
+.zKpiNum {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--z-text1);
+}
+.zKpiNum.pend { color: var(--z-pending); }
+.zKpiNum.pass { color: var(--z-success); }
+.zKpiNum.hold { color: var(--z-warning); }
+.zKpiNum.fail { color: var(--z-error);   }
+.zKpiLbl {
+  font-size: 10px;
+  color: var(--z-text3);
+  margin-top: 1px;
+  white-space: nowrap;
+}
+
+/* ══════════════════ FILTER BAR ══════════════════ */
+.zFilterRow {
+  display: flex;
+  align-items: center;
+  background: var(--z-card);
+  border-bottom: 1px solid var(--z-border);
+  padding: 5px 12px;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.zFilterLbl {
+  font-size: 10px;
+  color: var(--z-text3);
+  white-space: nowrap;
+}
+.zFilterRow .sapMInputBase { height: 28px !important; min-height: 28px !important; }
+.zFilterRow .sapMInputBaseInner { height: 26px !important; line-height: 26px !important; }
+.zFilterRow .sapMSFB { height: 28px !important; }
+.zFilterRow .sapMSlt .sapMSltLabel { line-height: 26px !important; }
+
+/* ══════════════════ SPLIT LAYOUT ══════════════════ */
+.zSplitRow {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Worklist Column ── */
+.zWlCol {
+  width: 300px;
+  min-width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;            /* 내부 리스트 스크롤 보장 (하단 잘림 방지) */
+  border-right: 1px solid var(--z-border);
+  background: var(--z-bg);
+  overflow: hidden;
+}
+.zWlHeader {
+  display: flex;
+  align-items: center;
+  padding: 7px 10px 6px;
+  background: var(--z-hdr);
+  border-bottom: 1px solid var(--z-border);
+  flex-shrink: 0;
+}
+.zWlTitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--z-text1);
+  flex: 1;
+}
+.zWlCount {
+  font-size: 11px;
+  color: var(--z-text2);
+  background: #e0e2e6;
+  border-radius: 10px;
+  padding: 1px 7px;
+}
+.zWlScroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.zWlScroll .sapMList { background: transparent; }
+.zWlScroll .sapMLIB { padding: 0; margin: 0; }
+.zWlScroll .sapMListNoData { padding: 24px; text-align: center; font-size: 12px; color: var(--z-text3); }
+
+/* ── Detail Column ── */
+.zDetailCol {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;            /* 내부 탭/스크롤 영역이 넘치지 않고 자체 스크롤되도록 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--z-bg);
+}
+
+/* ══════════════════ LOT CARD ══════════════════ */
+.zLotCard {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 10px 7px;
+  border-bottom: 1px solid var(--z-border);
+  background: var(--z-card);
+  cursor: pointer;
+  border-left: 3px solid transparent;
+  transition: background 0.1s;
+}
+.zLotCard:hover { background: #f0f4fc; }
+.zLotCard.zSelected {
+  background: var(--z-sel-bg);
+  border-left-color: var(--z-sel-bar);
+}
+.zLotRow1 {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 3px;
+}
+.zLotGr {
+  font-family: var(--z-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--z-text1);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zLotQty {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--z-primary);
+  white-space: nowrap;
+}
+.zLotRow2 {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--z-text1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+.zLotMatnr {
+  font-family: var(--z-mono);
+  font-size: 10px;
+  color: var(--z-text3);
+  margin-right: 4px;
+}
+.zLotRow3 {
+  display: flex;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--z-text2);
+  overflow: hidden;
+}
+.zLotRow3 > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.zLotRow4 {
+  display: flex;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--z-text3);
+  font-family: var(--z-mono);
+  margin-top: 2px;
+}
+
+/* ══════════════════ STATUS BADGE ══════════════════ */
+/* 기존 클래스 방식 */
+.zSts {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+.zSts.PENDING { background: #e3f0fb; color: var(--z-pending); }
+.zSts.PASS    { background: #e0f0e5; color: var(--z-success); }
+.zSts.PARTIAL { background: #e0f0e5; color: var(--z-success); }
+.zSts.HOLD    { background: #fef0e6; color: var(--z-warning); }
+.zSts.FAIL    { background: #fce9e9; color: var(--z-error);   }
+
+/* 상태 배지 (신규 카드) — 색상 채움 칩, 흰색 텍스트로 고대비 */
+.zStsTag {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 2px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  color: #fff;
+  background: var(--z-text3);   /* 미지 상태 기본 회색 */
+  letter-spacing: 0.2px;
+}
+/* 상태별 칩 배경색 */
+.zStsTag.pend { background: var(--z-pending); }
+.zStsTag.pass { background: var(--z-success); }
+.zStsTag.hold { background: var(--z-warning); }
+.zStsTag.fail { background: var(--z-error);   }
+
+/* 리스트 아이템이 선택/활성/호버 상태여도 배지 텍스트는 흰색 유지
+   (UI5 기본 selected/active 스타일이 텍스트를 검정으로 덮어 가독성을 떨어뜨리는 문제 차단) */
+.sapMLIB.sapMLIBSelected .zStsTag,
+.sapMLIB.sapMLIBActive   .zStsTag,
+.sapMLIB.sapMLIBHoverable:hover .zStsTag,
+.sapMLIBSelected .zStsTag .sapMText,
+.sapMLIBActive   .zStsTag {
+  color: #fff !important;
+}
+.sapMLIBSelected .zStsTag.pend, .sapMLIBActive .zStsTag.pend { background: var(--z-pending) !important; }
+.sapMLIBSelected .zStsTag.pass, .sapMLIBActive .zStsTag.pass { background: var(--z-success) !important; }
+.sapMLIBSelected .zStsTag.hold, .sapMLIBActive .zStsTag.hold { background: var(--z-warning) !important; }
+.sapMLIBSelected .zStsTag.fail, .sapMLIBActive .zStsTag.fail { background: var(--z-error)   !important; }
+
+/* 카드 상단 행 (Prueflos + 상태) */
+.zLotCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 3px;
+}
+/* 카드 자재명 */
+.zLotCardMid {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--z-text1);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 카드 보조 정보 (자재번호/배치, 공급업체) */
+.zLotCardSub {
+  font-size: 10px;
+  color: var(--z-text2);
+  margin-bottom: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 카드 하단 (GR/PO/수량) */
+.zLotCardBot {
+  font-size: 10px;
+  color: var(--z-text2);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 카드 내 검사로트번호 */
+.zLotPrueflos {
+  font-family: var(--z-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--z-text1);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 카드 행 구분자 */
+.zLotSep {
+  color: var(--z-border);
+  flex-shrink: 0;
+}
+
+/* SingleSelectMaster 선택 시 SAPUI5 기본 하이라이트 덮어쓰기 */
+.sapMLIBSelected .zLotCard,
+.sapMLIBSelected.sapMLIB .zLotCard {
+  background: var(--z-sel-bg) !important;
+  border-left-color: var(--z-sel-bar) !important;
+}
+.sapMLIB:focus .zLotCard,
+.sapMLIB.sapMLIBFocused .zLotCard { outline: none; }
+/* 선택된 리스트 아이템 배경 (SAPUI5 기본 파란색 제거) */
+.sapMListModeSSMActive .sapMLIBSelected,
+.sapMListModeSSM .sapMLIBSelected { background: transparent !important; }
+
+/* ══════════════════ OBJECT HEADER ══════════════════ */
+.zObjHdr {
+  background: var(--z-card);
+  border-bottom: 1px solid var(--z-border);
+  padding: 10px 14px 8px;
+  flex-shrink: 0;
+}
+.zObjHdrTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.zObjHdrLeft { flex: 1; min-width: 0; }
+.zObjHdrRight { text-align: right; flex-shrink: 0; margin-left: 16px; }
+.zObjPrueflos {
+  font-family: var(--z-mono);
+  font-size: 10px;
+  color: var(--z-text3);
+  margin-bottom: 2px;
+}
+.zObjName {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--z-text1);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zObjVendor {
+  font-size: 11px;
+  color: var(--z-text2);
+  margin-top: 1px;
+}
+.zObjQtyNum {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--z-primary);
+  line-height: 1.1;
+}
+.zObjQtyLbl { font-size: 10px; color: var(--z-text3); }
+.zObjAttrs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 16px;
+}
+.zObjAttr { display: flex; flex-direction: column; }
+.zObjAttrLbl { font-size: 9px; color: var(--z-text3); }
+.zObjAttrVal {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--z-text1);
+  font-family: var(--z-mono);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.zObjAttrVal.noMono { font-family: inherit; }
+
+/* ══════════════════ TABS ══════════════════ */
+.zTabContent {
+  flex: 1;
+  min-height: 0;            /* flex 자식이 부모를 넘지 않고 내부 스크롤되도록 */
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── 상세 IconTabBar: 남은 높이를 채우고 콘텐츠는 내부 스크롤 ── */
+.zDetailTabs.sapMITB {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: auto;            /* stretchContentHeight 의 height:100% 가 형제를 밀어내지 않도록 */
+}
+/* 탭 헤더(아이콘 행)는 고정 */
+.zDetailTabs > .sapMITH,
+.zDetailTabs > .sapMITBHeader {
+  flex-shrink: 0;
+}
+/* 콘텐츠 컨테이너가 나머지 높이를 차지 */
+.zDetailTabs > .sapMITBContainerContent {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.zDetailTabs .sapMITBContainerContent > .sapMITBContent {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+/* 각 탭의 최상위 콘텐츠(VBox / ScrollContainer)가 영역을 채우고 스크롤 */
+.zDetailTabs .sapMITBContent > .sapMVBox,
+.zDetailTabs .sapMITBContent > .sapMScrollCont {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;  /* 인라인 height:100% 무력화 → flex 가 높이 결정 */
+}
+/* zTabContent 내부의 스크롤 컨테이너도 남은 높이만 차지하도록 */
+.zDetailTabs .zTabContent > .sapMScrollCont {
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+}
+.zTabScroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.zTabInner { padding: 12px 14px; }
+.zTbl .sapMListTblCell { padding: 4px 8px !important; font-size: 11px !important; }
+.zTbl .sapMListTblHeaderCell { font-size: 11px !important; background: var(--z-hdr) !important; padding: 4px 8px !important; }
+.zTbl .sapMListTblRow:nth-child(even) .sapMListTblCell { background: var(--z-bg); }
+
+/* ══════════════════ UD CARDS ══════════════════ */
+.zUdGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.zUdCard {
+  background: var(--z-card);
+  border: 1px solid var(--z-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  cursor: pointer;
+  border-left: 4px solid var(--z-border);
+  user-select: none;
+}
+.zUdCard:hover { background: #f5f8fd; border-color: #b3c9e8; }
+.zUdCard.zUdSel-pass { border-left-color: var(--z-success); background: #f0f9f4; border-color: #8fd4a6; }
+.zUdCard.zUdSel-hold { border-left-color: var(--z-warning); background: #fef7f2; border-color: #e8b08a; }
+.zUdCard.zUdSel-fail { border-left-color: var(--z-error);   background: #fef5f5; border-color: #e8a0a0; }
+.zUdCode  { font-size: 18px; font-weight: 800; font-family: var(--z-mono); line-height: 1; margin-bottom: 2px; }
+.zUdCode.pass { color: var(--z-success); }
+.zUdCode.hold { color: var(--z-warning); }
+.zUdCode.fail { color: var(--z-error);   }
+.zUdLabel { font-size: 13px; font-weight: 600; color: var(--z-text1); margin-bottom: 2px; }
+.zUdDesc  { font-size: 11px; color: var(--z-text2); margin-bottom: 4px; }
+.zUdHint  { font-size: 10px; color: var(--z-text3); }
+
+/* UD final select row */
+.zUdFinalRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--z-card);
+  border: 1px solid var(--z-border);
+  border-radius: 4px;
+}
+.zUdFinalLbl { font-size: 12px; font-weight: 600; color: var(--z-text2); min-width: 120px; }
+
+/* ══════════════════ DISPOSITION TAB ══════════════════ */
+.zDispCard {
+  background: var(--z-card);
+  border: 1px solid var(--z-border);
+  border-radius: 4px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+}
+.zDispTitle { font-size: 12px; font-weight: 700; color: var(--z-text1); margin-bottom: 8px; }
+.zDispRow { display: flex; align-items: center; gap: 12px; margin-bottom: 5px; font-size: 12px; }
+.zDispLbl { min-width: 100px; color: var(--z-text2); }
+.zDispVal { font-weight: 600; font-family: var(--z-mono); }
+.zPassQtyInput input, .zHoldQtyInput input {
+  font-weight: 700;
+  font-family: var(--z-mono);
+}
+.zPassQtyInput input { color: #107e3e; }
+.zHoldQtyInput input { color: #c44400; }
+
+/* ══════════════════ MOVE PREVIEW ══════════════════ */
+.zMovePreview {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 3px;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+.zMovePreview.pass { background: #f0f9f4; color: var(--z-success); }
+.zMovePreview.hold { background: #fef7f2; color: var(--z-warning); }
+.zMovePreview.fail { background: #fef5f5; color: var(--z-error);   }
+
+/* ══════════════════ HISTORY TAB ══════════════════ */
+.zHistFlow { display: flex; flex-direction: column; }
+.zHistStep {
+  display: flex;
+  gap: 10px;
+  position: relative;
+  padding-bottom: 12px;
+}
+.zHistStep:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 13px;
+  top: 26px;
+  width: 1px;
+  height: calc(100% - 12px);
+  background: var(--z-border);
+}
+.zHistDot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-weight: 700;
+  color: #fff;
+}
+.zHistDot.bwart-101 { background: #2c6e9e; }
+.zHistDot.bwart-321 { background: var(--z-success); }
+.zHistDot.bwart-322 { background: var(--z-warning); }
+.zHistDot.bwart-def { background: var(--z-text3); }
+.zHistBody { flex: 1; padding-top: 2px; }
+.zHistBwart { font-size: 11px; font-weight: 700; color: var(--z-text1); }
+.zHistMoveType { font-size: 10px; color: var(--z-text2); margin-bottom: 2px; }
+.zHistMeta { display: flex; flex-wrap: wrap; gap: 3px 12px; font-size: 10px; color: var(--z-text3); font-family: var(--z-mono); }
+.zHistQty { font-weight: 700; color: var(--z-text1); }
+
+/* ══════════════════ EMPTY STATE ══════════════════ */
+.zEmpty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 8px;
+  padding: 48px 24px;
+}
+.zEmptyTitle { font-size: 14px; font-weight: 600; color: var(--z-text2); }
+.zEmptyText  { font-size: 11px; color: var(--z-text3); }
+
+/* ══════════════════ FOOTER ══════════════════ */
+.zFooter {
+  background: var(--z-card) !important;
+  border-top: 1px solid var(--z-border) !important;
+  flex-shrink: 0 !important;
+  height: 44px !important;
+  min-height: 44px !important;
+}
+
+/* ══════════════════ LOCAL INSPECTION (검사결과 탭) ══════════════════ */
+
+/* 요약 바 */
+.zInspSummaryBar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--z-hdr);
+  border-bottom: 1px solid var(--z-border);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.zInspProgress {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--z-text1);
+  min-width: 40px;
+}
+
+/* 검사항목 컨테이너 */
+.zInspContainer {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* 진행률 바 영역 */
+.zInspProgLbl {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--z-text2);
+  margin-right: 10px;
+  white-space: nowrap;
+}
+.zInspProgBar { flex: 0 0 auto; }
+/* 입력 진행률 바: 항상 초록색 채움 + 상태 아이콘(x 등) 숨김 */
+.zInspProgBar .sapMPIBar { background-color: var(--z-success) !important; }
+.zInspProgBar .sapMPIBarRemaining { background-color: #e9edf2 !important; }
+.zInspProgBar .sapMPIValueStateIcon,
+.zInspProgBar .sapMPIStateIcon,
+.zInspProgBar [class*="sapMPIIndicator"] { display: none !important; }
+
+/* 검사항목 행 (항목 | 기준 | 입력 | 판정) */
+.zInspRow {
+  display: flex !important;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--z-border);
+  min-height: 56px;
+}
+.zInspRow:last-child { border-bottom: none; }
+.zInspRow:hover { background: #f7f9fc; }
+
+/* 컬럼 1: 항목명 */
+.zInspColName { width: 170px; flex-shrink: 0; display: flex; flex-direction: column; }
+.zInspName { font-size: 13px; font-weight: 700; color: var(--z-text1); }
+/* 컬럼 2: 기준값 */
+.zInspColStd {
+  width: 120px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--z-text2);
+  font-family: var(--z-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 컬럼 3: 입력 컨트롤 (+단위) */
+.zInspColInput { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; }
+.zInspUnit { font-size: 12px; color: var(--z-text3); flex-shrink: 0; }
+/* 컬럼 4: 판정 배지 */
+.zInspColJudge { width: 96px; flex-shrink: 0; display: flex; justify-content: flex-end; }
+
+/* 판정 배지 = pill (테두리+연한 배경) */
+.zInspColJudge .sapMObjStatus {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 3px 11px;
+  font-weight: 700;
+  font-size: 12px;
+}
+.zInspColJudge .sapMObjStatusSuccess { border-color: var(--z-success); background: #eaf5ee; }
+.zInspColJudge .sapMObjStatusError   { border-color: var(--z-error);   background: #fdeaea; }
+.zInspColJudge .sapMObjStatusWarning { border-color: var(--z-warning); background: #fdf1e8; }
+.zInspColJudge .sapMObjStatusNone    { border-color: var(--z-border);  background: #f3f4f6; }
+
+/* 하단 요약 푸터 */
+.zInspFooter {
+  display: flex;
+  flex-shrink: 0;
+  border-top: 1px solid var(--z-border);
+  background: var(--z-card);
+}
+.zInspFootCell {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
+  border-right: 1px solid var(--z-border);
+}
+.zInspFootCell:last-child { border-right: none; }
+.zInspFootNum { font-size: 22px; font-weight: 800; line-height: 1.1; color: var(--z-text2); }
+.zInspFootNum.pass { color: var(--z-success); }
+.zInspFootNum.fail { color: var(--z-error);   }
+.zInspFootNum.warn { color: var(--z-warning); }
+.zInspFootNum.pend { color: var(--z-text3);   }
+.zInspFootLbl { font-size: 11px; color: var(--z-text3); margin-top: 2px; }
+
+/* 검사항목 메타 텍스트 */
+.zInspSubtext {
+  font-size: 11px;
+  color: var(--z-text2);
+  margin-top: 2px;
+}
+.zInspStd {
+  font-size: 10px;
+  color: var(--z-text3);
+  font-style: italic;
+  margin-top: 1px;
+}
+
+/* 판정 배지 */
+.zInspJudge {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* ══════════════════ PASS QTY ROW (A2) ══════════════════ */
+.zPassQtyRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 0 6px 0;
+  flex-wrap: wrap;
+}
+.zHoldQtyText {
+  font-size: 12px;
+  color: var(--z-warning);
+  font-weight: 600;
+}
+
+/* ══════════════════ MOVE PREVIEW ══════════════════ */
+.zMoveItem {
+  display: flex;
+  align-items: center;
+  padding: 8px 4px;
+  gap: 8px;
+  min-height: 40px;
+}
+.zMoveLbl {
+  font-size: 13px;
+  color: var(--z-text1);
+}
+.zMoveQty {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--z-text1);
+  font-family: var(--z-mono);
+}
+
+/* ══════════════════ HISTORY CARDS ══════════════════ */
+.zHistLoading {
+  padding: 16px;
+  color: var(--z-text2);
+  font-size: 12px;
+}
+.zHistCard {
+  background: var(--z-card);
+  border: 1px solid var(--z-border);
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+}
+.zHistTop {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+.zHistBwart {
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--z-mono);
+  min-width: 36px;
+}
+.zHistDoc {
+  font-size: 12px;
+  color: var(--z-text2);
+  font-family: var(--z-mono);
+}
+.zHistDate {
+  font-size: 11px;
+  color: var(--z-text3);
+  margin-left: auto;
+}
+.zHistMid {
+  font-size: 13px;
+  color: var(--z-text1);
+  margin-bottom: 3px;
+}
+.zHistBot {
+  font-size: 11px;
+  color: var(--z-text3);
+}
+.zHistFlow {
+  padding: 8px 0;
+}
+
+/* ══════════════════ DISP CARD (재고처분) ══════════════════ */
+.zDispCard {
+  background: var(--z-card);
+  border: 1px solid var(--z-border);
+  border-radius: 4px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+}
+.zDispTitle {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--z-text2);
+  margin-bottom: 8px;
+}
+/* 재고처분 상단 판정코드 배지 */
+.zDispTitleRow { margin-bottom: 8px; }
+.zDispUdCode.sapMObjStatus {
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 3px 12px;
+  font-weight: 700;
+  font-size: 12px;
+}
+.zDispUdCode.sapMObjStatusSuccess { border-color: var(--z-success); background: #eaf5ee; }
+.zDispUdCode.sapMObjStatusError   { border-color: var(--z-error);   background: #fdeaea; }
+.zDispUdCode.sapMObjStatusWarning { border-color: var(--z-warning); background: #fdf1e8; }
+.zDispUdCode.sapMObjStatusNone    { border-color: var(--z-border);  background: #f3f4f6; }
+.zDispRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+.zDispLbl {
+  width: 140px;
+  font-size: 12px;
+  color: var(--z-text2);
+  flex-shrink: 0;
+}
+.zDispVal {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--z-text1);
+}
+
+
+/* ── 판정 수량 색상 ── */
+.zPassQtyText {
+  color: #107e3e;
+  font-weight: 700;
+}
+.zHoldQtyText {
+  color: #c44400;
+  font-weight: 700;
+}

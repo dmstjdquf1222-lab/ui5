@@ -1,0 +1,1855 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>입고 품질관리 — ZRC1QM</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body,input,select,textarea,button{font-family:'72','72full','맑은 고딕',Arial,sans-serif;}
+:root{
+  --shell:#1b3a5c;--nav:#162f4a;
+  --bg:#f5f6f7;--card:#fff;--bg2:#eef0f2;
+  --bd:#d9d9d9;--bd2:#e8e8e8;--bd3:#f0f0f0;
+  --tp:#1d2d3e;--ts:#556b82;--tm:#8696a9;
+  --focus:#0064d9;
+  --G:#107e3e;--Gbg:#f1fdf6;--Gb:#8fcfac;
+  --R:#bb0000;--Rbg:#fff1f1;--Rb:#e8a0a0;
+  --O:#c44400;--Obg:#fff4ed;--Ob:#f5a96a;
+  --Pt:#2c6e9e;--Pbg:#e8f4fd;--Pb:#9dc8f0;
+  --Err:#6b21a8;--ErrBg:#faf5ff;--ErrB:#d8b4fe;
+  --QM:#5b0eab;--QMbg:#f3ecfd;--QMb:#c4a0f0;
+  --mono:'Courier New',monospace;--r:4px;
+}
+html,body{height:100%;overflow:hidden;}
+body{display:flex;flex-direction:column;background:var(--bg);font-size:13px;color:var(--tp);}
+
+/* ShellBar */
+.shell{background:var(--shell);color:#fff;height:44px;display:flex;align-items:center;padding:0 0 0 0;gap:0;flex-shrink:0;}
+.shell-nav-toggle{width:56px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;}
+.shell-nav-toggle:hover{background:rgba(255,255,255,.1);}
+.shell-nav-icon{display:flex;flex-direction:column;gap:4px;}
+.shell-nav-icon span{display:block;width:18px;height:2px;background:#fff;border-radius:1px;}
+.shell-logo{display:flex;align-items:center;gap:0;padding:0 16px 0 4px;border-right:1px solid rgba(255,255,255,.15);}
+.logo{font-size:14px;font-weight:700;letter-spacing:.5px;color:#fff;}
+.logo-badge{background:#f5a800;color:#1b3a5c;font-size:10px;font-weight:800;padding:1px 6px;border-radius:2px;margin-left:4px;}
+.shell-title-area{padding:0 16px;display:flex;flex-direction:column;justify-content:center;}
+.shell-title{font-size:13px;font-weight:600;color:#fff;}
+.shell-sub{font-size:10px;color:rgba(255,255,255,.45);}
+.shell-r{margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:16px;}
+.shell-user{font-size:11px;color:rgba(255,255,255,.5);}
+.shell-date{font-size:11px;color:rgba(255,255,255,.35);}
+.shell-btn{height:26px;padding:0 10px;border-radius:var(--r);border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.07);font-size:11px;color:rgba(255,255,255,.82);cursor:pointer;}
+.shell-btn:hover{background:rgba(255,255,255,.14);}
+
+/* Main layout */
+.main-layout{display:flex;flex:1;overflow:hidden;min-height:0;}
+
+/* ── Side Navigation ── */
+.side-nav{width:200px;background:var(--nav);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;transition:width .2s;}
+.side-nav.collapsed{width:56px;}
+.nav-section-label{font-size:10px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.6px;padding:16px 16px 6px;white-space:nowrap;overflow:hidden;}
+.side-nav.collapsed .nav-section-label{opacity:0;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;color:rgba(255,255,255,.65);font-size:12px;font-weight:500;border-left:3px solid transparent;transition:all .15s;white-space:nowrap;overflow:hidden;}
+.nav-item:hover{background:rgba(255,255,255,.07);color:#fff;}
+.nav-item.active{background:rgba(0,100,217,.25);border-left-color:var(--focus);color:#fff;font-weight:700;}
+.nav-icon{font-size:16px;flex-shrink:0;width:20px;text-align:center;}
+.nav-text{overflow:hidden;text-overflow:ellipsis;}
+.side-nav.collapsed .nav-text{display:none;}
+.side-nav.collapsed .nav-item{justify-content:center;padding:10px 0;}
+.nav-divider{height:1px;background:rgba(255,255,255,.08);margin:8px 16px;}
+.side-nav.collapsed .nav-divider{margin:8px 8px;}
+.nav-badge{background:var(--R);color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:8px;margin-left:auto;flex-shrink:0;}
+.side-nav.collapsed .nav-badge{display:none;}
+/* 트리 서브 메뉴 */
+.nav-sub-item{display:flex;align-items:center;gap:8px;padding:5px 16px 5px 36px;cursor:pointer;color:rgba(255,255,255,.5);font-size:11px;transition:all .12s;white-space:nowrap;overflow:hidden;}
+.nav-sub-item:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.8);}
+.nav-sub-item.active{color:#fff;background:rgba(0,100,217,.18);}
+.nav-sub-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.3);flex-shrink:0;}
+.nav-sub-text{flex:1;overflow:hidden;text-overflow:ellipsis;}
+.nav-sub-count{font-size:10px;font-weight:700;padding:1px 6px;border-radius:8px;background:rgba(255,255,255,.1);color:rgba(255,255,255,.5);flex-shrink:0;}
+.side-nav.collapsed .nav-sub-item{display:none;}
+.nav-context{margin-top:auto;border-top:1px solid rgba(255,255,255,.1);padding:12px 16px;display:flex;flex-direction:column;gap:10px;}
+.side-nav.collapsed .nav-context{display:none;}
+.nav-ctx-block{display:flex;flex-direction:column;gap:4px;}
+.nav-ctx-label{font-size:9px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.5px;}
+.nav-ctx-today{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.nav-ctx-chip{font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px;white-space:nowrap;}
+.nav-ctx-chip.pend{background:rgba(44,110,158,.35);color:#9dc8f0;}
+.nav-ctx-chip.hold{background:rgba(196,68,0,.25);color:#f5a96a;}
+.nav-ctx-chip.fail{background:rgba(187,0,0,.25);color:#e8a0a0;}
+.nav-ctx-warehouse{font-size:11px;font-weight:600;color:rgba(255,255,255,.75);display:flex;align-items:center;gap:5px;}
+.nav-ctx-warehouse-icon{font-size:13px;opacity:.7;}
+
+/* Page container */
+.page-container{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;}
+.page{display:none;flex-direction:column;flex:1;overflow:hidden;}
+.page.active{display:flex;}
+
+/* ── 공통 DPH ── */
+.dph{background:var(--card);border-bottom:1px solid var(--bd);flex-shrink:0;}
+.dph-title-row{padding:10px 20px 8px;border-bottom:1px solid var(--bd2);display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.dph-title{font-size:16px;font-weight:700;color:var(--tp);}
+.dph-sub{font-size:11px;color:var(--tm);margin-top:2px;}
+.dph-proc{display:flex;align-items:center;gap:3px;font-size:11px;flex-shrink:0;flex-wrap:wrap;}
+.dph-proc-step{color:var(--ts);font-weight:500;padding:2px 6px;border-radius:var(--r);}
+.dph-proc-step.hl{background:var(--Pbg);color:var(--Pt);font-weight:700;}
+.dph-proc-arr{color:var(--bd);font-size:12px;}
+.dph-kpi-row{display:flex;padding:8px 20px;gap:0;flex-wrap:wrap;}
+.kpi-item{display:flex;flex-direction:column;padding:4px 20px 4px 0;border-right:1px solid var(--bd2);margin-right:20px;}
+.kpi-item:last-child{border-right:none;margin-right:0;}
+.kpi-num{font-size:18px;font-weight:700;color:var(--tp);line-height:1;margin-bottom:2px;}
+.kpi-lbl{font-size:10px;color:var(--tm);font-weight:500;}
+.kpi-item.warn .kpi-num{color:var(--O);}
+.kpi-item.danger .kpi-num{color:var(--R);}
+.kpi-item.today .kpi-num{color:var(--focus);}
+.kpi-item.err .kpi-num{color:var(--Err);}
+
+/* Filter */
+.fbar{background:var(--card);border-bottom:1px solid var(--bd);padding:7px 20px;display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;flex-shrink:0;}
+.fg{display:flex;flex-direction:column;gap:2px;}
+.flbl{font-size:10px;color:var(--tm);font-weight:600;letter-spacing:.2px;}
+.fi{height:26px;border:1px solid var(--bd);border-radius:var(--r);padding:0 8px;font-size:12px;color:var(--tp);background:#fff;outline:none;}
+.fi:focus{border-color:var(--focus);}
+.fsel{height:26px;border:1px solid var(--bd);border-radius:var(--r);padding:0 6px;font-size:12px;color:var(--tp);background:#fff;outline:none;}
+.fbtn{height:26px;padding:0 12px;border-radius:var(--r);border:1px solid var(--focus);background:var(--focus);font-size:12px;color:#fff;cursor:pointer;font-weight:600;}
+.fbtn-ghost{height:26px;padding:0 10px;border-radius:var(--r);border:1px solid var(--bd);background:var(--card);font-size:12px;color:var(--ts);cursor:pointer;}
+
+/* FCL */
+.fcl{display:flex;flex:1;overflow:hidden;min-height:0;}
+
+/* ── Worklist (판정) ── */
+.begin-col{width:27%;min-width:250px;border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;background:var(--card);flex-shrink:0;}
+.wl-header{background:var(--bg2);border-bottom:1px solid var(--bd);padding:8px 14px;flex-shrink:0;}
+.wl-title{font-size:12px;font-weight:700;color:var(--ts);display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.wl-chips{display:flex;gap:4px;flex-wrap:wrap;}
+.wl-chip{padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--ts);}
+.wl-chip:hover{background:var(--bg);}
+.wl-chip.active{background:var(--focus);border-color:var(--focus);color:#fff;}
+.wl-chip.err-chip{border-color:var(--ErrB);color:var(--Err);}
+.wl-chip.err-chip.active{background:var(--Err);border-color:var(--Err);color:#fff;}
+.wl-scroll{flex:1;overflow-y:auto;}
+.wl-group{padding:5px 14px 3px;font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.4px;background:var(--bg2);border-bottom:1px solid var(--bd3);border-top:1px solid var(--bd2);display:flex;justify-content:space-between;position:sticky;top:0;z-index:2;}
+.wl-item{padding:9px 14px;border-bottom:1px solid var(--bd3);cursor:pointer;}
+.wl-item:hover{background:#f5f9ff;}
+.wl-item.sel{background:#deeeff;border-left:3px solid var(--focus);}
+.wl-item.err-item{background:#fdf8ff;}
+.wl-item.err-item.sel{background:#ede0ff;border-left:3px solid var(--Err);}
+.wi-row1{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.wi-name{font-size:13px;font-weight:600;color:var(--tp);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.wi-row2{font-size:11px;color:var(--ts);display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
+.wi-doc{font-family:var(--mono);font-size:10px;color:var(--tm);}
+.wi-sep{color:var(--bd);}
+.wi-insp-bar{margin-top:4px;display:flex;align-items:center;gap:6px;}
+.wi-progress{flex:1;height:4px;background:var(--bd3);border-radius:2px;overflow:hidden;}
+.wi-progress-fill{height:100%;border-radius:2px;transition:width .3s;}
+.wi-err-msg{font-size:10px;color:var(--Err);margin-top:3px;padding:2px 6px;background:var(--ErrBg);border-radius:var(--r);border:1px solid var(--ErrB);}
+.wi-row3{font-size:10px;color:var(--tm);display:flex;align-items:center;gap:4px;margin-top:2px;flex-wrap:wrap;}
+.wi-qty-badge{font-size:11px;font-weight:700;color:var(--tp);margin-top:3px;}
+
+.badge{display:inline-flex;padding:2px 7px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:.2px;flex-shrink:0;}
+.b-pend{background:var(--Pbg);color:var(--Pt);border:1px solid var(--Pb);}
+.b-pass{background:var(--Gbg);color:var(--G);border:1px solid var(--Gb);}
+.b-part{background:var(--Obg);color:var(--O);border:1px solid var(--Ob);}
+.b-fail{background:var(--Rbg);color:var(--R);border:1px solid var(--Rb);}
+.b-err{background:var(--ErrBg);color:var(--Err);border:1px solid var(--ErrB);}
+
+/* Mid column (판정 Object Page) */
+.mid-col{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);border-right:1px solid var(--bd);min-width:0;}
+.empty-state{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--tm);padding:24px;}
+
+/* Empty state dashboard */
+.es-dashboard{width:100%;max-width:520px;}
+.es-title{font-size:15px;font-weight:700;color:var(--ts);margin-bottom:4px;text-align:center;}
+.es-sub{font-size:11px;color:var(--tm);margin-bottom:20px;text-align:center;}
+.es-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.es-card{background:var(--card);border:1px solid var(--bd2);border-radius:var(--r);padding:12px 14px;cursor:pointer;transition:all .12s;}
+.es-card:hover{border-color:var(--focus);box-shadow:0 2px 8px rgba(0,100,217,.1);}
+.es-card-num{font-size:22px;font-weight:700;line-height:1;margin-bottom:3px;}
+.es-card-lbl{font-size:11px;color:var(--ts);}
+.es-card-hint{font-size:10px;color:var(--tm);margin-top:2px;}
+.es-guide{background:var(--card);border:1px solid var(--bd2);border-radius:var(--r);padding:12px 14px;}
+.es-guide-title{font-size:11px;font-weight:700;color:var(--ts);margin-bottom:8px;text-transform:uppercase;letter-spacing:.3px;}
+.es-step{display:flex;align-items:center;gap:8px;padding:5px 0;font-size:11px;color:var(--ts);}
+.es-step-num{width:20px;height:20px;background:var(--Pbg);color:var(--Pt);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+
+/* Object Page Header */
+.op-header{background:var(--card);border-bottom:1px solid var(--bd);padding:10px 16px;flex-shrink:0;}
+.op-hdr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
+.op-sub{font-size:10px;font-family:var(--mono);color:var(--tm);margin-bottom:3px;display:flex;align-items:center;gap:7px;}
+.op-name{font-size:16px;font-weight:700;color:var(--tp);margin-bottom:2px;}
+.op-meta{font-size:11px;color:var(--ts);}
+.op-right{text-align:right;flex-shrink:0;}
+.op-qty{font-size:24px;font-weight:700;color:var(--focus);line-height:1;}
+.op-unit{font-size:12px;color:var(--ts);}
+.op-qty-lbl{font-size:10px;color:var(--tm);margin-top:2px;}
+.op-attrs{display:flex;gap:14px;flex-wrap:wrap;}
+.op-attr .al{font-size:10px;color:var(--tm);margin-bottom:1px;}
+.op-attr .av{font-size:11px;font-weight:600;color:var(--tp);}
+.op-attr .av.mono{font-family:var(--mono);}
+.notice{border-radius:0;padding:6px 16px;font-size:12px;display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.notice-readonly{background:#f8fafb;border-bottom:1px solid var(--bd2);color:var(--ts);}
+.notice-error{background:var(--ErrBg);border-bottom:1px solid var(--ErrB);color:var(--Err);font-weight:600;}
+
+/* Object Page Tabs */
+.op-tabs{background:var(--card);border-bottom:2px solid var(--bd);display:flex;padding:0 16px;flex-shrink:0;}
+.op-tab{padding:9px 14px;font-size:12px;font-weight:600;color:var(--tm);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.op-tab:hover{color:var(--ts);}
+.op-tab.active{color:var(--focus);border-bottom-color:var(--focus);}
+.op-tab-badge{font-size:10px;padding:1px 5px;border-radius:8px;font-weight:700;background:var(--bd3);color:var(--tm);}
+.op-tab.active .op-tab-badge{background:var(--Pbg);color:var(--Pt);}
+.tab-pane{display:none;flex:1;overflow-y:auto;padding:14px 16px;}
+.tab-pane.active{display:block;}
+
+/* Insp */
+.insp-lot-info{display:flex;gap:14px;flex-wrap:wrap;padding:7px 10px;background:var(--bg);border-radius:var(--r);border:1px solid var(--bd2);margin-bottom:10px;}
+.ili-item .il-l{font-size:10px;color:var(--tm);margin-bottom:1px;}
+.ili-item .il-v{font-size:12px;font-weight:600;color:var(--tp);}
+.ili-item .il-v.mono{font-family:var(--mono);}
+.insp-progress-bar{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.ipb-label{font-size:11px;color:var(--ts);white-space:nowrap;}
+.ipb-track{flex:1;height:7px;background:var(--bd3);border-radius:4px;overflow:hidden;}
+.ipb-fill{height:100%;border-radius:4px;transition:width .3s;}
+.ipb-count{font-size:11px;font-weight:700;color:var(--ts);white-space:nowrap;}
+.insp-char-row{display:grid;grid-template-columns:110px 110px 1fr 90px;gap:0;border:1px solid var(--bd2);border-radius:var(--r);margin-bottom:5px;overflow:hidden;background:#fff;}
+.insp-char-row.judged-pass{border-color:var(--Gb);}
+.insp-char-row.judged-fail{border-color:var(--Rb);}
+.insp-char-row.judged-warn{border-color:var(--Ob);}
+.icr-cell{padding:7px 9px;font-size:12px;display:flex;align-items:center;border-right:1px solid var(--bd3);}
+.icr-cell:last-child{border-right:none;}
+.icr-name{font-weight:600;color:var(--tp);display:flex;flex-direction:column;gap:2px;}
+.icr-name-sub{font-size:10px;color:var(--tm);font-weight:400;}
+.icr-std{font-family:var(--mono);font-size:11px;color:var(--ts);}
+.insp-toggle{display:flex;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;}
+.itg-btn{padding:4px 9px;font-size:11px;font-weight:600;cursor:pointer;border:none;background:var(--bg);color:var(--tm);white-space:nowrap;}
+.itg-btn:hover{background:var(--bd3);}
+.itg-btn.pass.active{background:var(--G);color:#fff;}
+.itg-btn.fail.active{background:var(--R);color:#fff;}
+.itg-btn.warn.active{background:var(--O);color:#fff;}
+.insp-text-input{flex:1;height:28px;border:1px solid var(--bd);border-radius:var(--r);padding:0 7px;font-size:12px;color:var(--tp);outline:none;background:#fff;}
+.insp-text-input:focus{border-color:var(--focus);}
+.insp-text-input.pass{border-color:var(--G);background:var(--Gbg);}
+.insp-text-input.fail{border-color:var(--R);background:var(--Rbg);}
+.insp-unit{font-size:11px;color:var(--tm);white-space:nowrap;}
+.insp-select{flex:1;height:28px;border:1px solid var(--bd);border-radius:var(--r);padding:0 6px;font-size:12px;color:var(--tp);outline:none;background:#fff;}
+.insp-select.pass{border-color:var(--G);background:var(--Gbg);}
+.insp-select.fail{border-color:var(--R);background:var(--Rbg);}
+.icr-input-wrap{display:flex;align-items:center;gap:6px;width:100%;}
+.icr-judge{justify-content:center;}
+.insp-judge-badge{display:inline-flex;padding:2px 7px;border-radius:2px;font-size:11px;font-weight:700;}
+.ij-pass{background:var(--Gbg);color:var(--G);border:1px solid var(--Gb);}
+.ij-fail{background:var(--Rbg);color:var(--R);border:1px solid var(--Rb);}
+.ij-warn{background:var(--Obg);color:var(--O);border:1px solid var(--Ob);}
+.ij-pend{background:var(--bg);color:var(--tm);border:1px solid var(--bd);}
+.insp-summary-bar{display:flex;gap:0;border:1px solid var(--bd2);border-radius:var(--r);overflow:hidden;margin-top:10px;}
+.isb-item{flex:1;padding:7px 10px;text-align:center;border-right:1px solid var(--bd2);}
+.isb-item:last-child{border-right:none;}
+.isb-num{font-size:16px;font-weight:700;line-height:1;margin-bottom:2px;}
+.isb-lbl{font-size:10px;color:var(--tm);}
+
+/* UD */
+.ud-locked-notice{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);font-size:12px;color:var(--tm);margin-bottom:10px;}
+.ud-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.ud-item{border:1.5px solid var(--bd2);border-radius:var(--r);padding:11px 13px;cursor:pointer;background:#fff;transition:all .12s;}
+.ud-item:hover{border-color:var(--focus);background:var(--Pbg);}
+.ud-item.sel-pass{border-color:var(--G);background:var(--Gbg);}
+.ud-item.sel-hold{border-color:var(--O);background:var(--Obg);}
+.ud-item.sel-fail{border-color:var(--R);background:var(--Rbg);}
+.ud-item.disabled{opacity:.45;pointer-events:none;}
+.ud-code{font-size:14px;font-weight:700;font-family:var(--mono);margin-bottom:3px;}
+.ud-item.sel-pass .ud-code{color:var(--G);}
+.ud-item.sel-hold .ud-code{color:var(--O);}
+.ud-item.sel-fail .ud-code{color:var(--R);}
+.ud-label{font-size:12px;font-weight:700;color:var(--tp);margin-bottom:2px;}
+.ud-desc{font-size:11px;color:var(--ts);margin-bottom:5px;}
+.ud-qty-hint{font-size:10px;font-weight:700;padding:2px 7px;border-radius:var(--r);display:inline-block;}
+.ud-qty-hint.pass{background:var(--Gbg);color:var(--G);}
+.ud-qty-hint.hold{background:var(--Obg);color:var(--O);}
+.ud-type-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
+.rec-badge{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:6px;background:var(--Pbg);color:var(--Pt);}
+
+/* Qty */
+.qty-ud-summary{display:flex;align-items:center;gap:10px;padding:8px 12px;background:var(--Pbg);border:1px solid var(--Pb);border-radius:var(--r);font-size:12px;color:var(--Pt);font-weight:600;margin-bottom:10px;}
+.qty-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.qbox{border:1px solid var(--bd2);border-left:4px solid var(--bd);border-radius:var(--r);padding:10px 12px;background:var(--bg);}
+.qbox.pass{border-left-color:var(--G);}
+.qbox.hold{border-left-color:var(--O);}
+.ql{font-size:11px;font-weight:700;margin-bottom:6px;}
+.qbox.pass .ql{color:var(--G);}
+.qbox.hold .ql{color:var(--O);}
+.qinput{width:100%;height:40px;border:1px solid var(--bd);border-radius:var(--r);padding:0 9px;font-size:20px;font-weight:700;text-align:right;outline:none;color:var(--tp);background:#fff;}
+.qinput:focus{border-color:var(--focus);}
+.qbox.pass .qinput:focus{border-color:var(--G);}
+.qbox.hold .qinput:focus{border-color:var(--O);}
+.qinput.invalid{border-color:var(--R)!important;background:var(--Rbg);}
+.qinput:disabled{background:var(--bd3);color:var(--ts);cursor:not-allowed;}
+.qhelp{font-size:10px;color:var(--tm);margin-top:4px;}
+.qbox.pass .qhelp{color:var(--G);}
+.qbox.hold .qhelp{color:var(--O);}
+.rbar-wrap{margin-bottom:8px;}
+.rlabels{display:flex;justify-content:space-between;font-size:11px;font-weight:600;margin-bottom:3px;}
+.rbar{height:7px;border-radius:4px;background:var(--Obg);overflow:hidden;}
+.rfill{height:100%;background:var(--G);transition:width .3s;}
+.auto-v{border-radius:var(--r);padding:7px 10px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px;margin-top:2px;}
+.av-pend{background:var(--Pbg);color:var(--Pt);}
+.av-pass{background:var(--Gbg);color:var(--G);}
+.av-part{background:var(--Obg);color:var(--O);}
+.av-done{background:var(--Gbg);color:var(--G);}
+.av-err{background:var(--ErrBg);color:var(--Err);}
+.warn-box{display:none;align-items:center;gap:5px;padding:5px 9px;background:var(--Rbg);border:1px solid var(--Rb);border-radius:var(--r);font-size:11px;color:var(--R);margin-bottom:6px;}
+.auto-note{font-size:11px;color:var(--Pt);background:var(--Pbg);border:1px solid var(--Pb);border-radius:var(--r);padding:5px 9px;margin-bottom:7px;margin-top:12px;}
+.preview-title{font-size:10px;font-weight:700;color:var(--O);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;}
+.pr-rows{display:flex;flex-direction:column;gap:4px;}
+.pr-row{display:flex;align-items:center;gap:7px;padding:6px 9px;border:1px solid var(--bd3);border-radius:var(--r);background:var(--bg);font-size:11px;}
+.pr-row.pr-pass{border-left:3px solid var(--G);}
+.pr-row.pr-hold{border-left:3px solid var(--O);}
+.pr-row.pr-err{border-left:3px solid var(--Err);background:var(--ErrBg);}
+.pr-mvt{font-family:var(--mono);font-weight:700;font-size:12px;min-width:30px;}
+.pr-mvt.p{color:var(--G);}
+.pr-mvt.h{color:var(--O);}
+.pr-mvt.e{color:var(--Err);}
+.pr-lbl{color:var(--ts);flex:1;}
+.pr-qty{font-weight:700;font-family:var(--mono);}
+.pr-qty.p{color:var(--G);}
+.pr-qty.h{color:var(--O);}
+.pr-empty{font-size:11px;color:var(--tm);font-style:italic;}
+.dgrid{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;}
+.ditem{display:inline-flex;align-items:center;justify-content:center;padding:4px 12px;border:1px solid var(--bd);border-radius:12px;cursor:pointer;background:#fff;font-size:11px;font-weight:500;color:var(--ts);user-select:none;}
+.ditem:hover{border-color:var(--R);background:var(--Rbg);}
+.ditem.on{background:var(--R);color:#fff;border-color:var(--R);font-weight:700;}
+.ditem input{display:none;}
+.defnote{width:100%;height:36px;border:1px solid var(--bd);border-radius:var(--r);padding:5px 8px;font-size:11px;font-family:inherit;color:var(--tp);resize:none;outline:none;background:#fff;}
+.defnote:focus{border-color:var(--focus);}
+.defnote:disabled{background:var(--bd3);color:var(--tm);}
+.dc-title{font-size:10px;font-weight:700;color:var(--R);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;margin-top:12px;}
+
+/* Hist tab */
+.breadcrumb-wrap{margin-bottom:12px;}
+.bc-title{font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;}
+.breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:2px;}
+.bc-step{font-size:11px;font-weight:500;color:var(--tm);padding:3px 7px;border-radius:var(--r);}
+.bc-step.done{color:var(--G);font-weight:600;}
+.bc-step.active{color:var(--focus);font-weight:700;background:var(--Pbg);border:1px solid var(--Pb);}
+.bc-step.next-s{color:var(--O);}
+.bc-step.err-s{color:var(--Err);background:var(--ErrBg);border:1px solid var(--ErrB);font-weight:700;}
+.bc-arr{font-size:12px;color:var(--bd);padding:0 1px;}
+.move-summary-row{display:flex;gap:7px;margin-bottom:10px;}
+.ms-stat{background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:7px 12px;flex:1;text-align:center;}
+.ms-num{font-size:16px;font-weight:700;line-height:1;margin-bottom:2px;}
+.ms-lbl{font-size:10px;color:var(--tm);}
+
+/* Footer */
+.footer{background:var(--card);border-top:2px solid var(--bd);padding:9px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.footer-hint{font-size:11px;color:var(--ts);}
+.footer-hint strong{font-weight:700;color:var(--tp);}
+.footer-btns{display:flex;gap:7px;}
+.btn-ghost{height:30px;padding:0 13px;border-radius:var(--r);border:1px solid var(--bd);background:var(--card);font-size:12px;color:var(--ts);cursor:pointer;}
+.btn-ghost:hover{background:var(--bg);}
+.btn-next{height:30px;padding:0 16px;border-radius:var(--r);border:none;font-size:12px;font-weight:700;color:#fff;cursor:pointer;background:var(--focus);}
+.btn-next:disabled{background:var(--tm);cursor:not-allowed;}
+.btn-primary{height:30px;padding:0 18px;border-radius:var(--r);background:var(--focus);border:none;font-size:13px;font-weight:700;color:#fff;cursor:pointer;}
+.btn-primary:hover{background:#0055b8;}
+.btn-primary:disabled{background:var(--tm);cursor:not-allowed;opacity:.65;}
+.btn-err{height:30px;padding:0 14px;border-radius:var(--r);background:var(--Err);border:none;font-size:12px;font-weight:700;color:#fff;cursor:pointer;}
+
+/* End Column */
+.end-col{width:0;display:flex;flex-direction:column;overflow:hidden;background:var(--card);border-left:1px solid var(--bd);transition:width .22s;flex-shrink:0;}
+.end-col.open{width:270px;}
+.end-col-hdr{background:var(--bg2);border-bottom:1px solid var(--bd);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.end-col-title{font-size:12px;font-weight:700;color:var(--ts);}
+.end-close{background:none;border:none;font-size:15px;color:var(--tm);cursor:pointer;padding:2px 4px;}
+.end-body{flex:1;overflow-y:auto;padding:14px;}
+.end-field{margin-bottom:9px;}
+.ef-l{font-size:10px;color:var(--tm);font-weight:600;margin-bottom:2px;text-transform:uppercase;letter-spacing:.2px;}
+.ef-v{font-size:12px;font-weight:600;color:var(--tp);}
+.ef-v.mono{font-family:var(--mono);font-size:11px;}
+.end-badge-row{display:flex;align-items:center;gap:8px;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--bd3);}
+.end-mvt-num{font-size:20px;font-weight:700;font-family:var(--mono);}
+.end-status{font-size:11px;padding:3px 9px;border-radius:var(--r);font-weight:700;}
+.end-status.ok{background:var(--Gbg);color:var(--G);border:1px solid var(--Gb);}
+.end-status.err{background:var(--ErrBg);color:var(--Err);border:1px solid var(--ErrB);}
+.end-flow{display:flex;align-items:center;gap:6px;padding:7px 9px;background:var(--bg);border-radius:var(--r);border:1px solid var(--bd3);margin-bottom:10px;}
+.end-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;}
+
+/* ══ 이력 조회 화면 ══ */
+.hist-layout{display:flex;flex:1;overflow:hidden;min-height:0;}
+
+/* 이력 목록 - 너비 줄임 */
+.hist-list-col{width:300px;min-width:260px;border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;background:var(--card);flex-shrink:0;}
+.hist-list-hdr{background:var(--bg2);border-bottom:1px solid var(--bd);padding:8px 12px;flex-shrink:0;}
+.hist-list-title{font-size:12px;font-weight:700;color:var(--ts);margin-bottom:0;display:flex;justify-content:space-between;align-items:center;}
+
+/* 이력 테이블 */
+.htable-wrap{flex:1;overflow-y:auto;}
+.htable{width:100%;border-collapse:collapse;font-size:11px;}
+.htable th{background:var(--bg2);border-bottom:2px solid var(--bd);padding:6px 10px;font-size:10px;font-weight:700;color:var(--ts);text-align:left;white-space:nowrap;text-transform:uppercase;letter-spacing:.2px;position:sticky;top:0;z-index:1;}
+.htable td{padding:8px 10px;border-bottom:1px solid var(--bd3);color:var(--tp);vertical-align:middle;}
+.htable tr{cursor:pointer;}
+.htable tr:hover td{background:#f5f9ff;}
+.htable tr.sel td{background:#deeeff;}
+.htable tr.sel td:first-child{border-left:3px solid var(--focus);}
+
+/* 이력 상세 */
+.hist-detail-col{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);min-width:0;}
+.hist-detail-empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--tm);font-size:12px;flex-direction:column;gap:8px;}
+.hist-detail-content{flex:1;overflow-y:auto;padding:16px 18px;}
+
+/* 문서 흐름 타임라인 */
+.doc-flow-title{font-size:12px;font-weight:700;color:var(--ts);text-transform:uppercase;letter-spacing:.3px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-item{display:flex;gap:0;}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0;}
+.tl-dot{width:12px;height:12px;border-radius:50%;border:2px solid var(--bd);background:var(--card);flex-shrink:0;z-index:1;}
+.tl-dot.done{background:var(--G);border-color:var(--G);}
+.tl-dot.active{background:var(--focus);border-color:var(--focus);box-shadow:0 0 0 3px var(--Pbg);}
+.tl-dot.err{background:var(--Err);border-color:var(--Err);}
+.tl-dot.skip{background:var(--bd);border-color:var(--bd);}
+.tl-line{width:2px;flex:1;background:var(--bd2);min-height:12px;}
+.tl-item:last-child .tl-line{display:none;}
+.tl-content{padding:0 0 16px 12px;flex:1;}
+.tl-header{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.tl-step-name{font-size:12px;font-weight:700;color:var(--tp);}
+.tl-step-badge{font-size:10px;padding:2px 7px;border-radius:2px;font-weight:700;}
+.tl-docs{display:flex;flex-direction:column;gap:5px;}
+.tl-doc{background:var(--card);border:1px solid var(--bd2);border-radius:var(--r);padding:8px 12px;display:flex;align-items:center;gap:10px;font-size:11px;}
+.tl-doc:hover{border-color:var(--focus);cursor:pointer;background:#f5f9ff;}
+.tl-doc.active-doc{border-color:var(--focus);background:var(--Pbg);}
+.tl-doc-mvt{font-family:var(--mono);font-weight:700;font-size:12px;min-width:28px;}
+.tl-doc-lbl{flex:1;color:var(--ts);}
+.tl-doc-qty{font-family:var(--mono);font-weight:700;}
+.tl-doc-date{font-size:10px;color:var(--tm);}
+
+/* Table in hist */
+.hist-table{width:100%;border-collapse:collapse;font-size:11px;}
+.hist-table th{background:var(--bg2);border-bottom:1px solid var(--bd);padding:5px 8px;font-size:10px;font-weight:700;color:var(--ts);text-align:left;white-space:nowrap;text-transform:uppercase;}
+.hist-table td{padding:6px 8px;border-bottom:1px solid var(--bd3);color:var(--tp);white-space:nowrap;}
+.hist-table tr.clickable{cursor:pointer;}
+.hist-table tr.clickable:hover td{background:#f5f9ff;}
+.hist-table tr.clickable.act td{background:#deeeff;}
+.hist-empty{font-size:12px;color:var(--tm);font-style:italic;padding:12px 0;}
+
+/* ── 자재문서 섹션 ── */
+.doc-section-title{font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.5px;margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.doc-section-title::after{content:'';flex:1;height:1px;background:var(--bd2);}
+.doc-section-title:first-child{margin-top:0;}
+
+/* ══ 이력 조회 화면 ══ */
+.hist-layout{display:flex;flex:1;overflow:hidden;min-height:0;}
+
+/* 좌: 카드형 목록 */
+.hist-list-col{width:320px;min-width:280px;border-right:1px solid var(--bd);display:flex;flex-direction:column;overflow:hidden;background:var(--bg);flex-shrink:0;}
+.hist-list-hdr{background:var(--card);border-bottom:1px solid var(--bd);padding:8px 12px;flex-shrink:0;display:flex;justify-content:space-between;align-items:center;}
+.hist-list-title{font-size:12px;font-weight:700;color:var(--ts);}
+.hist-card-scroll{flex:1;overflow-y:auto;padding:8px;}
+
+/* 검사로트 카드 */
+.hlot-card{background:var(--card);border:1px solid var(--bd2);border-radius:6px;padding:11px 13px;margin-bottom:6px;cursor:pointer;transition:all .12s;border-left:3px solid transparent;}
+.hlot-card:hover{border-color:var(--focus);box-shadow:0 1px 6px rgba(0,0,0,.07);}
+.hlot-card.sel{border-left-color:var(--focus);background:#f0f7ff;border-color:var(--Pb);}
+.hlot-card.sel-pass{border-left-color:var(--G);}
+.hlot-card.sel-hold{border-left-color:var(--O);}
+.hlot-card.sel-fail{border-left-color:var(--R);}
+.hlot-card.sel-err{border-left-color:var(--Err);}
+.hlc-row1{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.hlc-lot{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--QM);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.hlc-name{font-size:13px;font-weight:600;color:var(--tp);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hlc-meta{font-size:10px;color:var(--tm);margin-bottom:5px;}
+.hlc-qty-row{display:flex;gap:10px;padding-top:5px;border-top:1px solid var(--bd3);}
+.hlc-qty{display:flex;flex-direction:column;gap:1px;}
+.hlc-qty-lbl{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:.3px;}
+.hlc-qty-val{font-size:12px;font-weight:700;color:var(--tp);}
+
+/* 우: 상세 */
+.hist-detail-col{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg);min-width:0;}
+.hist-detail-empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--tm);font-size:12px;flex-direction:column;gap:8px;}
+.hist-detail-content{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+
+/* 1. 상단 요약 카드 */
+.hd-summary{background:var(--card);border:1px solid var(--bd2);border-radius:6px;padding:14px 16px;display:flex;gap:16px;align-items:flex-start;}
+.hd-sum-main{flex:1;min-width:0;}
+.hd-sum-lot{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--QM);margin-bottom:3px;}
+.hd-sum-name{font-size:16px;font-weight:700;color:var(--tp);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.hd-sum-sub{font-size:11px;color:var(--ts);margin-bottom:10px;}
+.hd-sum-fields{display:grid;grid-template-columns:repeat(4,1fr);gap:8px 0;padding-top:10px;border-top:1px solid var(--bd3);}
+.hd-sf .sf-l{font-size:10px;color:var(--tm);margin-bottom:2px;}
+.hd-sf .sf-v{font-size:12px;font-weight:600;color:var(--tp);}
+.hd-sf .sf-v.mono{font-family:var(--mono);}
+.hd-sum-right{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+
+/* 2. 판정 결과 카드 */
+.hd-result{background:var(--card);border:1px solid var(--bd2);border-radius:6px;padding:12px 16px;}
+.hd-result-title{font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;}
+.hd-result-qty{display:flex;gap:0;margin-bottom:10px;}
+.hd-rq-item{flex:1;padding:8px 12px;border-right:1px solid var(--bd2);}
+.hd-rq-item:last-child{border-right:none;}
+.hd-rq-lbl{font-size:10px;color:var(--tm);margin-bottom:3px;}
+.hd-rq-val{font-size:18px;font-weight:800;line-height:1;color:var(--tp);}
+.hd-rq-unit{font-size:11px;font-weight:400;color:var(--tm);}
+.hd-result-bar{height:6px;border-radius:3px;background:var(--bd3);overflow:hidden;margin-bottom:8px;display:flex;}
+.hd-rb-pass{height:100%;background:var(--G);}
+.hd-rb-hold{height:100%;background:var(--O);}
+.hd-rb-fail{height:100%;background:var(--R);}
+.hd-result-tags{display:flex;gap:5px;flex-wrap:wrap;}
+.hd-rtag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;border:1px solid var(--bd2);color:var(--ts);background:var(--bg);}
+.hd-defnote{font-size:11px;color:var(--ts);padding:7px 10px;background:var(--bg);border-radius:var(--r);border:1px solid var(--bd3);margin-top:8px;line-height:1.5;}
+
+/* 3. 가로 프로세스 카드 */
+.hd-flow{background:var(--card);border:1px solid var(--bd2);border-radius:6px;padding:12px 16px;}
+.hd-flow-title{font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:12px;}
+.hd-flow-steps{display:flex;align-items:flex-start;gap:0;overflow-x:auto;padding-bottom:4px;}
+.hd-step{flex:1;min-width:120px;max-width:180px;position:relative;}
+.hd-step-connector{position:absolute;top:20px;right:-1px;width:calc(100% - 20px + 2px);height:2px;background:var(--bd2);z-index:0;left:20px;}
+.hd-step:last-child .hd-step-connector{display:none;}
+.hd-step-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;padding-right:12px;}
+.hd-step-dot{width:20px;height:20px;border-radius:50%;border:2px solid var(--bd);background:var(--card);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--tm);margin-bottom:7px;flex-shrink:0;}
+.hd-step-dot.done{background:var(--G);border-color:var(--G);color:#fff;}
+.hd-step-dot.done-o{background:var(--O);border-color:var(--O);color:#fff;}
+.hd-step-dot.active{background:var(--focus);border-color:var(--focus);color:#fff;}
+.hd-step-dot.err{background:var(--Err);border-color:var(--Err);color:#fff;}
+.hd-step-card{background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:8px 10px;width:100%;box-sizing:border-box;}
+.hd-step-card.c-pass{border-left:3px solid var(--G);}
+.hd-step-card.c-hold{border-left:3px solid var(--O);}
+.hd-step-card.c-err{border-left:3px solid var(--Err);}
+.hd-step-card.c-blue{border-left:3px solid var(--focus);}
+.hd-step-card.c-qm{border-left:3px solid var(--QM);}
+.hd-sc-type{font-size:9px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;}
+.hd-sc-doc{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--tp);margin-bottom:4px;}
+.hd-sc-detail{font-size:10px;color:var(--ts);line-height:1.5;}
+.hd-sc-qty{font-size:13px;font-weight:800;color:var(--tp);margin-top:4px;}
+.hd-sc-status{font-size:9px;font-weight:700;padding:1px 5px;border-radius:2px;margin-top:4px;display:inline-block;}
+.hd-sc-status.ok{background:var(--Gbg);color:var(--G);border:1px solid var(--Gb);}
+.hd-sc-status.ok-o{background:var(--Obg);color:var(--O);border:1px solid var(--Ob);}
+.hd-sc-status.pending{background:var(--Pbg);color:var(--Pt);border:1px solid var(--Pb);}
+.hd-sc-status.err{background:var(--ErrBg);color:var(--Err);border:1px solid var(--ErrB);}
+
+/* 4. 하단 탭 */
+.hd-tabs-wrap{background:var(--card);border:1px solid var(--bd2);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;}
+.hd-tabs{display:flex;border-bottom:1px solid var(--bd2);background:var(--bg2);}
+.hd-tab{padding:8px 14px;font-size:11px;font-weight:600;color:var(--tm);cursor:pointer;border-bottom:2px solid transparent;transition:all .12s;}
+.hd-tab:hover{color:var(--ts);}
+.hd-tab.active{color:var(--focus);border-bottom-color:var(--focus);background:var(--card);}
+.hd-tab-pane{display:none;padding:12px 14px;}
+.hd-tab-pane.active{display:block;}
+
+/* 탭 내 검사결과 테이블 */
+.insp-result-table{width:100%;border-collapse:collapse;font-size:11px;}
+.insp-result-table th{background:var(--bg2);border-bottom:1px solid var(--bd2);padding:5px 10px;font-size:10px;font-weight:700;color:var(--ts);text-align:left;text-transform:uppercase;letter-spacing:.2px;}
+.insp-result-table td{padding:7px 10px;border-bottom:1px solid var(--bd3);vertical-align:middle;}
+.insp-result-table tr:last-child td{border-bottom:none;}
+
+/* 자재문서 탭 */
+.matdoc-row{display:flex;gap:8px;flex-wrap:wrap;}
+.matdoc-chip{background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:8px 12px;flex:1;min-width:150px;}
+.matdoc-chip.c-gr{border-top:2px solid var(--focus);}
+.matdoc-chip.c-321{border-top:2px solid var(--G);}
+.matdoc-chip.c-322{border-top:2px solid var(--O);}
+.matdoc-chip.c-err{border-top:2px solid var(--Err);}
+.mc-type{font-size:9px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;}
+.mc-doc{font-family:var(--mono);font-size:13px;font-weight:800;color:var(--tp);margin-bottom:2px;}
+.mc-detail{font-size:10px;color:var(--ts);line-height:1.6;}
+
+/* 오류 박스 */
+.err-track-box{background:var(--ErrBg);border:1px solid var(--ErrB);border-radius:var(--r);padding:10px 14px;margin-bottom:8px;}
+.etb-title{font-size:11px;font-weight:700;color:var(--Err);margin-bottom:4px;display:flex;align-items:center;gap:5px;}
+.etb-msg{font-size:11px;color:var(--Err);}
+.no-err-box{font-size:12px;color:var(--tm);padding:16px 0;text-align:center;}
+
+/* Dialog */
+.dialog-overlay{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:500;display:none;align-items:center;justify-content:center;}
+.dialog-overlay.open{display:flex;}
+.dialog{background:var(--card);border-radius:6px;min-width:400px;max-width:520px;width:100%;box-shadow:0 8px 32px rgba(0,0,0,.18);overflow:hidden;}
+.dlg-header{padding:14px 20px 10px;border-bottom:1px solid var(--bd2);}
+.dlg-title{font-size:16px;font-weight:700;color:var(--tp);}
+.dlg-sub{font-size:11px;color:var(--tm);margin-top:2px;}
+.dlg-body{padding:16px 20px;}
+.dlg-footer{padding:10px 20px 14px;display:flex;justify-content:flex-end;gap:8px;border-top:1px solid var(--bd2);}
+.confirm-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd3);}
+.confirm-row:last-child{border-bottom:none;}
+.cr-lbl{font-size:12px;color:var(--ts);}
+.cr-val{font-size:13px;font-weight:700;color:var(--tp);}
+.confirm-move-row{display:flex;align-items:center;gap:8px;padding:7px 10px;border:1px solid var(--bd3);border-radius:var(--r);background:var(--bg);font-size:12px;margin-bottom:4px;}
+.confirm-move-row.pass{border-left:3px solid var(--G);}
+.confirm-move-row.hold{border-left:3px solid var(--O);}
+.dlg-warn{font-size:11px;color:var(--ts);background:var(--Obg);border:1px solid var(--Ob);border-radius:var(--r);padding:7px 10px;margin-top:10px;display:flex;align-items:center;gap:6px;}
+.retry-err-box{background:var(--ErrBg);border:1px solid var(--ErrB);border-radius:var(--r);padding:10px 12px;margin-bottom:12px;}
+.retry-err-title{font-size:11px;font-weight:700;color:var(--Err);margin-bottom:4px;}
+.retry-err-msg{font-size:12px;color:var(--Err);}
+
+.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);background:#1b3a5c;color:#fff;padding:9px 20px;border-radius:var(--r);font-size:12px;font-weight:600;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;}
+.toast.on{opacity:1;}
+</style>
+</head>
+<body>
+
+<!-- ShellBar -->
+<div class="shell">
+  <div class="shell-nav-toggle" onclick="toggleNav()" title="메뉴">
+    <div class="shell-nav-icon"><span></span><span></span><span></span></div>
+  </div>
+  <div class="shell-logo">
+    <span class="logo">TAESAN ERP</span>
+    <span class="logo-badge">QM</span>
+  </div>
+  <div class="shell-title-area">
+    <div class="shell-title" id="shellTitle">입고 품질판정</div>
+    <div class="shell-sub">ZRC1QM0010</div>
+  </div>
+  <div class="shell-r">
+    <span class="shell-date" id="todayDate"></span>
+    <span class="shell-user">이하영 · SCM 혁신팀 과장</span>
+    <button class="shell-btn" onclick="doRefresh()">&#8635; 새로고침</button>
+    <button class="shell-btn" onclick="exportCSV()">&#8615; Excel</button>
+  </div>
+</div>
+
+<!-- Main Layout -->
+<div class="main-layout">
+
+  <!-- ── Side Navigation ── -->
+  <div class="side-nav" id="sideNav">
+    <div class="nav-section-label">품질관리</div>
+
+    <!-- 품질 판정 -->
+    <div class="nav-item active" id="nav-judge" onclick="switchPage('judge');setWlFilter('all')">
+      <span class="nav-icon">&#9878;</span>
+      <span class="nav-text">품질 판정</span>
+    </div>
+    <!-- 트리 서브 항목 -->
+    <div class="nav-sub-item" id="ns-all"   onclick="switchPage('judge');setWlFilter('all')">
+      <span class="nav-sub-dot"></span><span class="nav-sub-text">전체</span>
+      <span class="nav-sub-count" id="nsc-all">0</span>
+    </div>
+    <div class="nav-sub-item" id="ns-pend"  onclick="switchPage('judge');setWlFilter('판정대기')">
+      <span class="nav-sub-dot" style="background:var(--Pt)"></span><span class="nav-sub-text">대기</span>
+      <span class="nav-sub-count" id="nsc-pend" style="background:rgba(44,110,158,.3);color:#9dc8f0">0</span>
+    </div>
+    <div class="nav-sub-item" id="ns-pass"  onclick="switchPage('judge');setWlFilter('합격')">
+      <span class="nav-sub-dot" style="background:var(--G)"></span><span class="nav-sub-text">합격</span>
+      <span class="nav-sub-count" id="nsc-pass" style="background:rgba(16,126,62,.25);color:#8fcfac">0</span>
+    </div>
+    <div class="nav-sub-item" id="ns-hold"  onclick="switchPage('judge');setWlFilter('보류')">
+      <span class="nav-sub-dot" style="background:var(--O)"></span><span class="nav-sub-text">보류</span>
+      <span class="nav-sub-count" id="nsc-hold" style="background:rgba(196,68,0,.25);color:#f5a96a">0</span>
+    </div>
+    <div class="nav-sub-item" id="ns-fail"  onclick="switchPage('judge');setWlFilter('불량')">
+      <span class="nav-sub-dot" style="background:var(--R)"></span><span class="nav-sub-text">불량</span>
+      <span class="nav-sub-count" id="nsc-fail" style="background:rgba(187,0,0,.2);color:#e8a0a0">0</span>
+    </div>
+
+    <!-- 이력 조회 -->
+    <div class="nav-item" id="nav-history" onclick="switchPage('history')" style="margin-top:4px">
+      <span class="nav-icon">&#128196;</span>
+      <span class="nav-text">이력 조회</span>
+    </div>
+
+    <!-- 컨텍스트 정보 -->
+    <div class="nav-context" id="navContext">
+      <div class="nav-ctx-block">
+        <div class="nav-ctx-label">현재 창고</div>
+        <div class="nav-ctx-warehouse">
+          <span class="nav-ctx-warehouse-icon">&#127981;</span>
+          <span>SL40 품질검사창고</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Page Container ── -->
+  <div class="page-container">
+
+    <!-- ══ Page 1: 품질판정 ══ -->
+    <div class="page active" id="page-judge">
+
+      <!-- DPH -->
+      <div class="dph">
+        <div class="dph-title-row">
+          <div>
+            <div class="dph-title">입고 품질판정</div>
+            <div class="dph-sub">검사항목 입력 → 판정코드 선택 → 재고 처분 → 321/322 이동문서 자동 생성</div>
+          </div>
+          <div class="dph-proc">
+            <span class="dph-proc-step">PO 발주</span><span class="dph-proc-arr">›</span>
+            <span class="dph-proc-step">입고(101)</span><span class="dph-proc-arr">›</span>
+            <span class="dph-proc-step">품질창고(SL40)</span><span class="dph-proc-arr">›</span>
+            <span class="dph-proc-step hl">검사 & 품질판정</span><span class="dph-proc-arr">›</span>
+            <span class="dph-proc-step">321 원자재 / 322 보류</span>
+          </div>
+        </div>
+        <div class="dph-kpi-row">
+          <div class="kpi-item"><div class="kpi-num" id="kPend" style="color:var(--Pt)">0</div><div class="kpi-lbl">판정 대기</div></div>
+          <div class="kpi-item today"><div class="kpi-num" id="kToday">0</div><div class="kpi-lbl">처리 완료</div></div>
+          <div class="kpi-item warn"><div class="kpi-num" id="kHold">0</div><div class="kpi-lbl">보류 판정</div></div>
+          <div class="kpi-item danger"><div class="kpi-num" id="kFail">0</div><div class="kpi-lbl">불량 판정</div></div>
+          <div class="kpi-item danger"><div class="kpi-num" id="kQRate">—</div><div class="kpi-lbl">품질 이상률</div></div>
+          <div class="kpi-item err"><div class="kpi-num" id="kErr">0</div><div class="kpi-lbl">이동오류</div></div>
+        </div>
+      </div>
+
+      <!-- FilterBar -->
+      <div class="fbar">
+        <div class="fg" style="flex:1;min-width:160px">
+          <div class="flbl">자재 / 공급업체 / 문서번호</div>
+          <input id="fQ" class="fi" style="width:100%" placeholder="자재번호, 자재명, 공급업체, 문서번호..." oninput="applyFilter()">
+        </div>
+        <div class="fg"><div class="flbl">입고일 From</div><input id="fDf" type="date" class="fi" onchange="applyFilter()"></div>
+        <div class="fg"><div class="flbl">입고일 To</div><input id="fDt" type="date" class="fi" onchange="applyFilter()"></div>
+        <button class="fbtn-ghost" onclick="clearFilter()">초기화</button>
+      </div>
+
+      <!-- FCL -->
+      <div class="fcl">
+
+        <!-- Worklist -->
+        <div class="begin-col">
+          <div class="wl-header">
+            <div class="wl-title">
+              <span>Worklist</span>
+              <span id="wlTotal" style="font-size:11px;font-weight:400;color:var(--tm)">0건</span>
+            </div>
+          </div>
+          <div class="wl-scroll" id="wlScroll"></div>
+        </div>
+
+        <!-- Object Page -->
+        <div class="mid-col">
+          <div class="empty-state" id="opEmpty">
+            <div style="font-size:40px;opacity:.08;color:var(--ts)">&#9878;</div>
+            <div class="es-dashboard">
+              <div class="es-title">판정할 검사로트를 선택하세요</div>
+              <div class="es-sub">좌측 Worklist에서 항목을 클릭하거나 아래 카드를 클릭하세요</div>
+              <div class="es-cards">
+                <div class="es-card" onclick="setWlFilter('판정대기')" style="border-left:4px solid var(--Pt)">
+                  <div class="es-card-num" id="es_pend" style="color:var(--Pt)">0</div>
+                  <div class="es-card-lbl">판정 대기</div>
+                  <div class="es-card-hint">→ 클릭하면 대기 목록 필터</div>
+                </div>
+                <div class="es-card" onclick="setWlFilter('이동오류')" style="border-left:4px solid var(--Err)">
+                  <div class="es-card-num" id="es_err" style="color:var(--Err)">0</div>
+                  <div class="es-card-lbl">이동오류</div>
+                  <div class="es-card-hint">→ 재처리 필요 건</div>
+                </div>
+                <div class="es-card" onclick="setWlFilter('보류')" style="border-left:4px solid var(--O)">
+                  <div class="es-card-num" id="es_hold" style="color:var(--O)">0</div>
+                  <div class="es-card-lbl">보류 판정</div>
+                  <div class="es-card-hint">→ 보류 완료 건 조회</div>
+                </div>
+                <div class="es-card" onclick="setWlFilter('불량')" style="border-left:4px solid var(--R)">
+                  <div class="es-card-num" id="es_fail" style="color:var(--R)">0</div>
+                  <div class="es-card-lbl">불량 판정</div>
+                  <div class="es-card-hint">→ 불량 완료 건 조회</div>
+                </div>
+              </div>
+              <div class="es-guide">
+                <div class="es-guide-title">판정 처리 순서</div>
+                <div class="es-step"><div class="es-step-num">1</div><span>검사항목 입력 — 특성별 측정값 또는 합/불 선택</span></div>
+                <div class="es-step"><div class="es-step-num">2</div><span>판정코드 선택 — A1/A2/H1/R2 중 선택</span></div>
+                <div class="es-step"><div class="es-step-num">3</div><span>재고 처분 수량 확인 — 321/322 이동문서 생성</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div id="opPage" style="display:none;flex-direction:column;flex:1;overflow:hidden;">
+            <div class="op-header">
+              <div class="op-hdr-top">
+                <div>
+                  <div class="op-sub"><span id="op_key"></span><span id="op_badge"></span></div>
+                  <div class="op-name" id="op_name"></div>
+                  <div class="op-meta" id="op_meta"></div>
+                </div>
+                <div class="op-right">
+                  <div class="op-qty" id="op_qty"></div>
+                  <div class="op-unit" id="op_unit"></div>
+                  <div class="op-qty-lbl">입고수량</div>
+                </div>
+              </div>
+              <div class="op-attrs" id="op_attrs"></div>
+            </div>
+            <div class="notice notice-readonly" id="roNotice" style="display:none"><span>&#128274;</span><span>판정 완료 건입니다. 조회만 가능합니다.</span></div>
+            <div class="notice notice-error"    id="errNotice" style="display:none"><span>&#9888;</span><span id="errMsg">재고 이동문서 생성에 실패했습니다.</span></div>
+
+            <div class="op-tabs">
+              <div class="op-tab active" id="tab-insp" onclick="switchTab('insp')">검사결과 <span class="op-tab-badge" id="tbi">0/0</span></div>
+              <div class="op-tab" id="tab-ud"   onclick="switchTab('ud')">판정코드</div>
+              <div class="op-tab" id="tab-qty"  onclick="switchTab('qty')">재고 처분</div>
+              <div class="op-tab" id="tab-hist" onclick="switchTab('hist')">이동 이력</div>
+            </div>
+
+            <!-- Tab 1 -->
+            <div class="tab-pane active" id="pane-insp">
+              <div class="insp-lot-info">
+                <div class="ili-item"><div class="il-l">검사로트번호</div><div class="il-v mono" id="il_lot">—</div></div>
+                <div class="ili-item"><div class="il-l">검사유형</div><div class="il-v" id="il_type">—</div></div>
+                <div class="ili-item"><div class="il-l">샘플수량</div><div class="il-v" id="il_sample">—</div></div>
+                <div class="ili-item"><div class="il-l">검사계획</div><div class="il-v mono" id="il_plan">—</div></div>
+              </div>
+              <div class="insp-progress-bar">
+                <span class="ipb-label">입력 진행률</span>
+                <div class="ipb-track"><div class="ipb-fill" id="inspFill" style="width:0%"></div></div>
+                <span class="ipb-count" id="inspCount">0/0</span>
+              </div>
+              <div id="inspChars"></div>
+              <div class="insp-summary-bar">
+                <div class="isb-item"><div class="isb-num" id="isb_pass" style="color:var(--G)">0</div><div class="isb-lbl">합격</div></div>
+                <div class="isb-item"><div class="isb-num" id="isb_fail" style="color:var(--R)">0</div><div class="isb-lbl">불합격</div></div>
+                <div class="isb-item"><div class="isb-num" id="isb_warn" style="color:var(--O)">0</div><div class="isb-lbl">주의</div></div>
+                <div class="isb-item"><div class="isb-num" id="isb_pend" style="color:var(--tm)">0</div><div class="isb-lbl">미입력</div></div>
+              </div>
+            </div>
+
+            <!-- Tab 2 -->
+            <div class="tab-pane" id="pane-ud">
+              <div class="ud-locked-notice" id="udLocked"><span>&#128274;</span><span id="udLockMsg">검사항목을 모두 입력하면 판정코드를 선택할 수 있습니다</span></div>
+              <div class="ud-grid" id="udGrid" style="display:none"></div>
+            </div>
+
+            <!-- Tab 3 -->
+            <div class="tab-pane" id="pane-qty">
+              <div class="qty-ud-summary" id="qtyUdSummary" style="display:none"></div>
+              <div class="warn-box" id="wOver">&#9888; 합격 + 보류 수량이 입고 수량을 초과합니다</div>
+              <div class="warn-box" id="wMismatch">&#9888; 합격 + 보류 수량의 합이 입고 수량과 일치해야 합니다</div>
+              <div class="qty-grid">
+                <div class="qbox pass"><div class="ql">&#10003; 합격 수량 (가용재고)</div><input class="qinput" type="number" id="q_pass" min="0" placeholder="0" oninput="autoCalcHold(this)"><div class="qhelp">321 이동문서 → 원자재창고 (SL10)</div></div>
+                <div class="qbox hold"><div class="ql">&#9888; 보류 수량 (보류재고)</div><input class="qinput" type="number" id="q_hold" min="0" placeholder="0" oninput="onQ()"><div class="qhelp">322 이동문서 → 보류창고 (SL50)</div></div>
+              </div>
+              <div class="rbar-wrap">
+                <div class="rlabels"><span id="r_pass" style="color:var(--G)">합격 0%</span><span id="r_hold" style="color:var(--O)">보류 0%</span></div>
+                <div class="rbar"><div class="rfill" id="rfill" style="width:0%"></div></div>
+              </div>
+              <div class="auto-v av-pend" id="autoV">수량을 입력하세요</div>
+              <div class="auto-note">&#8594; 판정 저장 시 321 / 322 이동문서가 자동 생성됩니다</div>
+              <div class="preview-title" id="previewTitle">생성 예정 이동문서</div>
+              <div class="pr-rows" id="prRows"><div class="pr-empty">수량 입력 시 미리보기됩니다</div></div>
+              <div id="defSection" style="display:none">
+                <div class="dc-title">보류/불량 유형 <span style="font-weight:400;font-size:10px">(필수)</span></div>
+                <div class="warn-box" id="wDef" style="margin-bottom:6px">&#9888; 유형을 1개 이상 선택하세요</div>
+                <div class="dgrid" id="dgrid"></div>
+                <textarea class="defnote" id="defNote" placeholder="세부 내용 (위치, 증상, 재검사 여부 등)..."></textarea>
+              </div>
+            </div>
+
+            <!-- Tab 4 -->
+            <div class="tab-pane" id="pane-hist">
+              <div class="breadcrumb-wrap"><div class="bc-title">문서 흐름</div><div class="breadcrumb" id="breadcrumb"></div></div>
+              <div class="move-summary-row" id="moveSummaryRow"></div>
+              <table class="hist-table">
+                <thead><tr>
+                  <th style="width:80px">이동유형</th><th style="width:90px">이동문서번호</th>
+                  <th>자재명</th><th style="width:60px;text-align:right">수량</th>
+                  <th style="width:28px">단위</th><th style="width:50px">출발</th>
+                  <th style="width:50px">도착</th><th style="width:68px">결과</th>
+                </tr></thead>
+                <tbody id="histTbody"></tbody>
+              </table>
+              <div class="hist-empty" id="histEmpty">이동 이력이 없습니다</div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+              <div class="footer-hint" id="footerHint">검사결과 → 판정코드 → 재고처분 순서로 진행하세요</div>
+              <div class="footer-btns">
+                <button class="btn-ghost"    onclick="clearSel()">&#8592; 목록으로</button>
+                <button class="btn-err"      id="btnRetry" style="display:none" onclick="openRetryDialog()">&#9888; 이동문서 재처리</button>
+                <button class="btn-next"     id="btnNext"  style="display:none" onclick="goNextTab()"></button>
+                <button class="btn-primary"  id="btnSave"  style="display:none" onclick="openConfirmDialog()">판정 저장 및 재고이동</button>
+              </div>
+            </div>
+          </div>
+        </div><!-- /mid-col -->
+
+        <!-- End Column -->
+        <div class="end-col" id="endCol">
+          <div class="end-col-hdr"><span class="end-col-title">이동문서 상세</span><button class="end-close" onclick="closeEndCol()">&#10005;</button></div>
+          <div class="end-body" id="endBody"><div style="font-size:12px;color:var(--tm);text-align:center;padding:20px 0">이동 이력에서 행을 클릭하세요</div></div>
+        </div>
+
+      </div><!-- /fcl -->
+    </div><!-- /page-judge -->
+
+    <!-- ══ Page 2: 이력 조회 ══ -->
+    <div class="page" id="page-history">
+      <div class="dph">
+        <div class="dph-title-row">
+          <div>
+            <div class="dph-title">품질판정 이력 조회</div>
+            <div class="dph-sub">판정 결과 및 자재문서 흐름 추적 — GR 입고 · 검사로트 · UD 판정 · 321/322 재고이동</div>
+          </div>
+        </div>
+        <div class="dph-kpi-row">
+          <div class="kpi-item"><div class="kpi-num" id="hk_total">0</div><div class="kpi-lbl">전체 로트</div></div>
+          <div class="kpi-item"><div class="kpi-num" id="hk_pass" style="color:var(--G)">0</div><div class="kpi-lbl">합격</div></div>
+          <div class="kpi-item warn"><div class="kpi-num" id="hk_hold">0</div><div class="kpi-lbl">보류</div></div>
+          <div class="kpi-item danger"><div class="kpi-num" id="hk_fail">0</div><div class="kpi-lbl">불량</div></div>
+          <div class="kpi-item"><div class="kpi-num" id="hk_pend" style="color:var(--Pt)">0</div><div class="kpi-lbl">판정대기</div></div>
+          <div class="kpi-item err"><div class="kpi-num" id="hk_err">0</div><div class="kpi-lbl">이동오류</div></div>
+        </div>
+      </div>
+
+      <div class="fbar">
+        <div class="fg" style="flex:1;min-width:140px"><div class="flbl">자재번호 / 자재명</div><input id="hfMat" class="fi" style="width:100%" placeholder="RM-BAT-400, 배터리..." oninput="renderHistPage()"></div>
+        <div class="fg"><div class="flbl">공급업체</div><input id="hfVnd" class="fi" style="width:120px" placeholder="공급업체명..." oninput="renderHistPage()"></div>
+        <div class="fg"><div class="flbl">판정결과</div>
+          <select id="hfSt" class="fsel" onchange="renderHistPage()">
+            <option value="">전체</option>
+            <option value="합격">합격</option>
+            <option value="보류">보류</option>
+            <option value="불량">불량</option>
+            <option value="이동오류">이동오류</option>
+          </select>
+        </div>
+        <div class="fg"><div class="flbl">입고일 From</div><input id="hfDf" type="date" class="fi" onchange="renderHistPage()"></div>
+        <div class="fg"><div class="flbl">입고일 To</div><input id="hfDt" type="date" class="fi" onchange="renderHistPage()"></div>
+        <button class="fbtn-ghost" onclick="clearHistFilter()">초기화</button>
+      </div>
+
+      <div class="hist-layout">
+
+        <!-- 좌: 카드형 로트 목록 -->
+        <div class="hist-list-col">
+          <div class="hist-list-hdr">
+            <span class="hist-list-title">검사로트</span>
+            <span id="hListTotal" style="font-size:11px;color:var(--tm)">0건</span>
+          </div>
+          <div class="hist-card-scroll" id="hCardList"></div>
+        </div>
+
+        <!-- 우: 상세 추적 -->
+        <div class="hist-detail-col">
+          <div class="hist-detail-empty" id="hDetailEmpty">
+            <div style="font-size:40px;opacity:.08">&#128270;</div>
+            <div style="font-size:13px;font-weight:600;color:var(--ts)">검사로트를 선택하세요</div>
+            <div style="font-size:11px;color:var(--tm);margin-top:4px">판정 결과 · 자재문서 · 재고 이동 추적</div>
+          </div>
+          <div class="hist-detail-content" id="hDetailContent" style="display:none;flex-direction:column;">
+
+            <!-- 1. 상단 요약 -->
+            <div class="hd-summary" id="hSum"></div>
+
+            <!-- 2. 판정 결과 -->
+            <div class="hd-result" id="hResult"></div>
+
+            <!-- 3. 가로 문서 흐름 -->
+            <div class="hd-flow" id="hFlow"></div>
+
+            <!-- 4. 하단 탭 -->
+            <div class="hd-tabs-wrap">
+              <div class="hd-tabs">
+                <div class="hd-tab active" id="htab-insp" onclick="switchHTab('insp')">검사결과</div>
+                <div class="hd-tab" id="htab-docs" onclick="switchHTab('docs')">자재문서</div>
+                <div class="hd-tab" id="htab-err"  onclick="switchHTab('err')">오류 / 재처리</div>
+                <div class="hd-tab" id="htab-log"  onclick="switchHTab('log')">변경이력</div>
+              </div>
+              <div class="hd-tab-pane active" id="hpane-insp"></div>
+              <div class="hd-tab-pane" id="hpane-docs"></div>
+              <div class="hd-tab-pane" id="hpane-err"></div>
+              <div class="hd-tab-pane" id="hpane-log"></div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /page-history -->
+
+  </div><!-- /page-container -->
+</div><!-- /main-layout -->
+
+<!-- 저장 확인 Dialog -->
+<div class="dialog-overlay" id="dlgConfirm">
+  <div class="dialog">
+    <div class="dlg-header"><div class="dlg-title">판정 저장 및 재고이동</div><div class="dlg-sub">아래 내용을 확인 후 저장을 진행하세요</div></div>
+    <div class="dlg-body">
+      <div class="confirm-row"><span class="cr-lbl">자재명</span><span class="cr-val" id="cf_name"></span></div>
+      <div class="confirm-row"><span class="cr-lbl">판정코드</span><span class="cr-val" id="cf_ud"></span></div>
+      <div class="confirm-row"><span class="cr-lbl">검사특성 결과</span><span class="cr-val" id="cf_insp"></span></div>
+      <div class="confirm-row"><span class="cr-lbl">입고수량</span><span class="cr-val" id="cf_total"></span></div>
+      <div class="confirm-row"><span class="cr-lbl">합격수량</span><span class="cr-val" style="color:var(--G)" id="cf_pass"></span></div>
+      <div class="confirm-row"><span class="cr-lbl">보류수량</span><span class="cr-val" style="color:var(--O)" id="cf_hold"></span></div>
+      <div style="margin-top:12px;font-size:10px;font-weight:700;color:var(--tm);text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px">생성 예정 이동문서</div>
+      <div id="cf_moves"></div>
+      <div class="dlg-warn">&#9888; 저장 후에는 조회만 가능합니다. 이 작업은 재고에 즉시 반영됩니다.</div>
+    </div>
+    <div class="dlg-footer">
+      <button class="btn-ghost" onclick="closeDlg('dlgConfirm')">취소</button>
+      <button class="btn-primary" onclick="doSave()">저장 및 재고이동</button>
+    </div>
+  </div>
+</div>
+
+<!-- 재처리 Dialog -->
+<div class="dialog-overlay" id="dlgRetry">
+  <div class="dialog">
+    <div class="dlg-header"><div class="dlg-title">이동문서 재처리</div><div class="dlg-sub">실패한 이동문서를 재생성합니다</div></div>
+    <div class="dlg-body">
+      <div class="retry-err-box"><div class="retry-err-title">&#9888; 오류 내용</div><div class="retry-err-msg" id="rt_errMsg"></div></div>
+      <div class="confirm-row"><span class="cr-lbl">원입고문서</span><span class="cr-val" style="font-family:var(--mono)" id="rt_srcDoc"></span></div>
+      <div class="confirm-row"><span class="cr-lbl">실패 이동유형</span><span class="cr-val" style="color:var(--Err)" id="rt_mvt"></span></div>
+      <div class="confirm-row"><span class="cr-lbl">재처리 수량</span><span class="cr-val" id="rt_qty"></span></div>
+      <div class="confirm-row"><span class="cr-lbl">도착지</span><span class="cr-val" id="rt_to"></span></div>
+    </div>
+    <div class="dlg-footer">
+      <button class="btn-ghost" onclick="closeDlg('dlgRetry')">취소</button>
+      <button class="btn-err" onclick="doRetry()">재처리 실행</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const DEFECTS=["치수불량","외관불량","기능불량","재질불량","포장불량","수량불량","라벨오류","재검토필요","기타"];
+const TODAY=new Date().toISOString().slice(0,10);
+document.getElementById("todayDate").textContent=TODAY;
+let moveSeq=5000000200;
+let navCollapsed=false;
+
+const UD_CODES=[
+  {code:"A1",type:"pass",qtyMode:"full_pass",label:"합격",        desc:"전량 합격 — 가용재고(SL10) 이동",              color:"var(--G)"},
+  {code:"A2",type:"pass",qtyMode:"split",    label:"부분 합격",    desc:"일부 합격 — 합격분 SL10, 나머지 SL50",        color:"var(--G)"},
+  {code:"H1",type:"hold",qtyMode:"full_hold",label:"보류 — 재검사",desc:"전량 보류창고(SL50) — 재검사 후 재판정",      color:"var(--O)"},
+  {code:"R2",type:"fail",qtyMode:"full_hold",label:"불합격 — 공급업체 처리 대기",desc:"전량 보류창고(SL50) 이동 후 후속처리",color:"var(--R)"},
+];
+
+const INSP_PLANS={
+  "5000000302|1":{lot:"IL-2026-0302",type:"01 입고검사",sample:"30 EA",plan:"QP-BAT-400",chars:[
+    {id:"c1",name:"외관 검사",sub:"스크래치·변형",std:"이상 없음",inputType:"toggle",opts:["이상 없음","경미한 흠집","불량"]},
+    {id:"c2",name:"치수 검사",sub:"Ø12.0±0.1mm",std:"11.9~12.1mm",inputType:"measure",unit:"mm",min:11.9,max:12.1},
+    {id:"c3",name:"도금 두께",sub:"5μm 이상",std:"5.0μm 이상",inputType:"measure",unit:"μm",min:5.0,max:99},
+    {id:"c4",name:"기능 검사",sub:"체결 테스트",std:"정상 체결",inputType:"toggle",opts:["정상","불량"]},
+  ]},
+  "5000000300|1":{lot:"IL-2026-0300",type:"01 입고검사",sample:"120 EA",plan:"QP-CTL-100",chars:[
+    {id:"c1",name:"외관 검사",sub:"파손·변형",std:"이상 없음",inputType:"toggle",opts:["이상 없음","경미","불량"]},
+    {id:"c2",name:"전압 테스트",sub:"24V ± 0.5V",std:"23.5~24.5V",inputType:"measure",unit:"V",min:23.5,max:24.5},
+    {id:"c3",name:"전류 테스트",sub:"5A 이하",std:"5.0A 이하",inputType:"measure",unit:"A",min:0,max:5.0},
+    {id:"c4",name:"온도 테스트",sub:"80°C 이하",std:"80°C 이하",inputType:"measure",unit:"°C",min:0,max:80},
+    {id:"c5",name:"방수 등급",sub:"IP65",std:"IP65 이상",inputType:"select",opts:["IP65","IP67","IP54","미달"]},
+  ]},
+  "5000000297|1":{lot:"IL-2026-0297",type:"01 입고검사",sample:"50 EA",plan:"QP-BDY-200",chars:[
+    {id:"c1",name:"외관 검사",sub:"스크래치",std:"이상 없음",inputType:"toggle",opts:["이상 없음","경미","불량"]},
+    {id:"c2",name:"치수 A",sub:"85.0±0.3mm",std:"84.7~85.3mm",inputType:"measure",unit:"mm",min:84.7,max:85.3},
+    {id:"c3",name:"치수 B",sub:"42.0±0.2mm",std:"41.8~42.2mm",inputType:"measure",unit:"mm",min:41.8,max:42.2},
+    {id:"c4",name:"표면 경도",sub:"HRC 45 이상",std:"HRC 45 이상",inputType:"measure",unit:"HRC",min:45,max:99},
+  ]},
+  "5000000295|1":{lot:"IL-2026-0295",type:"01 입고검사",sample:"30 EA",plan:"QP-BDY-200",chars:[
+    {id:"c1",name:"외관 검사",sub:"스크래치",std:"이상 없음",inputType:"toggle",opts:["이상 없음","경미","불량"]},
+    {id:"c2",name:"치수 A",sub:"85.0±0.3mm",std:"84.7~85.3mm",inputType:"measure",unit:"mm",min:84.7,max:85.3},
+    {id:"c3",name:"표면 경도",sub:"HRC 45 이상",std:"HRC 45 이상",inputType:"measure",unit:"HRC",min:45,max:99},
+  ]},
+  "5000000291|1":{lot:"IL-2026-0291",type:"01 입고검사",sample:"14 EA",plan:"QP-CTL-200",chars:[
+    {id:"c1",name:"외관 검사",sub:"파손·변형",std:"이상 없음",inputType:"toggle",opts:["이상 없음","경미","불량"]},
+    {id:"c2",name:"해상도",sub:"FHD 이상",std:"FHD 1920x1080",inputType:"select",opts:["FHD 1920x1080","4K UHD","HD 720p","미달"]},
+    {id:"c3",name:"터치 응답",sub:"10ms 이하",std:"10ms 이하",inputType:"measure",unit:"ms",min:0,max:10},
+    {id:"c4",name:"밝기",sub:"400nit 이상",std:"400nit 이상",inputType:"measure",unit:"nit",min:400,max:9999},
+  ]},
+  "5000000290|1":{lot:"IL-2026-0290",type:"01 입고검사",sample:"14 EA",plan:"QP-CTL-100",chars:[
+    {id:"c1",name:"외관 검사",sub:"파손·변형",std:"이상 없음",inputType:"toggle",opts:["이상 없음","경미","불량"]},
+    {id:"c2",name:"전압 테스트",sub:"24V ± 0.5V",std:"23.5~24.5V",inputType:"measure",unit:"V",min:23.5,max:24.5},
+    {id:"c3",name:"전류 테스트",sub:"5A 이하",std:"5.0A 이하",inputType:"measure",unit:"A",min:0,max:5.0},
+  ]},
+};
+
+const SAVED_INSP={
+  "5000000294|1":{lot:"IL-2026-0294",type:"01 입고검사",sample:"6 EA",plan:"QP-BDY-100",chars:[
+    {id:"c1",name:"외관 검사",std:"이상 없음",savedVal:"이상 없음",judge:"pass"},
+    {id:"c2",name:"치수 검사",std:"표준치수",savedVal:"기준 내",judge:"pass"},
+  ]},
+  "5000000292|1":{lot:"IL-2026-0292",type:"01 입고검사",sample:"80 EA",plan:"QP-BAT-100",chars:[
+    {id:"c1",name:"외관 검사",std:"이상 없음",savedVal:"이상 없음",judge:"pass"},
+    {id:"c2",name:"치수 검사",std:"10.0±0.2mm",savedVal:"일부 10.25mm 초과",judge:"warn"},
+    {id:"c3",name:"용량 테스트",std:"36V ± 0.5V",savedVal:"36.0V",judge:"pass"},
+    {id:"c4",name:"충방전 테스트",std:"정상",savedVal:"정상",judge:"pass"},
+  ]},
+  "5000000289|1":{lot:"IL-2026-0289",type:"01 입고검사",sample:"5 EA",plan:"QP-BDY-100",chars:[
+    {id:"c1",name:"외관 검사",std:"이상 없음",savedVal:"이상 없음",judge:"pass"},
+    {id:"c2",name:"기능 검사",std:"정상 동작",savedVal:"전량 기능 불량",judge:"fail"},
+    {id:"c3",name:"치수 검사",std:"표준치수",savedVal:"기준 내",judge:"pass"},
+  ]},
+  "5000000285|1":{lot:"IL-2026-0285",type:"01 입고검사",sample:"20 EA",plan:"QP-FRM-010",chars:[
+    {id:"c1",name:"외관 검사",std:"이상 없음",savedVal:"이상 없음",judge:"pass"},
+    {id:"c2",name:"재질 확인",std:"SUS304",savedVal:"일부 SUS201 혼입",judge:"fail"},
+    {id:"c3",name:"인장 강도",std:"500MPa 이상",savedVal:"합격 180EA / 미달 20EA",judge:"warn"},
+  ]},
+};
+
+const RAW=[
+  {mblnr:"5000000302",zeile:"1",matnr:"RM-BAT-400",maktx:"배터리 커넥터",werks:"1000",lgort:"SL40",menge:300,meins:"EA",lifnr_nm:"(주)한국스틸",ebeln:"BAT-400-01",charg:"BT-2026-010",budat:"2026-06-09",status:"판정대기",udCode:null,inspValues:{}},
+  {mblnr:"5000000300",zeile:"1",matnr:"RM-CTL-100",maktx:"모터 컨트롤러",werks:"1000",lgort:"SL40",menge:1200,meins:"EA",lifnr_nm:"대성부품(주)",ebeln:"CTL-100-01",charg:"BT-2026-011",budat:"2026-06-09",status:"판정대기",udCode:null,inspValues:{}},
+  {mblnr:"5000000297",zeile:"1",matnr:"RM-BDY-200",maktx:"페달",werks:"1000",lgort:"SL40",menge:500,meins:"EA",lifnr_nm:"삼성정공(주)",ebeln:"BDY-200-01",charg:"BT-2026-012",budat:"2026-06-08",status:"판정대기",udCode:null,inspValues:{}},
+  {mblnr:"5000000295",zeile:"1",matnr:"RM-BDY-200",maktx:"페달",werks:"1000",lgort:"SL40",menge:300,meins:"EA",lifnr_nm:"삼성정공(주)",ebeln:"BDY-200-01",charg:"BT-2026-013",budat:"2026-06-08",status:"판정대기",udCode:null,inspValues:{}},
+  {mblnr:"5000000294",zeile:"1",matnr:"RM-BDY-100",maktx:"안장",werks:"1000",lgort:"SL10",menge:6,meins:"EA",lifnr_nm:"(주)한국스틸",ebeln:"TEST",charg:"BT-2026-014",budat:"2026-06-07",status:"합격",passQty:6,holdQty:0,defects:[],defNote:"",udCode:"A1"},
+  {mblnr:"5000000292",zeile:"1",matnr:"RM-BAT-100",maktx:"배터리 셀 36V",werks:"1000",lgort:"SL40",menge:800,meins:"EA",lifnr_nm:"LG이노텍(주)",ebeln:"TEST11",charg:"BT-2026-015",budat:"2026-06-06",status:"보류",passQty:750,holdQty:50,defects:["치수불량"],defNote:"일부 치수 허용오차 초과",udCode:"A2"},
+  {mblnr:"5000000291",zeile:"1",matnr:"RM-CTL-200",maktx:"LCD 디스플레이",werks:"1000",lgort:"SL40",menge:140,meins:"EA",lifnr_nm:"현대모비스(주)",ebeln:"CTL-200-01",charg:"BT-2026-016",budat:"2026-06-06",status:"판정대기",udCode:null,inspValues:{}},
+  {mblnr:"5000000290",zeile:"1",matnr:"RM-CTL-100",maktx:"모터 컨트롤러",werks:"1000",lgort:"SL40",menge:140,meins:"EA",lifnr_nm:"대성부품(주)",ebeln:"CTL-100-01",charg:"BT-2026-017",budat:"2026-06-05",status:"판정대기",udCode:null,inspValues:{}},
+  {mblnr:"5000000289",zeile:"1",matnr:"RM-BDY-100",maktx:"안장",werks:"1000",lgort:"SL40",menge:5,meins:"EA",lifnr_nm:"(주)한국스틸",ebeln:"TEST",charg:"BT-2026-018",budat:"2026-06-05",status:"불량",passQty:0,holdQty:5,defects:["기능불량"],defNote:"전체 기능 불량",udCode:"R2"},
+  {mblnr:"5000000285",zeile:"1",matnr:"RM-FRM-010",maktx:"스틸 프레임 A",werks:"1000",lgort:"SL40",menge:200,meins:"EA",lifnr_nm:"현대위아(주)",ebeln:"FRM-010-01",charg:"BT-2026-020",budat:"2026-06-07",status:"이동오류",passQty:180,holdQty:20,defects:["재질불량"],defNote:"일부 재질 기준 미달",udCode:"A2",errMsg:"322 이동문서 생성 실패 — SL50 창고 잠금 상태"},
+];
+
+let data=RAW.map(r=>({...r,inspValues:{...r.inspValues}}));
+let filtered=[...data];
+let selKey=null,selUdCode=null,selMoveDoc=null,wlFilter="판정대기",curTab="insp";
+let moveHistory=[];
+let curPage="judge";
+let selHistKey=null;
+
+/* ── 헬퍼 ── */
+function getKey(r){return r.mblnr+"|"+r.zeile;}
+function isDone(s){return["합격","보류","불량","이동오류"].includes(s);}
+function isErr(s){return s==="이동오류";}
+function calcSt(p,h){if(!p&&!h)return null;if(p>0&&h===0)return"합격";if(h>0&&p===0)return"불량";return"보류";}
+function bc(s){if(s==="합격")return"b-pass";if(s==="보류")return"b-part";if(s==="불량")return"b-fail";if(s==="이동오류")return"b-err";return"b-pend";}
+function bcLbl(s){if(s==="합격")return"합격";if(s==="보류")return"보류";if(s==="불량")return"불량";if(s==="이동오류")return"이동오류";return"판정대기";}
+function judgeLabel(j){return j==="pass"?`<span class="insp-judge-badge ij-pass">✓ 합격</span>`:j==="fail"?`<span class="insp-judge-badge ij-fail">✗ 불합격</span>`:j==="warn"?`<span class="insp-judge-badge ij-warn">△ 주의</span>`:`<span class="insp-judge-badge ij-pend">미입력</span>`;}
+function getLot(key){const s=SAVED_INSP[key]||INSP_PLANS[key];return s?s.lot:"—";}
+
+function mkMove(mvt,mvtLbl,r,qty,to,result,dt){
+  return{mvt,mvtLbl,docNo:String(moveSeq++),srcDoc:r.mblnr,srcZeile:r.zeile,matnr:r.matnr,maktx:r.maktx,lifnr_nm:r.lifnr_nm,qty,meins:r.meins,from:r.lgort,to,result,dt,processedBy:"이하영",ebeln:r.ebeln};
+}
+function initMoveHistory(){
+  moveHistory=[];moveSeq=5000000200;
+  data.filter(r=>isDone(r.status)&&!isErr(r.status)).forEach(r=>{
+    if((r.passQty||0)>0) moveHistory.push(mkMove("321","QI→원자재",r,r.passQty,"SL10",r.status,"2026-06-09 09:15"));
+    if((r.holdQty||0)>0) moveHistory.push(mkMove("322","QI→보류",r,r.holdQty,"SL50",r.status,"2026-06-09 09:15"));
+  });
+  const errR=data.find(r=>r.status==="이동오류");
+  if(errR&&(errR.passQty||0)>0) moveHistory.push(mkMove("321","QI→원자재",errR,errR.passQty,"SL10","이동오류(부분)","2026-06-07 14:32"));
+}
+initMoveHistory();
+
+/* ── 네비 토글 ── */
+function toggleNav(){navCollapsed=!navCollapsed;document.getElementById("sideNav").className="side-nav"+(navCollapsed?" collapsed":"");}
+
+/* ── 페이지 전환 ── */
+function switchPage(p){
+  curPage=p;
+  ["judge","history"].forEach(id=>{
+    document.getElementById("page-"+id).className="page"+(p===id?" active":"");
+    const navEl=document.getElementById("nav-"+id);
+    if(navEl)navEl.className="nav-item"+(p===id?" active":"");
+  });
+  document.getElementById("shellTitle").textContent=p==="judge"?"입고 품질판정":"품질판정 이력 조회";
+  if(p==="history") renderHistPage();
+}
+
+/* ── KPI & Nav Badge ── */
+function updateKPI(){
+  const pend=data.filter(r=>r.status==="판정대기").length;
+  const pass=data.filter(r=>r.status==="합격").length;
+  const hold=data.filter(r=>r.status==="보류").length;
+  const fail=data.filter(r=>r.status==="불량").length;
+  const err=data.filter(r=>r.status==="이동오류").length;
+  const judged=pass+hold+fail;
+  const done=pass+hold+fail;
+  document.getElementById("kPend").textContent=pend;
+  document.getElementById("kToday").textContent=done;
+  document.getElementById("kHold").textContent=hold;
+  document.getElementById("kFail").textContent=fail;
+  document.getElementById("kQRate").textContent=judged>0?((hold+fail)/judged*100).toFixed(1)+"%":"—";
+  document.getElementById("kErr").textContent=err;
+  /* 트리 서브 카운트 */
+  const total=data.length;
+  const sc={all:total,pend,pass,hold,fail};
+  Object.entries(sc).forEach(([k,v])=>{const el=document.getElementById("nsc-"+k);if(el)el.textContent=v;});
+  /* nav badge (숨김 — 트리로 대체) */
+  /* empty state cards */
+  const esPend=document.getElementById("es_pend");const esErr=document.getElementById("es_err");
+  const esHold=document.getElementById("es_hold");const esFail=document.getElementById("es_fail");
+  if(esPend)esPend.textContent=pend;if(esErr)esErr.textContent=err;
+  if(esHold)esHold.textContent=hold;if(esFail)esFail.textContent=fail;
+  /* hist KPI */
+  document.getElementById("hk_total").textContent=data.length;
+  document.getElementById("hk_pass").textContent=pass;
+  document.getElementById("hk_hold").textContent=hold;
+  document.getElementById("hk_fail").textContent=fail;
+  document.getElementById("hk_pend").textContent=pend;
+  document.getElementById("hk_err").textContent=err;
+}
+
+/* ── Worklist ── */
+function setWlFilter(f){
+  wlFilter=f;
+  const map={all:"wc-all","판정대기":"wc-pend","합격":"wc-pass","보류":"wc-hold","불량":"wc-fail","이동오류":"wc-err"};
+  Object.values(map).forEach(id=>{const el=document.getElementById(id);if(!el)return;el.className=id==="wc-err"?"wl-chip err-chip":"wl-chip";});
+  const aid=map[f];if(aid){const el=document.getElementById(aid);if(el)el.className=(aid==="wc-err"?"wl-chip err-chip active":"wl-chip active");}
+  renderWorklist();
+}
+
+function getInspProgress(key,r){
+  const plan=INSP_PLANS[key];if(!plan)return null;
+  const total=plan.chars.length;
+  const done=plan.chars.filter(c=>(r.inspValues||{})[c.id]!==undefined&&(r.inspValues||{})[c.id]!=="").length;
+  return{total,done,pct:total>0?Math.round(done/total*100):0};
+}
+
+function renderWorklist(){
+  const wlData=filtered.filter(r=>wlFilter==="all"||r.status===wlFilter);
+  const pend=wlData.filter(r=>r.status==="판정대기");
+  const done=wlData.filter(r=>isDone(r.status)&&!isErr(r.status));
+  const errs=wlData.filter(r=>isErr(r.status));
+  document.getElementById("wlTotal").textContent="전체 "+filtered.length+"건";
+  let html="";
+  if(pend.length){
+    html+=`<div class="wl-group"><span>판정 대기</span><span>${pend.length}건</span></div>`;
+    pend.forEach(r=>{
+      const key=getKey(r);const sel=key===selKey?" sel":"";
+      const plan=INSP_PLANS[key];const lotNum=plan?plan.lot:"검사계획 미설정";
+      const prog=getInspProgress(key,r);
+      let progHtml="";
+      if(prog){const fc=prog.pct===100?"var(--G)":prog.pct>0?"var(--focus)":"var(--bd)";progHtml=`<div class="wi-insp-bar"><div class="wi-progress"><div class="wi-progress-fill" style="width:${prog.pct}%;background:${fc}"></div></div><span style="font-size:10px;color:${fc==="var(--bd)"?"var(--tm)":fc};font-weight:600;white-space:nowrap">${prog.pct===100?"검사입력 완료":`${prog.done}/${prog.total}`}</span></div>`;}
+      html+=`<div class="wl-item${sel}" onclick="selectRow('${key}')">
+        <div class="wi-row1"><span class="badge b-pend">판정대기</span><span class="wi-name">${r.maktx}</span></div>
+        <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--QM);margin:2px 0">${lotNum}</div>
+        <div class="wi-row2"><span class="wi-doc">GR ${r.mblnr}/${r.zeile}행</span><span class="wi-sep">·</span><span class="wi-doc">PO ${r.ebeln}</span></div>
+        <div class="wi-row3"><span>${r.lifnr_nm}</span><span class="wi-sep">·</span><span>${r.budat}</span><span class="wi-sep">·</span><span>배치 ${r.charg}</span></div>
+        <div class="wi-qty-badge">${r.menge.toLocaleString()} ${r.meins}</div>
+        ${progHtml}
+      </div>`;
+    });
+  }
+  if(done.length){
+    html+=`<div class="wl-group"><span>판정 완료</span><span>${done.length}건</span></div>`;
+    done.forEach(r=>{
+      const key=getKey(r);const sel=key===selKey?" sel":"";
+      const ud=UD_CODES.find(u=>u.code===r.udCode);
+      const lot=getLot(key);
+      html+=`<div class="wl-item${sel}" onclick="selectRow('${key}')">
+        <div class="wi-row1"><span class="badge ${bc(r.status)}">${bcLbl(r.status)}</span><span class="wi-name">${r.maktx}</span></div>
+        <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--QM);margin:2px 0">${lot}</div>
+        <div class="wi-row2">
+          ${ud?`<span style="font-family:var(--mono);font-size:10px;font-weight:700;color:${ud.color}">${ud.code}</span><span class="wi-sep">·</span><span style="font-size:10px;font-weight:600">${ud.label}</span>`:""}
+          ${(r.passQty||0)>0?`<span class="wi-sep">·</span><span style="color:var(--G);font-weight:600;font-size:10px">${r.passQty.toLocaleString()} 합격</span>`:""}
+          ${(r.holdQty||0)>0?`<span class="wi-sep">·</span><span style="color:var(--O);font-weight:600;font-size:10px">${r.holdQty.toLocaleString()} 보류</span>`:""}
+        </div>
+        <div class="wi-row3"><span class="wi-doc">GR ${r.mblnr}/${r.zeile}행</span><span class="wi-sep">·</span><span>${r.lifnr_nm}</span><span class="wi-sep">·</span><span>${r.budat}</span></div>
+      </div>`;
+    });
+  }
+  if(errs.length){
+    html+=`<div class="wl-group" style="background:var(--ErrBg);color:var(--Err);border-color:var(--ErrB)"><span>&#9888; 이동오류</span><span>${errs.length}건</span></div>`;
+    errs.forEach(r=>{
+      const key=getKey(r);const sel=key===selKey?" sel":"";
+      const lot=getLot(key);
+      html+=`<div class="wl-item err-item${sel}" onclick="selectRow('${key}')">
+        <div class="wi-row1"><span class="badge b-err">이동오류</span><span class="wi-name">${r.maktx}</span></div>
+        <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:var(--QM);margin:2px 0">${lot}</div>
+        <div class="wi-row2"><span class="wi-doc">GR ${r.mblnr}/${r.zeile}행</span><span class="wi-sep">·</span><span>${r.lifnr_nm}</span></div>
+        <div class="wi-err-msg">&#9888; ${r.errMsg||"이동문서 생성 실패"}</div>
+      </div>`;
+    });
+  }
+  if(!html) html=`<div style="padding:24px;text-align:center;color:var(--tm);font-size:12px">해당하는 항목이 없습니다</div>`;
+  document.getElementById("wlScroll").innerHTML=html;
+  updateKPI();
+}
+
+function applyFilter(){
+  const q=document.getElementById("fQ").value.toLowerCase();
+  const df=document.getElementById("fDf").value,dt=document.getElementById("fDt").value;
+  filtered=data.filter(r=>{
+    if(q&&!r.matnr.toLowerCase().includes(q)&&!r.maktx.toLowerCase().includes(q)&&!r.lifnr_nm.toLowerCase().includes(q)&&!r.mblnr.includes(q))return false;
+    if(df&&r.budat<df)return false;if(dt&&r.budat>dt)return false;return true;
+  });
+  selKey=null;showEmpty();renderWorklist();
+}
+function clearFilter(){["fQ","fDf","fDt"].forEach(id=>document.getElementById(id).value="");applyFilter();}
+
+/* ── Tab switching ── */
+function switchTab(t){
+  curTab=t;
+  ["insp","ud","qty","hist"].forEach(id=>{
+    document.getElementById("tab-"+id).className="op-tab"+(t===id?" active":"");
+    document.getElementById("pane-"+id).className="tab-pane"+(t===id?" active":"");
+  });
+  if(t==="hist"&&selKey){const r=data.find(d=>getKey(d)===selKey);if(r)renderHistory(r);}
+  updateFooterButtons();
+}
+
+function updateFooterButtons(){
+  if(!selKey)return;
+  const r=data.find(d=>getKey(d)===selKey);if(!r)return;
+  const done=isDone(r.status);const err=isErr(r.status);
+  const btnNext=document.getElementById("btnNext");
+  const btnSave=document.getElementById("btnSave");
+  if((done&&!err)||err){btnNext.style.display="none";btnSave.style.display="none";return;}
+  if(curTab==="insp"){
+    btnSave.style.display="none";btnNext.style.display="";
+    const plan=INSP_PLANS[selKey];
+    if(plan){
+      const dc=plan.chars.filter(c=>(r.inspValues||{})[c.id]!==undefined&&(r.inspValues||{})[c.id]!=="").length;
+      const all=dc===plan.chars.length;
+      btnNext.textContent=all?"다음 — 판정코드 선택 ›":"검사항목 입력 중 ("+dc+"/"+plan.chars.length+")";
+      btnNext.disabled=!all;btnNext.style.background=all?"var(--focus)":"var(--tm)";
+    } else {btnNext.textContent="다음 — 판정코드 선택 ›";btnNext.disabled=false;btnNext.style.background="var(--focus)";}
+  } else if(curTab==="ud"){
+    btnSave.style.display="none";btnNext.style.display="";
+    btnNext.textContent=selUdCode?"다음 — 재고처분 확인 ›":"판정코드를 선택하세요";
+    btnNext.disabled=!selUdCode;btnNext.style.background=selUdCode?"var(--focus)":"var(--tm)";
+  } else if(curTab==="qty"){
+    btnNext.style.display="none";btnSave.style.display="";
+    btnSave.disabled=!selUdCode||((parseFloat(document.getElementById("q_pass").value)||0)+(parseFloat(document.getElementById("q_hold").value)||0)===0);
+  } else {
+    btnNext.style.display="none";btnSave.style.display="none";
+  }
+}
+function goNextTab(){if(curTab==="insp")switchTab("ud");else if(curTab==="ud")switchTab("qty");}
+
+/* ── 자동 판정 ── */
+function autoJudgeMeasure(val,c){const v=parseFloat(val);if(isNaN(v))return"pend";if(v<c.min||v>c.max)return"fail";const w=(c.max-c.min)*0.05;if(v<=c.min+w||v>=c.max-w)return"warn";return"pass";}
+function getCharJudge(c,val){if(!val)return"pend";if(c.inputType==="toggle"){const i=c.opts.indexOf(val);return i===0?"pass":i===c.opts.length-1?"fail":"warn";}if(c.inputType==="measure")return autoJudgeMeasure(val,c);if(c.inputType==="select"){const i=c.opts.indexOf(val);return(i===0||i===1)?"pass":i===c.opts.length-1?"fail":"warn";}return"pend";}
+function getAllJudges(key,r){const plan=INSP_PLANS[key];if(!plan)return[];return plan.chars.map(c=>getCharJudge(c,(r.inspValues||{})[c.id]||""));}
+
+/* ── Tab1: 검사결과 ── */
+function renderInspTab(key,r,done){
+  const src=done?SAVED_INSP[key]:INSP_PLANS[key];
+  if(!src){["il_lot","il_type","il_sample","il_plan"].forEach(id=>document.getElementById(id).textContent="—");document.getElementById("inspChars").innerHTML=`<div style="text-align:center;padding:24px;color:var(--tm);font-size:12px">이 자재에 등록된 검사계획이 없습니다</div>`;document.getElementById("inspFill").style.width="0%";document.getElementById("inspCount").textContent="0/0";document.getElementById("tbi").textContent="—";updateInspSummary([]);return;}
+  document.getElementById("il_lot").textContent=src.lot;document.getElementById("il_type").textContent=src.type;document.getElementById("il_sample").textContent=src.sample;document.getElementById("il_plan").textContent=src.plan;
+  if(done){
+    const total=src.chars.length;document.getElementById("inspFill").style.width="100%";document.getElementById("inspFill").style.background="var(--G)";document.getElementById("inspCount").textContent=`${total}/${total}`;document.getElementById("tbi").textContent=`${total}/${total}`;
+    document.getElementById("inspChars").innerHTML=src.chars.map(c=>{const rc=c.judge==="pass"?"judged-pass":c.judge==="fail"?"judged-fail":c.judge==="warn"?"judged-warn":"";return`<div class="insp-char-row ${rc}"><div class="icr-cell icr-name"><div>${c.name}</div></div><div class="icr-cell icr-std">${c.std}</div><div class="icr-cell" style="color:var(--ts)">${c.savedVal||"—"}</div><div class="icr-cell icr-judge">${judgeLabel(c.judge)}</div></div>`;}).join("");
+    updateInspSummary(src.chars.map(c=>c.judge||"pend"));
+  } else {
+    const vals=r.inspValues||{};const total=src.chars.length;
+    const dc=src.chars.filter(c=>vals[c.id]!==undefined&&vals[c.id]!=="").length;
+    const pct=total>0?Math.round(dc/total*100):0;const fc=pct===100?"var(--G)":pct>0?"var(--focus)":"var(--bd)";
+    document.getElementById("inspFill").style.width=pct+"%";document.getElementById("inspFill").style.background=fc;document.getElementById("inspCount").textContent=`${dc}/${total}`;document.getElementById("tbi").textContent=`${dc}/${total}`;
+    const jr=[];
+    document.getElementById("inspChars").innerHTML=src.chars.map(c=>{
+      const cv=vals[c.id]||"";const jg=getCharJudge(c,cv);jr.push(jg);
+      const rc=cv?(jg==="pass"?"judged-pass":jg==="fail"?"judged-fail":jg==="warn"?"judged-warn":""):"";
+      let ih="";
+      if(c.inputType==="toggle"){const btns=c.opts.map((o,i)=>{const bc2=i===0?"pass":i===c.opts.length-1?"fail":"warn";return`<button class="itg-btn ${bc2}${cv===o?" active":""}" onclick="setInspVal('${key}','${c.id}','${o}')">${o}</button>`;}).join("");ih=`<div class="icr-input-wrap"><div class="insp-toggle">${btns}</div></div>`;}
+      else if(c.inputType==="measure"){const ic=cv?(jg==="pass"?"pass":jg==="fail"?"fail":""):"";ih=`<div class="icr-input-wrap"><input class="insp-text-input ${ic}" type="number" value="${cv}" placeholder="측정값" onchange="setInspVal('${key}','${c.id}',this.value)" oninput="setInspVal('${key}','${c.id}',this.value)"><span class="insp-unit">${c.unit||""}</span></div>`;}
+      else if(c.inputType==="select"){const ic=cv?(jg==="pass"?"pass":jg==="fail"?"fail":""):"";const opts=c.opts.map(o=>`<option value="${o}" ${cv===o?"selected":""}>${o}</option>`).join("");ih=`<div class="icr-input-wrap"><select class="insp-select ${ic}" onchange="setInspVal('${key}','${c.id}',this.value)"><option value="">-- 선택 --</option>${opts}</select></div>`;}
+      return`<div class="insp-char-row ${rc}" id="icr-${c.id}"><div class="icr-cell icr-name"><div style="font-weight:600">${c.name}</div>${c.sub?`<div class="icr-name-sub">${c.sub}</div>`:""}</div><div class="icr-cell icr-std">${c.std}</div><div class="icr-cell">${ih}</div><div class="icr-cell icr-judge" id="ijudge-${c.id}">${judgeLabel(jg)}</div></div>`;
+    }).join("");
+    updateInspSummary(jr);
+  }
+}
+function updateInspSummary(r){document.getElementById("isb_pass").textContent=r.filter(j=>j==="pass").length;document.getElementById("isb_fail").textContent=r.filter(j=>j==="fail").length;document.getElementById("isb_warn").textContent=r.filter(j=>j==="warn").length;document.getElementById("isb_pend").textContent=r.filter(j=>j==="pend").length;}
+
+function setInspVal(key,charId,val){
+  const r=data.find(d=>getKey(d)===key);if(!r||isDone(r.status))return;
+  if(!r.inspValues)r.inspValues={};r.inspValues[charId]=val;
+  const plan=INSP_PLANS[key];if(!plan)return;
+  const c=plan.chars.find(x=>x.id===charId);if(!c)return;
+  const jg=getCharJudge(c,val);
+  const row=document.getElementById("icr-"+charId);
+  if(row)row.className="insp-char-row"+(val?(jg==="pass"?" judged-pass":jg==="fail"?" judged-fail":jg==="warn"?" judged-warn":""):"");
+  const je=document.getElementById("ijudge-"+charId);if(je)je.innerHTML=judgeLabel(jg);
+  if(c.inputType==="measure"){const inp=row&&row.querySelector(".insp-text-input");if(inp)inp.className="insp-text-input "+(val?(jg==="pass"?"pass":jg==="fail"?"fail":""):"");}
+  else if(c.inputType==="select"){const sel=row&&row.querySelector(".insp-select");if(sel)sel.className="insp-select "+(val?(jg==="pass"?"pass":jg==="fail"?"fail":""):"");}
+  const vals=r.inspValues;const total=plan.chars.length;
+  const dc=plan.chars.filter(x=>vals[x.id]!==undefined&&vals[x.id]!=="").length;
+  const pct=total>0?Math.round(dc/total*100):0;const fc=pct===100?"var(--G)":pct>0?"var(--focus)":"var(--bd)";
+  document.getElementById("inspFill").style.width=pct+"%";document.getElementById("inspFill").style.background=fc;
+  document.getElementById("inspCount").textContent=`${dc}/${total}`;document.getElementById("tbi").textContent=`${dc}/${total}`;
+  const allJ=getAllJudges(key,r);updateInspSummary(allJ);
+  updateUDLock(key,r,allJ,dc===total);updateFooterButtons();renderWorklist();
+}
+
+/* ── Tab2: UD ── */
+function updateUDLock(key,r,allJudges,allDone){
+  const locked=document.getElementById("udLocked");const grid=document.getElementById("udGrid");
+  const plan=INSP_PLANS[key];
+  if(plan&&!allDone){
+    locked.style.display="flex";
+    const dc=plan.chars.filter(c=>(r.inspValues||{})[c.id]!==undefined&&(r.inspValues||{})[c.id]!=="").length;
+    document.getElementById("udLockMsg").textContent=`검사항목을 모두 입력하면 판정코드를 선택할 수 있습니다 (${dc}/${plan.chars.length} 완료)`;
+    grid.style.display="none";return;
+  }
+  locked.style.display="none";grid.style.display="grid";
+  const hasFail=allJudges.includes("fail"),hasWarn=allJudges.includes("warn");
+  const rec=hasFail?"R2":hasWarn?"A2":"A1";
+  grid.innerHTML=UD_CODES.map(u=>{
+    const sc=u.code===selUdCode?` sel-${u.type}`:"";
+    const dc=u.type==="pass"?"var(--G)":u.type==="hold"?"var(--O)":"var(--R)";
+    const qh=u.qtyMode==="full_pass"?`<span class="ud-qty-hint pass">합격수량 = 입고수량 자동</span>`:u.qtyMode==="full_hold"?`<span class="ud-qty-hint hold">보류수량 = 입고수량 자동</span>`:`<span class="ud-qty-hint pass">합격/보류 수량 직접 입력</span>`;
+    const recHint=u.code===rec?`<div style="font-size:10px;color:var(--Pt);margin-top:4px">★ 추천 — ${hasFail?"불합격 항목 존재":hasWarn?"주의 항목 존재":"전체 합격"}</div>`:"";
+    return`<div class="ud-item${sc}" onclick="selectUD('${u.code}','${u.type}','${u.qtyMode}')">
+      <div class="ud-code" style="color:${u.code===selUdCode?u.color:"var(--tp)"}">${u.code}${u.code===rec?`<span class="rec-badge">★ 추천</span>`:""}</div>
+      <div class="ud-label">${u.label}</div>
+      <div class="ud-desc"><span class="ud-type-dot" style="background:${dc}"></span>${u.desc}</div>
+      ${qh}${recHint}
+    </div>`;
+  }).join("");
+}
+
+function selectUD(code,type,qtyMode){
+  if(!selKey)return;const r=data.find(d=>getKey(d)===selKey);if(!r||isDone(r.status))return;
+  selUdCode=code;
+  const qp=document.getElementById("q_pass");const qh=document.getElementById("q_hold");
+  if(qtyMode==="full_pass"){qp.value=r.menge;qp.disabled=true;qh.value=0;qh.disabled=true;}
+  else if(qtyMode==="full_hold"){qp.value=0;qp.disabled=true;qh.value=r.menge;qh.disabled=true;}
+  else{qp.disabled=false;qh.disabled=false;}
+  const allJ=getAllJudges(selKey,r);const plan=INSP_PLANS[selKey];
+  const total=plan?plan.chars.length:0;const dc=plan?plan.chars.filter(c=>(r.inspValues||{})[c.id]!==undefined&&(r.inspValues||{})[c.id]!=="").length:0;
+  updateUDLock(selKey,r,allJ,!plan||dc===total);
+  const ud=UD_CODES.find(u=>u.code===code);
+  document.getElementById("qtyUdSummary").style.display="flex";
+  document.getElementById("qtyUdSummary").innerHTML=`<span style="font-family:var(--mono);font-weight:700;font-size:14px">${code}</span><span style="font-weight:600">${ud?ud.label:""}</span><span style="color:var(--ts);font-size:11px">${ud?ud.desc:""}</span>`;
+  if(code==="H1"||code==="R2"){document.getElementById("defSection").style.display="";document.getElementById("wDef").style.display=document.querySelectorAll(".ditem.on").length===0?"flex":"none";}
+  onQ();switchTab("qty");
+  document.getElementById("footerHint").innerHTML=`[${code}] 선택됨 — 수량 확인 후 판정 저장하세요`;
+}
+
+/* ── Tab3: 재고처분 ── */
+function autoCalcHold(inp){
+  if(!selKey)return;const r=data.find(d=>getKey(d)===selKey);if(!r||isDone(r.status))return;
+  const ud=selUdCode?UD_CODES.find(u=>u.code===selUdCode):null;
+  if(ud&&ud.qtyMode==="split"){const p=parseFloat(inp.value)||0;document.getElementById("q_hold").value=Math.max(0,r.menge-p);}
+  onQ();
+}
+
+function onQ(){
+  if(!selKey)return;const r=data.find(d=>getKey(d)===selKey);if(!r||isDone(r.status))return;
+  const tot=r.menge,p=parseFloat(document.getElementById("q_pass").value)||0,h=parseFloat(document.getElementById("q_hold").value)||0;
+  const pp=tot>0?Math.min(100,p/tot*100):0,hp=tot>0?Math.min(100,h/tot*100):0;
+  document.getElementById("rfill").style.width=pp.toFixed(1)+"%";
+  document.getElementById("r_pass").textContent="합격 "+pp.toFixed(1)+"%";
+  document.getElementById("r_hold").textContent="보류 "+hp.toFixed(1)+"%";
+  const over=(p+h)>tot,mismatch=!over&&(p+h>0)&&(p+h!==tot);
+  document.getElementById("wOver").style.display=over?"flex":"none";
+  document.getElementById("wMismatch").style.display=mismatch?"flex":"none";
+  const invalid=over||mismatch;
+  const qpEl=document.getElementById("q_pass");const qhEl=document.getElementById("q_hold");
+  if(!qpEl.disabled)qpEl.classList.toggle("invalid",invalid);
+  if(!qhEl.disabled)qhEl.classList.toggle("invalid",invalid);
+  document.getElementById("defSection").style.display=h>0||(selUdCode==="H1"||selUdCode==="R2")?"":"none";
+  const sd=[...document.querySelectorAll(".ditem.on")];
+  document.getElementById("wDef").style.display=(h>0&&sd.length===0)?"flex":"none";
+  const st=calcSt(p,h);const ud=selUdCode?UD_CODES.find(u=>u.code===selUdCode):null;
+  const el=document.getElementById("autoV");
+  if(!st){el.className="auto-v av-pend";el.textContent="수량을 입력하세요";}
+  else if(st==="합격"){el.className="auto-v av-pass";el.innerHTML=`✓ [${selUdCode}] 합격 — 321 원자재창고(SL10) 이동문서 생성 예정`;}
+  else if(st==="보류"){el.className="auto-v av-part";el.innerHTML=`◑ [${selUdCode}] 보류 — 321+322 이동문서 각각 생성 예정`;}
+  else{el.className="auto-v av-part";el.innerHTML=`✗ [${selUdCode}] 불합격 — 322 보류창고(SL50) 이동 후 후속처리 예정`;}
+  /* preview */
+  const pt=document.getElementById("previewTitle");pt.textContent="생성 예정 이동문서";pt.style.color="var(--O)";
+  const rows=[];
+  if(p>0) rows.push(`<div class="pr-row pr-pass"><span class="pr-mvt p">321</span><span class="pr-lbl">QI(${r.lgort}) → 원자재(SL10)</span><span class="pr-qty p">${p.toLocaleString()} ${r.meins}</span></div>`);
+  if(h>0) rows.push(`<div class="pr-row pr-hold"><span class="pr-mvt h">322</span><span class="pr-lbl">QI(${r.lgort}) → 보류(SL50)</span><span class="pr-qty h">${h.toLocaleString()} ${r.meins}</span></div>`);
+  document.getElementById("prRows").innerHTML=rows.length?rows.join(""):`<div class="pr-empty">수량 입력 시 미리보기됩니다</div>`;
+  renderBreadcrumb(st||r.status);updateFooterButtons();
+}
+
+/* ── Tab4: 이동이력 ── */
+function renderHistory(r){
+  const rel=moveHistory.filter(m=>m.srcDoc===r.mblnr&&m.srcZeile===r.zeile);
+  const c321=rel.filter(m=>m.mvt==="321"),c322=rel.filter(m=>m.mvt==="322");
+  document.getElementById("moveSummaryRow").innerHTML=`
+    <div class="ms-stat"><div class="ms-num" style="color:var(--tp)">${rel.length}</div><div class="ms-lbl">총 이동문서</div></div>
+    <div class="ms-stat"><div class="ms-num" style="color:var(--G)">${c321.length}</div><div class="ms-lbl">321</div></div>
+    <div class="ms-stat"><div class="ms-num" style="color:var(--O)">${c322.length}</div><div class="ms-lbl">322</div></div>
+    <div class="ms-stat"><div class="ms-num" style="color:var(--G)">${c321.reduce((a,m)=>a+m.qty,0).toLocaleString()}</div><div class="ms-lbl">원자재 수량</div></div>
+    <div class="ms-stat"><div class="ms-num" style="color:var(--O)">${c322.reduce((a,m)=>a+m.qty,0).toLocaleString()}</div><div class="ms-lbl">보류 수량</div></div>`;
+  const tb=document.getElementById("histTbody"),empty=document.getElementById("histEmpty");
+  if(!rel.length){tb.innerHTML="";empty.style.display="";return;}
+  empty.style.display="none";
+  tb.innerHTML=rel.map(m=>{const mc=m.mvt==="321"?"color:var(--G)":"color:var(--O)";const rb=m.result==="합격"?"b-pass":m.result.includes("오류")?"b-err":m.result==="보류"?"b-part":"b-fail";const act=m.docNo===selMoveDoc?" act":"";return`<tr class="clickable${act}" onclick="openMoveDetail('${m.docNo}')"><td style="font-family:var(--mono);font-weight:700;font-size:11px;${mc}">${m.mvtLbl} ${m.mvt}</td><td style="font-family:var(--mono);font-size:10px;color:var(--focus);text-decoration:underline">${m.docNo}</td><td style="font-weight:500">${m.maktx}</td><td style="text-align:right;font-weight:700;font-family:var(--mono);${mc}">${m.qty.toLocaleString()}</td><td style="color:var(--tm)">${m.meins}</td><td style="color:var(--ts)">${m.from}</td><td style="color:var(--ts)">${m.to}</td><td><span class="badge ${rb}">${m.result}</span></td></tr>`;}).join("");
+  renderBreadcrumb(r.status);
+}
+
+function renderBreadcrumb(status){
+  const last=status==="합격"?"321 원자재(SL10)":status==="보류"?"321+322 분기":status==="불량"?"322 보류(SL50)":status==="이동오류"?"이동오류 ⚠":"재고 이동";
+  const steps=["PO 발주","GR 입고(101)","품질창고(SL40)","검사 실시","품질 판정",last];
+  const judged=isDone(status),err=isErr(status),ai=judged?5:4;
+  let h="";
+  steps.forEach((s,i)=>{if(i>0)h+=`<span class="bc-arr">›</span>`;const done=i<ai&&(judged||i<4),active=(!judged&&i===4)||(judged&&i===5);let cls=done?"done":active?"active":(!judged&&i===5)?"next-s":"";if(err&&i===5)cls="err-s";h+=`<span class="bc-step ${cls}">${s}</span>`;});
+  document.getElementById("breadcrumb").innerHTML=h;
+}
+
+function openMoveDetail(docNo){
+  selMoveDoc=docNo;const m=moveHistory.find(x=>x.docNo===docNo);if(!m)return;
+  document.getElementById("endCol").className="end-col open";
+  const ok=!m.result.includes("오류"),mc=m.mvt==="321"?"var(--G)":"var(--O)";
+  document.getElementById("endBody").innerHTML=`
+    <div class="end-badge-row"><div class="end-mvt-num" style="color:${mc}">${m.mvt}</div><span class="end-status ${ok?"ok":"err"}">${ok?"생성완료":"생성실패"}</span></div>
+    <div class="end-flow"><div style="font-size:11px;font-weight:600;color:var(--ts)">${m.from}<br><span style="font-size:10px;color:var(--tm)">품질검사창고</span></div><div style="font-size:14px;color:var(--tm);padding:0 6px">→</div><div style="font-size:11px;font-weight:700;color:${mc}">${m.to}<br><span style="font-size:10px;color:var(--tm)">${m.mvt==="321"?"원자재창고":"보류창고"}</span></div></div>
+    <div class="end-grid">
+      <div class="end-field"><div class="ef-l">이동문서번호</div><div class="ef-v mono">${m.docNo}</div></div>
+      <div class="end-field"><div class="ef-l">이동유형</div><div class="ef-v" style="color:${mc}">${m.mvtLbl} ${m.mvt}</div></div>
+      <div class="end-field"><div class="ef-l">원입고문서</div><div class="ef-v mono">${m.srcDoc}/${m.srcZeile}</div></div>
+      <div class="end-field"><div class="ef-l">처리일시</div><div class="ef-v">${m.dt}</div></div>
+      <div class="end-field"><div class="ef-l">자재번호</div><div class="ef-v mono">${m.matnr}</div></div>
+      <div class="end-field"><div class="ef-l">공급업체</div><div class="ef-v">${m.lifnr_nm}</div></div>
+    </div>
+    <div class="end-field" style="margin-top:4px"><div class="ef-l">이동수량</div><div class="ef-v" style="font-size:20px;font-weight:700;color:${mc}">${m.qty.toLocaleString()} <span style="font-size:12px;color:var(--ts)">${m.meins}</span></div></div>
+    <div class="end-field"><div class="ef-l">처리자</div><div class="ef-v">${m.processedBy}</div></div>`;
+}
+function closeEndCol(){document.getElementById("endCol").className="end-col";selMoveDoc=null;}
+
+function setReadonly(on){
+  ["defNote"].forEach(id=>document.getElementById(id).disabled=on);
+  document.getElementById("btnSave").disabled=on;
+  document.querySelectorAll(".ditem").forEach(el=>{el.style.pointerEvents=on?"none":"";el.style.opacity=on?".7":"";});
+  if(on){document.getElementById("q_pass").disabled=true;document.getElementById("q_hold").disabled=true;}
+}
+function buildDGrid(sel){document.getElementById("dgrid").innerHTML=DEFECTS.map(d=>{const on=sel.includes(d)?"on":"";return`<div class="ditem ${on}" onclick="toggleD(this)"><input type="checkbox" ${on?"checked":""}><span>${d}</span></div>`;}).join("");}
+function toggleD(el){el.classList.toggle("on");el.querySelector("input").checked=el.classList.contains("on");onQ();}
+
+function selectRow(key){
+  selKey=key;selMoveDoc=null;
+  const r=data.find(d=>getKey(d)===key);if(!r)return;
+  const done=isDone(r.status),err=isErr(r.status);
+  document.getElementById("opEmpty").style.display="none";
+  document.getElementById("opPage").style.display="flex";
+  document.getElementById("op_key").textContent=r.matnr+" / "+r.zeile+"행";
+  document.getElementById("op_badge").innerHTML=`<span class="badge ${bc(r.status)}">${bcLbl(r.status)}</span>`;
+  document.getElementById("op_name").textContent=r.maktx;
+  document.getElementById("op_meta").textContent="공급업체: "+r.lifnr_nm+" · "+r.werks+"/"+r.lgort;
+  document.getElementById("op_qty").textContent=r.menge.toLocaleString();
+  document.getElementById("op_unit").textContent=r.meins;
+  document.getElementById("op_attrs").innerHTML=
+    `<div class="op-attr"><div class="al">문서번호/행</div><div class="av mono">${r.mblnr}/${r.zeile}</div></div>`+
+    `<div class="op-attr"><div class="al">구매오더</div><div class="av mono">${r.ebeln}</div></div>`+
+    `<div class="op-attr"><div class="al">배치번호</div><div class="av mono">${r.charg}</div></div>`+
+    `<div class="op-attr"><div class="al">전기일</div><div class="av">${r.budat}</div></div>`;
+  document.getElementById("roNotice").style.display=done&&!err?"flex":"none";
+  document.getElementById("errNotice").style.display=err?"flex":"none";
+  if(err) document.getElementById("errMsg").textContent=r.errMsg||"재고 이동문서 생성에 실패했습니다.";
+  document.getElementById("btnSave").style.display=err?"none":"";
+  document.getElementById("btnRetry").style.display=err?"":"none";
+  document.getElementById("q_pass").value=r.passQty!==undefined?r.passQty:"";
+  document.getElementById("q_hold").value=r.holdQty!==undefined?r.holdQty:"";
+  document.getElementById("defNote").value=r.defNote||"";
+  buildDGrid(r.defects||[]);
+  selUdCode=r.udCode||null;
+  renderInspTab(key,r,done);
+  if(done){
+    document.getElementById("udLocked").style.display="none";
+    document.getElementById("udGrid").style.display="grid";
+    document.getElementById("udGrid").innerHTML=UD_CODES.map(u=>{const sc=u.code===r.udCode?` sel-${u.type}`:"";return`<div class="ud-item${sc} disabled"><div class="ud-code" style="color:${u.code===r.udCode?u.color:"var(--tp)"}">${u.code}</div><div class="ud-label">${u.label}</div><div class="ud-desc">${u.desc}</div></div>`;}).join("");
+    const ud=UD_CODES.find(u=>u.code===r.udCode);
+    document.getElementById("qtyUdSummary").style.display=ud?"flex":"none";
+    if(ud)document.getElementById("qtyUdSummary").innerHTML=`<span style="font-family:var(--mono);font-weight:700;font-size:14px">${r.udCode}</span><span style="font-weight:600">${ud.label}</span><span style="color:var(--ts);font-size:11px">${ud.desc}</span>`;
+    const el=document.getElementById("autoV");
+    el.className=err?"auto-v av-err":"auto-v av-done";
+    if(err)el.innerHTML="&#9888; &nbsp;이동오류 — 이동문서 생성 실패";
+    else if(r.status==="합격")el.innerHTML=`✓ [${r.udCode}] 판정 완료 — 321 원자재창고 이동문서 생성됨`;
+    else el.innerHTML=`◑ [${r.udCode}] 판정 완료 — 이동문서 생성됨`;
+    document.getElementById("footerHint").innerHTML=err?"&#9888; 이동문서 재처리 필요":"판정 완료 건입니다. 조회만 가능합니다.";
+    const pt=document.getElementById("previewTitle");
+    pt.textContent=err?"이동오류 — 생성 실패":"생성된 이동문서";pt.style.color=err?"var(--Err)":"var(--G)";
+    const rows=[];
+    if((r.passQty||0)>0)rows.push(`<div class="pr-row ${err?"pr-err":"pr-pass"}"><span class="pr-mvt ${err?"e":"p"}">321</span><span class="pr-lbl">QI → 원자재(SL10)${err?" ✓":""}</span><span class="pr-qty ${err?"e":"p"}">${r.passQty.toLocaleString()} ${r.meins}</span></div>`);
+    if((r.holdQty||0)>0)rows.push(`<div class="pr-row ${err?"pr-err":"pr-hold"}"><span class="pr-mvt ${err?"e":"h"}">322</span><span class="pr-lbl">QI → 보류(SL50)${err?" ✗ 실패":""}</span><span class="pr-qty ${err?"e":"h"}">${r.holdQty.toLocaleString()} ${r.meins}</span></div>`);
+    document.getElementById("prRows").innerHTML=rows.length?rows.join(""):`<div class="pr-empty">해당 없음</div>`;
+    document.getElementById("defSection").style.display=(r.holdQty||0)>0?"":"none";
+    renderBreadcrumb(r.status);
+    setReadonly(true);
+    document.getElementById("q_pass").disabled=true;document.getElementById("q_hold").disabled=true;
+  } else {
+    const allJ=getAllJudges(key,r);const plan=INSP_PLANS[key];
+    const total=plan?plan.chars.length:0;const dc=plan?plan.chars.filter(c=>(r.inspValues||{})[c.id]!==undefined&&(r.inspValues||{})[c.id]!=="").length:0;
+    updateUDLock(key,r,allJ,!plan||dc===total);
+    if(selUdCode){const ud=UD_CODES.find(u=>u.code===selUdCode);if(ud){if(ud.qtyMode==="full_pass"){document.getElementById("q_pass").disabled=true;document.getElementById("q_hold").disabled=true;}else if(ud.qtyMode==="full_hold"){document.getElementById("q_pass").disabled=true;document.getElementById("q_hold").disabled=true;}else{document.getElementById("q_pass").disabled=false;document.getElementById("q_hold").disabled=false;}}}
+    else{document.getElementById("q_pass").disabled=false;document.getElementById("q_hold").disabled=false;}
+    setReadonly(false);onQ();
+  }
+  switchTab(done?"qty":"insp");updateFooterButtons();closeEndCol();renderWorklist();
+}
+
+/* ── 저장/재처리 ── */
+function openConfirmDialog(){
+  if(!selKey)return;const r=data.find(d=>getKey(d)===selKey);if(!r||isDone(r.status))return;
+  if(!selUdCode){showToast("판정코드(UD)를 선택하세요");switchTab("ud");return;}
+  const p=parseFloat(document.getElementById("q_pass").value)||0,h=parseFloat(document.getElementById("q_hold").value)||0;
+  if(!p&&!h){showToast("합격 또는 보류 수량을 입력하세요");switchTab("qty");return;}
+  if(p+h>r.menge){showToast("수량 합계가 입고 수량을 초과합니다");return;}
+  if(p+h!==r.menge){showToast("합격+보류("+((p+h).toLocaleString())+")이 입고수량("+r.menge.toLocaleString()+")과 일치해야 합니다");return;}
+  const defs=[...document.querySelectorAll(".ditem.on")].map(e=>e.querySelector("span").textContent);
+  const needDef=(h>0)||(selUdCode==="H1"||selUdCode==="R2");
+  if(needDef&&defs.length===0){showToast("보류/불량 유형을 반드시 선택하세요");switchTab("qty");return;}
+  const ud=UD_CODES.find(u=>u.code===selUdCode);
+  const allJ=getAllJudges(selKey,r);const pass=allJ.filter(j=>j==="pass").length,fail=allJ.filter(j=>j==="fail").length,warn=allJ.filter(j=>j==="warn").length;
+  document.getElementById("cf_name").textContent=r.maktx;
+  document.getElementById("cf_ud").innerHTML=`<span style="font-family:var(--mono);font-weight:700">${selUdCode}</span> ${ud?ud.label:""}`;
+  document.getElementById("cf_insp").textContent=allJ.length?`합격 ${pass} / 불합격 ${fail} / 주의 ${warn}`:"검사계획 없음";
+  document.getElementById("cf_total").textContent=r.menge.toLocaleString()+" "+r.meins;
+  document.getElementById("cf_pass").textContent=p.toLocaleString()+" "+r.meins+(p>0?" (321→SL10)":"");
+  document.getElementById("cf_hold").textContent=h.toLocaleString()+" "+r.meins+(h>0?" (322→SL50)":"");
+  let movesHtml="";
+  if(p>0)movesHtml+=`<div class="confirm-move-row pass"><span style="font-family:var(--mono);font-weight:700;color:var(--G);min-width:28px">321</span><span style="color:var(--ts);flex:1">SL40→SL10 원자재창고</span><span style="font-family:var(--mono);font-weight:700;color:var(--G)">${p.toLocaleString()} ${r.meins}</span></div>`;
+  if(h>0)movesHtml+=`<div class="confirm-move-row hold"><span style="font-family:var(--mono);font-weight:700;color:var(--O);min-width:28px">322</span><span style="color:var(--ts);flex:1">SL40→SL50 보류창고</span><span style="font-family:var(--mono);font-weight:700;color:var(--O)">${h.toLocaleString()} ${r.meins}</span></div>`;
+  document.getElementById("cf_moves").innerHTML=movesHtml;
+  document.getElementById("dlgConfirm").className="dialog-overlay open";
+}
+
+function doSave(){
+  closeDlg("dlgConfirm");if(!selKey)return;
+  const r=data.find(d=>getKey(d)===selKey);if(!r||isDone(r.status))return;
+  const p=parseFloat(document.getElementById("q_pass").value)||0,h=parseFloat(document.getElementById("q_hold").value)||0;
+  const defs=[...document.querySelectorAll(".ditem.on")].map(e=>e.querySelector("span").textContent);
+  const ns=calcSt(p,h);const oi=data.findIndex(d=>getKey(d)===selKey);
+  data[oi]={...data[oi],status:ns,passQty:p,holdQty:h,defects:defs,defNote:document.getElementById("defNote").value,udCode:selUdCode};
+  const fi=filtered.findIndex(d=>getKey(d)===selKey);if(fi>=0)filtered[fi]=data[oi];
+  const nowStr=TODAY+" "+new Date().toTimeString().slice(0,5);
+  if(p>0)moveHistory.push(mkMove("321","QI→원자재",r,p,"SL10",ns,nowStr));
+  if(h>0)moveHistory.push(mkMove("322","QI→보류",r,h,"SL50",ns,nowStr));
+  const ud=UD_CODES.find(u=>u.code===selUdCode);
+  showToast(`✓ [${selUdCode}] ${ud?ud.label:""} — ${ns==="합격"?"321 이동문서 생성":ns==="보류"?"321+322 이동문서 생성":"322 이동문서 생성"} · ${ns} 목록으로 이동됨`);
+  setWlFilter(ns);selectRow(selKey);
+}
+
+function openRetryDialog(){
+  if(!selKey)return;const r=data.find(d=>getKey(d)===selKey);if(!r||!isErr(r.status))return;
+  document.getElementById("rt_errMsg").textContent=r.errMsg||"이동문서 생성 실패";
+  document.getElementById("rt_srcDoc").textContent=r.mblnr+" / "+r.zeile+"행";
+  document.getElementById("rt_mvt").textContent="322 (QI→보류)";
+  document.getElementById("rt_qty").textContent=(r.holdQty||0).toLocaleString()+" "+r.meins;
+  document.getElementById("rt_to").textContent="SL50 보류창고";
+  document.getElementById("dlgRetry").className="dialog-overlay open";
+}
+function doRetry(){
+  closeDlg("dlgRetry");if(!selKey)return;
+  const r=data.find(d=>getKey(d)===selKey);if(!r||!isErr(r.status))return;
+  const nowStr=TODAY+" "+new Date().toTimeString().slice(0,5);
+  if((r.holdQty||0)>0)moveHistory.push(mkMove("322","QI→보류",r,r.holdQty,"SL50","보류",nowStr));
+  const oi=data.findIndex(d=>getKey(d)===selKey);
+  data[oi]={...data[oi],status:"보류",errMsg:undefined};
+  const fi=filtered.findIndex(d=>getKey(d)===selKey);if(fi>=0)filtered[fi]=data[oi];
+  setWlFilter("보류");showToast("✓ 재처리 완료 — 322 보류창고 이동문서 생성됨");selectRow(selKey);
+}
+
+/* ══ 이력 조회 ══ */
+function clearHistFilter(){["hfMat","hfVnd","hfDf","hfDt"].forEach(id=>document.getElementById(id).value="");document.getElementById("hfSt").value="";renderHistPage();}
+
+function renderHistPage(){
+  const mat=document.getElementById("hfMat").value.toLowerCase();
+  const vnd=document.getElementById("hfVnd").value.toLowerCase();
+  const st=document.getElementById("hfSt").value;
+  const df=document.getElementById("hfDf").value,dt=document.getElementById("hfDt").value;
+  const rows=data.filter(r=>{
+    if(mat&&!r.matnr.toLowerCase().includes(mat)&&!r.maktx.toLowerCase().includes(mat))return false;
+    if(vnd&&!r.lifnr_nm.toLowerCase().includes(vnd))return false;
+    if(st&&r.status!==st)return false;
+    if(df&&r.budat<df)return false;if(dt&&r.budat>dt)return false;
+    return true;
+  });
+  document.getElementById("hListTotal").textContent=rows.length+"건";
+  const list=document.getElementById("hCardList");
+  if(!rows.length){list.innerHTML=`<div style="padding:24px;text-align:center;color:var(--tm);font-size:12px">조회 결과가 없습니다</div>`;return;}
+  list.innerHTML=rows.map(r=>{
+    const key=getKey(r);const lot=getLot(key);
+    const isSel=key===selHistKey;
+    const selCls=isSel?` sel sel-${r.status==="합격"?"pass":r.status==="보류"?"hold":r.status==="불량"?"fail":r.status==="이동오류"?"err":""}` : "";
+    const stBadge=`<span class="badge ${bc(r.status)}" style="font-size:9px;padding:1px 6px">${bcLbl(r.status)}</span>`;
+    const passV=(r.passQty||0)>0?`<div class="hlc-qty"><div class="hlc-qty-lbl">합격</div><div class="hlc-qty-val" style="color:var(--G)">${r.passQty.toLocaleString()}</div></div>`:"";
+    const holdV=(r.holdQty||0)>0?`<div class="hlc-qty"><div class="hlc-qty-lbl">보류</div><div class="hlc-qty-val" style="color:var(--O)">${r.holdQty.toLocaleString()}</div></div>`:"";
+    return`<div class="hlot-card${selCls}" onclick="selectHistRow('${key}')">
+      <div class="hlc-row1">
+        <span class="hlc-lot">${lot}</span>
+        ${stBadge}
+      </div>
+      <div class="hlc-name">${r.maktx}</div>
+      <div class="hlc-meta">${r.matnr} · ${r.lifnr_nm}<br>${r.budat} · GR ${r.mblnr}</div>
+      <div class="hlc-qty-row">
+        <div class="hlc-qty"><div class="hlc-qty-lbl">입고</div><div class="hlc-qty-val">${r.menge.toLocaleString()}</div></div>
+        ${passV}${holdV}
+        <div style="margin-left:auto;font-size:10px;color:var(--tm);align-self:flex-end">${r.meins}</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+let curHTab="insp";
+function switchHTab(t){
+  curHTab=t;
+  ["insp","docs","err","log"].forEach(id=>{
+    document.getElementById("htab-"+id).className="hd-tab"+(t===id?" active":"");
+    document.getElementById("hpane-"+id).className="hd-tab-pane"+(t===id?" active":"");
+  });
+}
+
+function selectHistRow(key){
+  selHistKey=key;
+  renderHistPage();
+  const r=data.find(d=>getKey(d)===key);if(!r)return;
+  const lot=getLot(key);
+  const ud=UD_CODES.find(u=>u.code===r.udCode);
+  const rel=moveHistory.filter(m=>m.srcDoc===r.mblnr&&m.srcZeile===r.zeile);
+  const moves321=rel.filter(m=>m.mvt==="321");
+  const moves322=rel.filter(m=>m.mvt==="322");
+  const judged=isDone(r.status);
+  const isErrLot=r.status==="이동오류";
+
+  document.getElementById("hDetailEmpty").style.display="none";
+  document.getElementById("hDetailContent").style.display="flex";
+
+  /* ── 1. 상단 요약 카드 ── */
+  document.getElementById("hSum").innerHTML=`
+    <div class="hd-sum-main">
+      <div class="hd-sum-lot">${lot}</div>
+      <div class="hd-sum-name">${r.maktx}</div>
+      <div class="hd-sum-sub">${r.matnr} · ${r.lifnr_nm} · 배치 ${r.charg}</div>
+      <div class="hd-sum-fields">
+        <div class="hd-sf"><div class="sf-l">입고일</div><div class="sf-v">${r.budat}</div></div>
+        <div class="hd-sf"><div class="sf-l">판정코드</div><div class="sf-v mono">${r.udCode||"—"}${ud?" "+ud.label:""}</div></div>
+        <div class="hd-sf"><div class="sf-l">판정자</div><div class="sf-v">이하영</div></div>
+        <div class="hd-sf"><div class="sf-l">판정일시</div><div class="sf-v">${judged?"2026-06-09 09:15":"—"}</div></div>
+        <div class="hd-sf"><div class="sf-l">GR 문서</div><div class="sf-v mono">${r.mblnr}/${r.zeile}행</div></div>
+        <div class="hd-sf"><div class="sf-l">구매오더</div><div class="sf-v mono">${r.ebeln}</div></div>
+        <div class="hd-sf"><div class="sf-l">저장위치</div><div class="sf-v">SL40 품질검사창고</div></div>
+        <div class="hd-sf"><div class="sf-l">검사계획</div><div class="sf-v mono">${(INSP_PLANS[key]||SAVED_INSP[key]||{}).plan||"—"}</div></div>
+      </div>
+    </div>
+    <div class="hd-sum-right">
+      <span class="badge ${bc(r.status)}" style="font-size:13px;padding:5px 12px">${bcLbl(r.status)}</span>
+      ${ud?`<div style="font-family:var(--mono);font-size:12px;font-weight:700;color:${ud.color};background:var(--bg);border:1px solid var(--bd2);border-radius:var(--r);padding:4px 10px">${ud.code}</div>`:""}
+      <button class="btn-ghost" style="font-size:10px;height:24px;padding:0 8px" onclick="goToJudge()">↗ 판정화면</button>
+    </div>`;
+
+  /* ── 2. 판정 결과 카드 ── */
+  const total=r.menge,pass=r.passQty||0,hold=r.holdQty||0,fail=total-pass-hold>0?total-pass-hold:0;
+  const passP=total>0?Math.round(pass/total*100):0;
+  const holdP=total>0?Math.round(hold/total*100):0;
+  const failP=100-passP-holdP;
+  const defTags=(r.defects||[]).map(d=>`<span class="hd-rtag">${d}</span>`).join("");
+  document.getElementById("hResult").innerHTML=`
+    <div class="hd-result-title">판정 결과</div>
+    <div class="hd-result-qty">
+      <div class="hd-rq-item">
+        <div class="hd-rq-lbl">입고수량</div>
+        <div class="hd-rq-val">${total.toLocaleString()} <span class="hd-rq-unit">${r.meins}</span></div>
+      </div>
+      <div class="hd-rq-item">
+        <div class="hd-rq-lbl">합격수량</div>
+        <div class="hd-rq-val" style="color:${pass>0?"var(--G)":"var(--tm)"}">${pass>0?pass.toLocaleString():"—"} <span class="hd-rq-unit">${pass>0?r.meins:""}</span></div>
+      </div>
+      <div class="hd-rq-item">
+        <div class="hd-rq-lbl">보류수량</div>
+        <div class="hd-rq-val" style="color:${hold>0?"var(--O)":"var(--tm)"}">${hold>0?hold.toLocaleString():"—"} <span class="hd-rq-unit">${hold>0?r.meins:""}</span></div>
+      </div>
+      <div class="hd-rq-item">
+        <div class="hd-rq-lbl">불량수량</div>
+        <div class="hd-rq-val" style="color:${fail>0?"var(--R)":"var(--tm)"}">${fail>0?fail.toLocaleString():"—"} <span class="hd-rq-unit">${fail>0?r.meins:""}</span></div>
+      </div>
+    </div>
+    ${judged?`<div class="hd-result-bar"><div class="hd-rb-pass" style="width:${passP}%"></div><div class="hd-rb-hold" style="width:${holdP}%"></div><div class="hd-rb-fail" style="width:${failP}%"></div></div>`:""}
+    ${defTags?`<div style="font-size:10px;color:var(--tm);margin-bottom:5px;font-weight:600">품질 이상 유형</div><div class="hd-result-tags">${defTags}</div>`:""}
+    ${r.defNote?`<div class="hd-defnote">📝 ${r.defNote}</div>`:""}
+    ${!judged?`<div style="font-size:11px;color:var(--tm);padding:8px 0">아직 판정이 완료되지 않았습니다.</div>`:""}`;
+
+  /* ── 3. 가로 문서 흐름 ── */
+  const steps=[];
+  // Step 1: GR 입고
+  steps.push({dot:"done",dotLabel:"GR",cardCls:"c-blue",type:"GR · 101 QM입고",doc:r.mblnr+"/"+r.zeile+"행",detail:`SL40 품질검사창고<br>배치 ${r.charg}<br>PO ${r.ebeln}`,qty:r.menge+" "+r.meins,status:"ok",statusLbl:"완료"});
+  // Step 2: 검사로트
+  steps.push({dot:"done",dotLabel:"QM",cardCls:"c-qm",type:"검사로트 (QM)",doc:lot,detail:`${(INSP_PLANS[key]||SAVED_INSP[key]||{}).type||"01 입고검사"}<br>${(INSP_PLANS[key]||SAVED_INSP[key]||{}).plan||"—"}`,qty:"",status:judged?"ok":"pending",statusLbl:judged?"완료":"대기"});
+  // Step 3: UD 판정
+  steps.push({dot:judged?"done":"active",dotLabel:"UD",cardCls:judged?"c-qm":"",type:"Usage Decision",doc:r.udCode||(judged?"—":"판정 대기"),detail:ud?`${ud.label}<br>판정자 이하영<br>2026-06-09 09:15`:`판정 대기`,qty:"",status:judged?"ok":"pending",statusLbl:judged?"완료":"대기"});
+  // Step 4: 321 (합격이 있으면)
+  if(judged&&pass>0){
+    const m321=moves321[0];
+    steps.push({dot:m321?"done":"pending",dotLabel:"321",cardCls:"c-pass",type:"321 · QI→가용재고",doc:m321?m321.docNo:"생성 대기",detail:`SL40 → SL10<br>원자재창고<br>${m321?m321.dt:"—"}`,qty:pass.toLocaleString()+" "+r.meins,status:m321?"ok":"pending",statusLbl:m321?"완료":"대기"});
+  }
+  // Step 5: 322 (보류/오류)
+  if(judged&&hold>0){
+    const m322=moves322[0];const hasErr=isErrLot&&!m322;
+    steps.push({dot:hasErr?"err":m322?"done-o":"pending",dotLabel:"322",cardCls:hasErr?"c-err":"c-hold",type:"322 · QI→보류재고",doc:hasErr?"생성 실패":m322?m322.docNo:"생성 대기",detail:hasErr?`SL40 → SL50<br>보류창고<br><span style="color:var(--Err)">${r.errMsg||"오류"}</span>`:`SL40 → SL50<br>보류창고<br>${m322?m322.dt:"—"}`,qty:hold.toLocaleString()+" "+r.meins,status:hasErr?"err":m322?"ok-o":"pending",statusLbl:hasErr?"오류":m322?"완료":"대기"});
+  }
+
+  const stepsHtml=steps.map((s,i)=>`
+    <div class="hd-step">
+      ${i<steps.length-1?`<div class="hd-step-connector"></div>`:""}
+      <div class="hd-step-inner">
+        <div class="hd-step-dot ${s.dot}">${s.dotLabel}</div>
+        <div class="hd-step-card ${s.cardCls}">
+          <div class="hd-sc-type">${s.type}</div>
+          <div class="hd-sc-doc">${s.doc}</div>
+          <div class="hd-sc-detail">${s.detail}</div>
+          ${s.qty?`<div class="hd-sc-qty">${s.qty}</div>`:""}
+          <div class="hd-sc-status ${s.status}">${s.statusLbl}</div>
+        </div>
+      </div>
+    </div>`).join("");
+  document.getElementById("hFlow").innerHTML=`<div class="hd-flow-title">문서 흐름</div><div class="hd-flow-steps">${stepsHtml}</div>`;
+
+  /* ── 4. 탭 콘텐츠 ── */
+  // 검사결과 탭
+  const src=SAVED_INSP[key]||INSP_PLANS[key];
+  if(src&&src.chars){
+    const rows=src.chars.map(c=>{
+      const val=c.savedVal||(r.inspValues||{})[c.id]||"—";
+      const jg=c.judge||(r.inspValues?getCharJudge(c,(r.inspValues||{})[c.id]||""):"pend");
+      const jBadge=judgeLabel(jg);
+      return`<tr><td style="font-weight:600">${c.name}</td><td style="color:var(--ts)">${c.std}</td><td>${val}</td><td>${jBadge}</td></tr>`;
+    }).join("");
+    document.getElementById("hpane-insp").innerHTML=`
+      <div style="font-size:11px;color:var(--ts);margin-bottom:8px">검사계획 ${src.plan||"—"} · 검사유형 ${src.type||"—"} · 샘플 ${src.sample||"—"}</div>
+      <table class="insp-result-table">
+        <thead><tr><th>검사항목</th><th>기준</th><th>측정값</th><th>판정</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>`;
+  } else {
+    document.getElementById("hpane-insp").innerHTML=`<div style="color:var(--tm);font-size:12px;padding:12px 0">등록된 검사결과가 없습니다.</div>`;
+  }
+
+  // 자재문서 탭
+  const grChip=`<div class="matdoc-chip c-gr"><div class="mc-type">GR · 이동유형 101</div><div class="mc-doc">${r.mblnr}/${r.zeile}행</div><div class="mc-detail">QM입고 → SL40 품질검사창고<br>배치 ${r.charg} · ${r.menge.toLocaleString()} ${r.meins}<br>전기일 ${r.budat}</div></div>`;
+  const chips321=moves321.map(m=>`<div class="matdoc-chip c-321"><div class="mc-type">TR · 이동유형 321</div><div class="mc-doc">${m.docNo}</div><div class="mc-detail">SL40 → SL10 원자재창고<br>${m.qty.toLocaleString()} ${m.meins}<br>${m.dt}</div></div>`).join("");
+  const chips322=moves322.map(m=>`<div class="matdoc-chip c-322"><div class="mc-type">TR · 이동유형 322</div><div class="mc-doc">${m.docNo}</div><div class="mc-detail">SL40 → SL50 보류창고<br>${m.qty.toLocaleString()} ${m.meins}<br>${m.dt}</div></div>`).join("");
+  const errChip=isErrLot&&!moves322.length?`<div class="matdoc-chip c-err"><div class="mc-type">TR · 이동유형 322</div><div class="mc-doc" style="color:var(--Err)">생성 실패</div><div class="mc-detail" style="color:var(--Err)">${r.errMsg||"이동문서 생성 실패"}</div></div>`:"";
+  document.getElementById("hpane-docs").innerHTML=`<div class="matdoc-row">${grChip}${chips321}${chips322}${errChip}</div>`;
+
+  // 오류/재처리 탭
+  if(isErrLot){
+    document.getElementById("hpane-err").innerHTML=`
+      <div class="err-track-box">
+        <div class="etb-title">⚠ 이동문서 생성 오류</div>
+        <div class="etb-msg">${r.errMsg||"322 이동문서 생성 실패"}</div>
+      </div>
+      <div style="font-size:11px;color:var(--ts)">
+        <div style="margin-bottom:4px"><strong>실패 이동유형:</strong> 322 (QI→보류재고)</div>
+        <div style="margin-bottom:4px"><strong>대상 수량:</strong> ${hold.toLocaleString()} ${r.meins}</div>
+        <div style="margin-bottom:4px"><strong>도착 창고:</strong> SL50 보류창고</div>
+        <div style="margin-bottom:12px"><strong>원인:</strong> SL50 창고 잠금 상태</div>
+      </div>
+      <button class="btn-ghost" style="font-size:11px" onclick="switchPage('judge');selectRow('${key}');setWlFilter('이동오류')">↗ 판정화면에서 재처리</button>`;
+  } else {
+    document.getElementById("hpane-err").innerHTML=`<div class="no-err-box">오류 이력 없음</div>`;
+  }
+
+  // 변경이력 탭
+  document.getElementById("hpane-log").innerHTML=`
+    <table class="insp-result-table">
+      <thead><tr><th>일시</th><th>작업</th><th>작업자</th><th>내용</th></tr></thead>
+      <tbody>
+        <tr><td>${r.budat} 08:30</td><td>GR 입고</td><td>시스템</td><td>101 이동 · SL40 입고 · ${r.menge.toLocaleString()} ${r.meins}</td></tr>
+        ${judged?`<tr><td>2026-06-09 09:15</td><td>품질판정</td><td>이하영</td><td>${r.udCode||""} ${ud?ud.label:""} · 합격 ${pass} / 보류 ${hold} ${r.meins}</td></tr>`:""}
+        ${moves321.map(m=>`<tr><td>${m.dt}</td><td>321 이동</td><td>시스템</td><td>SL40→SL10 · ${m.qty.toLocaleString()} ${m.meins} · 자재문서 ${m.docNo}</td></tr>`).join("")}
+        ${moves322.map(m=>`<tr><td>${m.dt}</td><td>322 이동</td><td>시스템</td><td>SL40→SL50 · ${m.qty.toLocaleString()} ${m.meins} · 자재문서 ${m.docNo}</td></tr>`).join("")}
+        ${isErrLot&&!moves322.length?`<tr><td>2026-06-07 14:32</td><td style="color:var(--Err)">322 오류</td><td>시스템</td><td style="color:var(--Err)">${r.errMsg||"이동문서 생성 실패"}</td></tr>`:""}
+      </tbody>
+    </table>`;
+
+  switchHTab(curHTab);
+}
+
+function goToJudge(){
+  if(!selHistKey)return;
+  switchPage("judge");
+  selectRow(selHistKey);
+  setWlFilter("all");
+}
+
+function closeDlg(id){document.getElementById(id).className="dialog-overlay";}
+function clearSel(){selKey=null;selUdCode=null;closeEndCol();showEmpty();renderWorklist();}
+function showEmpty(){document.getElementById("opEmpty").style.display="flex";document.getElementById("opPage").style.display="none";}
+function doRefresh(){
+  data=RAW.map(r=>({...r,inspValues:{...r.inspValues}}));filtered=[...data];
+  selKey=null;selUdCode=null;selHistKey=null;initMoveHistory();closeEndCol();showEmpty();
+  clearFilter();wlFilter="판정대기";setWlFilter("판정대기");
+  renderHistPage();showToast("새로고침 완료");
+}
+function exportCSV(){
+  const hd=["문서번호","행","자재번호","자재명","공급업체","수량","단위","전기일","판정코드","판정상태","합격수량","보류수량","보류유형","보류상세"];
+  const rows=data.map(r=>[r.mblnr,r.zeile,r.matnr,r.maktx,r.lifnr_nm,r.menge,r.meins,r.budat,r.udCode||"",r.status,r.passQty||"",r.holdQty||"",(r.defects||[]).join("|"),r.defNote||""]);
+  const csv=[hd,...rows].map(r=>r.map(v=>`"${v}"`).join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"}));a.download="품질판정_"+TODAY+".csv";a.click();showToast("Excel 다운로드 완료");
+}
+function showToast(msg){const t=document.getElementById("toast");t.textContent=msg;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),3500);}
+
+renderWorklist();updateKPI();
+</script>
+</body>
+</html>
+

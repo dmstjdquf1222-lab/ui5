@@ -1,0 +1,189 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "zuifec12",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.20.2",
+      "toolsId": "5e5b4403-3cb0-46dd-b582-2e5ad0a306dc"
+    },
+    "dataSources": {
+      "annotation": {
+        "type": "ODataAnnotation",
+        "uri": "annotations/annotation.xml",
+        "settings": {
+          "localUri": "annotations/annotation.xml"
+        }
+      },
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zui_tfec12_o4/srvd/sap/zui_tfec12_o4/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [
+            "annotation"
+          ],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.120.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "zuifec12.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "ZC_TFEC12List",
+          "target": "ZC_TFEC12List"
+        },
+        {
+          "pattern": "ZC_TFEC12({key}):?query:",
+          "name": "ZC_TFEC12ObjectPage",
+          "target": "ZC_TFEC12ObjectPage"
+        }
+      ],
+      "targets": {
+        "ZC_TFEC12List": {
+          "type": "Component",
+          "id": "ZC_TFEC12List",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/ZC_TFEC12",
+              "variantManagement": "Page",
+              "navigation": {
+                "ZC_TFEC12": {
+                  "detail": {
+                    "route": "ZC_TFEC12ObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  },
+                  "columns": {
+                    "RemainSeatsCol": {
+                      "header": "Remain Seats",
+                      "position": {
+                        "anchor": "DataField::SeatsOccupied",
+                        "placement": "After"
+                      },
+                      "template": "zuifec12.ext.fragment.RemainSeatsCol"
+                    }
+                  }
+                },
+                "@com.sap.vocabularies.UI.v1.SelectionFields": {
+                  "filterFields": {
+                    "idSeatsOccFilter": {
+                      "label": "Seats Occ",
+                      "property": "SeatsOccupied",
+                      "template": "zuifec12.ext.fragment.SeatsOccFilter",
+                      "required": false,
+                      "position": {
+                        "placement": "After",
+                        "anchor": "FlightDate"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ZC_TFEC12ObjectPage": {
+          "type": "Component",
+          "id": "ZC_TFEC12ObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/ZC_TFEC12"
+            }
+          }
+        }
+      }
+    },
+    "extends": {
+      "extensions": {
+        "sap.ui.controllerExtensions": {
+          "sap.fe.templates.ListReport.ListReportController": {
+            "controllerName": "zuifec12.ext.controller.ListReportCont"
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  },
+  "sap.fe": {
+    "app": {
+      "enableLazyLoading": true
+    }
+  }
+}

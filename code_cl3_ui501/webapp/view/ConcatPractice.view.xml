@@ -14,7 +14,7 @@
             <Panel
                 class="sapUiResponsiveMargin"
                 headerText="Concat practice"
-                width="55rem"
+                width="68rem"
             >
                 <t:Table
                     rows="{/ConcatSet}"
@@ -27,8 +27,8 @@
                     </t:extension>
 
                     <t:columns>
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
+                        <t:Column width="8rem">
+                            <Label text="Airline" />
                             <t:template>
                                 <Text
                                     text="{carrid}"
@@ -36,8 +36,8 @@
                                 />
                             </t:template>
                         </t:Column>
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
+                        <t:Column width="8rem">
+                            <Label text="Connection" />
                             <t:template>
                                 <Text
                                     text="{connid}"
@@ -45,8 +45,8 @@
                                 />
                             </t:template>
                         </t:Column>
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
+                        <t:Column width="8rem">
+                            <Label text="Flight date" />
                             <t:template>
                                 <Text
                                     text="{Fldate}"
@@ -54,8 +54,8 @@
                                 />
                             </t:template>
                         </t:Column>
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
+                        <t:Column width="8rem">
+                            <Label text="Book ID" />
                             <t:template>
                                 <Text
                                     text="{bookid}"
@@ -63,17 +63,8 @@
                                 />
                             </t:template>
                         </t:Column>
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
-                            <t:template>
-                                <Text
-                                    text="{Deptime}"
-                                    wrapping="false"
-                                />
-                            </t:template>
-                        </t:Column>
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
+                        <t:Column width="8rem">
+                            <Label text="Custom ID" />
                             <t:template>
                                 <Text
                                     text="{customid}"
@@ -81,50 +72,32 @@
                                 />
                             </t:template>
                         </t:Column>
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
+                        <t:Column width="8rem">
+                            <Label text="Depature time" />
                             <t:template>
                                 <Text
-                                    text="{luggweight}"
+                                    text="{Deptime}"
                                     wrapping="false"
                                 />
                             </t:template>
                         </t:Column>
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
+                        <t:Column width="8rem">
+                            <Label text="Distance" />
                             <t:template>
                                 <Text
-                                    text="{wunit}"
+                                    text="{parts:[{path:'luggweight'},{path:'wunit'}],
+	                                type: 'sap.ui.model.type.Unit',
+	                                formatOptions: {showMeasure: false }}"
                                     wrapping="false"
                                 />
                             </t:template>
                         </t:Column>
-                        <!-- <t:Column width="10rem">
-                            <Label text="Material code" />
-                            <t:template>
-                                <Text
-                                    text="{forcuram}"
-                                    wrapping="false"
-                                />
-                            </t:template>
-                        </t:Column> -->
-
-                        <t:Column width="7rem">
+                        <t:Column width="8rem">
                             <Label text="Foreign Amount" />
                             <t:template>
                                 <Text
-                                    text="{ parts:[{path:'ConcatSet>forcuram'},{path:'ConcatSet>forcurkey'}],
-                                    type: 'sap.ui.model.type.Currency',formatOptions: {showMeasure: true }}"
-                                    wrapping="false"
-                                />
-                            </t:template>
-                        </t:Column>
-
-                        <t:Column width="10rem">
-                            <Label text="Material code" />
-                            <t:template>
-                                <Text
-                                    text="{forcurkey}"
+                                    text="{ parts:[{path:'forcuram'},{path:'forcurkey'}],
+                                    type: 'sap.ui.model.type.Currency',formatOptions: {showMeasure: false }}"
                                     wrapping="false"
                                 />
                             </t:template>

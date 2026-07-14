@@ -1,0 +1,137 @@
+{
+  "_version": "1.60.0",
+  "sap.app": {
+    "id": "c1.pp.c1pporder",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.20.2",
+      "toolsId": "7ec39c3a-a87e-428f-83f5-a73baad7f6f4"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata4/sap/zrap_c1_pp_0002_bind/srvd/sap/zrap_c1_pp_0002_srv/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "4.0"
+        }
+      },
+      "orderCreateService": {
+        "uri": "/sap/opu/odata4/sap/zrap_c1_pp_0003_bind/srvd/sap/zrap_c1_pp_0003_srv/0001/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.120.0",
+      "libs": {
+        "sap.m": {},
+        "sap.f": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "c1.pp.c1pporder.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "orderCreate": {
+        "dataSource": "orderCreateService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "app",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "c1.pp.c1pporder.view",
+        "async": true,
+        "viewPath": "c1.pp.c1pporder.view"
+      },
+      "routes": [
+        {
+          "name": "Routec1_pp_order",
+          "pattern": ":?query:",
+          "target": [
+            "Targetc1_pp_order"
+          ]
+        }
+      ],
+      "targets": {
+        "Targetc1_pp_order": {
+          "id": "c1_pp_order",
+          "name": "c1_pp_order"
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "c1.pp.c1pporder.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}
+

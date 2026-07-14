@@ -1,0 +1,78 @@
+<mvc:View
+    controllerName="test2.cl312.test2cl312.controller.Test2View"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:c="sap.ui.core"
+    xmlns:viz="sap.viz.ui5.controls"
+    xmlns:layout="sap.ui.layout"
+    xmlns:viz.feeds="sap.viz.ui5.controls.common.feeds"
+    xmlns:viz.data="sap.viz.ui5.data"
+>
+    <Page
+        id="page"
+        title="{i18n>title}"
+    >
+        <Panel
+            class="sapUiResponsiveMargin"
+            headerText="Seats data"
+            width="auto"
+        >
+            <viz:VizFrame
+                id="idVizFrame"
+                uiConfig="{applicationSet:'fiori'}"
+                height='500px'
+                width="1200px"
+                vizType='line'
+                vizProperties="{title:{text:'Seats booking Information'},
+                legend:{drawingEffect:'glossy'},
+                plotArea:{drawingEffect:'glossy'}
+                }"
+            >
+                <viz:dataset>
+                    <viz.data:FlattenedDataset data="{/TestSet}">
+                        <viz.data:dimensions>
+                            <viz.data:DimensionDefinition
+                                name="Airline"
+                                value="{Carrname}"
+                            />
+                        </viz.data:dimensions>
+                        <viz.data:measures>
+                            <viz.data:MeasureDefinition
+                                name="Capacity"
+                                value="{Seatsmax}"
+                            />
+                            <viz.data:MeasureDefinition
+                                name="Occupied"
+                                value="{Seatsocc}"
+                            />
+                        </viz.data:measures>
+                    </viz.data:FlattenedDataset>
+                </viz:dataset>
+
+                <viz:feeds>
+                    <viz.feeds:FeedItem
+                        id='valueAxis1Feed'
+                        uid="valueAxis"
+                        type="Measure"
+                        values="Capacity"
+                    />
+                    <viz.feeds:FeedItem
+                        id='valueAxis2Feed'
+                        uid="valueAxis"
+                        type="Measure"
+                        values="Occupied"
+                    />
+                    <viz.feeds:FeedItem
+                        id='categoryAxisFeed'
+                        uid="categoryAxis"
+                        type="Dimension"
+                        values="Airline"
+                    />
+                </viz:feeds>
+                <viz:dependents>
+                    <viz:Popover id="idPopOver" />
+                </viz:dependents>
+            </viz:VizFrame>
+        </Panel>
+    </Page>
+</mvc:View>

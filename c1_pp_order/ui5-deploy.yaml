@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=https://sap.github.io/ui5-tooling/schema/ui5.yaml.json
+
+specVersion: "4.0"
+metadata:
+  name: c1.pp.c1pporder
+type: application
+builder:
+  resources:
+    excludes:
+      - /test/**
+      - /localService/**
+  customTasks:
+    - name: deploy-to-abap
+      afterTask: generateCachebusterInfo
+      configuration:
+        target:
+          url: http://bgissap1.bgissap.co.kr:8000
+          client: '100'
+        app:
+          name: ZC1_PP_ORDER
+          description: 생산오더관리
+          package: ZPC1PP
+          transport: EFXK902105
+        exclude:
+          - /test/

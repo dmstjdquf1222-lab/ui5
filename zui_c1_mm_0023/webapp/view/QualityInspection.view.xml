@@ -1,0 +1,457 @@
+﻿<mvc:View
+    controllerName="c1.mm.zuic1mm0023.controller.QualityInspection"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:tnt="sap.tnt"
+    xmlns:m="sap.m"
+    xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    displayBlock="true"
+    height="100%">
+
+    <tnt:ToolPage id="toolPage" sideExpanded="true">
+
+        <!-- ── 상단 헤더 툴바 ── -->
+        <tnt:header>
+            <tnt:ToolHeader>
+                <m:Button id="btnToggleNav" icon="sap-icon://menu2" type="Transparent"
+                    tooltip="메뉴 접기/펼치기" press="onToggleSideNav"/>
+                <m:Title text="입고 품질판정" level="H4" titleStyle="H5"/>
+                <m:ToolbarSpacer/>
+                <m:Button id="btnRefresh" icon="sap-icon://refresh" type="Transparent"
+                    tooltip="새로고침" press="onRefresh"/>
+                <m:Text id="txtCurrentDate" text=""/>
+            </tnt:ToolHeader>
+        </tnt:header>
+
+        <!-- ── 사이드 내비게이션 ── -->
+        <tnt:sideContent>
+            <tnt:SideNavigation id="sideNav" itemSelect="onNavItemSelect">
+                <tnt:NavigationList>
+                    <tnt:NavigationListItem id="navJudge" text="품질판정"
+                        icon="sap-icon://quality-issue" key="judge" expanded="true">
+                        <tnt:NavigationListItem id="navAll"     text="전체"    key="ALL"     icon="sap-icon://list"/>
+                        <tnt:NavigationListItem id="navPending" text="판정대기" key="PENDING" icon="sap-icon://pending"/>
+                        <tnt:NavigationListItem id="navPass"    text="합격"      key="PASS"    icon="sap-icon://accept"/>
+                        <tnt:NavigationListItem id="navHold"    text="부분합격"   key="PARTIAL" icon="sap-icon://pause"/>
+                        <tnt:NavigationListItem id="navFail"    text="불합격/보류" key="FAIL"    icon="sap-icon://decline"/>
+                    </tnt:NavigationListItem>
+                    <tnt:NavigationListItem id="navHist" text="이력조회"
+                        icon="sap-icon://history" key="history" expanded="true">
+                        <tnt:NavigationListItem id="navHistAll"  text="전체이력"        key="HIST_ALL"  icon="sap-icon://list"/>
+                        <tnt:NavigationListItem id="navHistPass" text="합격이력"        key="HIST_PASS" icon="sap-icon://accept"/>
+                        <tnt:NavigationListItem id="navHistHold" text="불합격/보류 이력" key="HIST_HOLD" icon="sap-icon://pause"/>
+                    </tnt:NavigationListItem>
+                </tnt:NavigationList>
+            </tnt:SideNavigation>
+        </tnt:sideContent>
+
+        <!-- ══ 메인 컨텐츠 ══ -->
+        <tnt:mainContents>
+            <m:NavContainer id="mainNav" defaultTransitionName="show">
+
+                <!-- ════ PAGE 1: 품질판정 ════ -->
+                <m:Page id="pageJudge" showHeader="false" enableScrolling="false">
+                        <m:VBox height="100%" renderType="Bare">
+
+                            <!-- KPI 스트립 -->
+                            <m:HBox id="kpiStrip" class="zKpiStrip" renderType="Bare" alignItems="Stretch">
+                                <m:VBox class="zKpiCell" alignItems="Center" justifyContent="Center">
+                                    <m:Text id="kpiTotalNum" text="0" class="zKpiNum"/>
+                                    <m:Text text="전체" class="zKpiLbl"/>
+                                </m:VBox>
+                                <m:VBox class="zKpiCell" alignItems="Center" justifyContent="Center">
+                                    <m:Text id="kpiPendNum" text="0" class="zKpiNum pend"/>
+                                    <m:Text text="판정대기" class="zKpiLbl"/>
+                                </m:VBox>
+                                <m:VBox class="zKpiCell" alignItems="Center" justifyContent="Center">
+                                    <m:Text id="kpiPassNum" text="0" class="zKpiNum pass"/>
+                                    <m:Text text="합격" class="zKpiLbl"/>
+                                </m:VBox>
+                                <m:VBox class="zKpiCell" alignItems="Center" justifyContent="Center">
+                                    <m:Text id="kpiHoldNum" text="0" class="zKpiNum hold"/>
+                                    <m:Text text="부분합격" class="zKpiLbl"/>
+                                </m:VBox>
+                                <m:VBox class="zKpiCell" alignItems="Center" justifyContent="Center">
+                                    <m:Text id="kpiFailNum" text="0" class="zKpiNum fail"/>
+                                    <m:Text text="불합격/보류" class="zKpiLbl"/>
+                                </m:VBox>
+                                <m:VBox class="zKpiCell" alignItems="Center" justifyContent="Center">
+                                    <m:Text id="kpiRateNum" text="-%" class="zKpiNum pass"/>
+                                    <m:Text text="합격률" class="zKpiLbl"/>
+                                </m:VBox>
+                            </m:HBox>
+
+                            <!-- 필터 바 -->
+                            <m:HBox id="filterBar" class="zFilterRow" renderType="Bare" alignItems="Center">
+                                <m:Text text="로트번호" class="zFilterLbl"/>
+                                <m:Input id="fLot" width="140px" placeholder="로트번호"
+                                    showValueHelp="true" valueHelpRequest="onLotValueHelp"
+                                    submit="onLoadList"/>
+                                <m:Text text="자재" class="zFilterLbl"/>
+                                <m:Input id="fMatnr" width="160px" placeholder="자재번호 / 자재명"
+                                    showValueHelp="true" valueHelpRequest="onMatnrValueHelp"
+                                    submit="onLoadList"/>
+                                <m:Text text="입고일자" class="zFilterLbl"/>
+                                <m:DatePicker id="fDateFrom" width="130px"
+                                    displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd"
+                                    placeholder="2026-01-01" change="onFilterChange"/>
+                                <m:Text text="~" class="zFilterLbl"/>
+                                <m:DatePicker id="fDateTo" width="130px"
+                                    displayFormat="yyyy-MM-dd" valueFormat="yyyy-MM-dd"
+                                    placeholder="2026-12-31" change="onFilterChange"/>
+                                <m:Button text="초기화" type="Transparent" icon="sap-icon://clear-filter" press="onResetFilter"/>
+                                <m:ToolbarSpacer/>
+                                <m:Button id="btnSearch" text="조회" type="Emphasized"
+                                    icon="sap-icon://search" press="onLoadList"/>
+                            </m:HBox>
+
+                            <!-- 분할 레이아웃 -->
+                            <m:HBox id="splitRow" class="zSplitRow" renderType="Bare">
+
+                                <!-- ── 워크리스트 ── -->
+                                <m:VBox id="wlCol" class="zWlCol" renderType="Bare">
+                                    <m:HBox class="zWlHeader" renderType="Bare" alignItems="Center">
+                                        <m:Text class="zWlTitle" text="검사로트 목록"/>
+                                        <m:Text id="wlCountBadge" class="zWlCount" text="0건"/>
+                                    </m:HBox>
+                                    <m:ScrollContainer id="wlScroll" class="zWlScroll"
+                                        vertical="true" horizontal="false" height="100%">
+                                        <m:List id="wlList"
+                                            noDataText="조회 결과가 없습니다."
+                                            mode="SingleSelectMaster"
+                                            itemPress="onLotItemPress"
+                                            selectionChange="onLotSelectionChange"
+                                            growing="true" growingThreshold="50">
+                                        </m:List>
+                                    </m:ScrollContainer>
+                                </m:VBox>
+
+                                <!-- ── 상세 컬럼 ── -->
+                                <m:VBox id="detailCol" class="zDetailCol" renderType="Bare">
+
+                                    <!-- 초기 빈 상태 -->
+                                    <m:VBox id="detailEmpty" class="zEmpty"
+                                        alignItems="Center" justifyContent="Center">
+                                        <core:Icon src="sap-icon://quality-issue" size="4rem" color="#cccccc"/>
+                                        <m:Title text="로트를 선택하세요" level="H5" titleStyle="H5" class="zEmptyTitle"/>
+                                        <m:Text text="좌측 목록에서 검사로트를 클릭하면 상세 내용이 표시됩니다." class="zEmptyText"/>
+                                    </m:VBox>
+
+                                    <!-- 상세 내용 -->
+                                    <m:VBox id="detailContent" class="zTabContent" renderType="Bare" visible="false">
+
+                                        <!-- Object Header -->
+                                        <m:VBox id="objHdr" class="zObjHdr" renderType="Bare">
+                                            <m:HBox class="zObjHdrTop" renderType="Bare" alignItems="Start">
+                                                <m:VBox class="zObjHdrLeft" renderType="Bare">
+                                                    <m:Text id="objPrueflos" class="zObjPrueflos" text=""/>
+                                                    <m:Text id="objName"     class="zObjName"     text=""/>
+                                                    <m:Text id="objVendor"   class="zObjVendor"   text=""/>
+                                                </m:VBox>
+                                                <m:VBox class="zObjHdrRight" renderType="Bare" alignItems="End">
+                                                    <m:Text id="objQtyNum" class="zObjQtyNum" text=""/>
+                                                    <m:Text id="objQtyLbl" class="zObjQtyLbl" text=""/>
+                                                    <m:ObjectStatus id="objStsStatus" text="" state="None" inverted="true"/>
+                                                </m:VBox>
+                                            </m:HBox>
+                                            <m:HBox class="zObjAttrs" renderType="Bare">
+                                                <m:VBox class="zObjAttr" renderType="Bare">
+                                                    <m:Label text="입고문서" class="zObjAttrLbl"/>
+                                                    <m:Text id="objMblnr" class="zObjAttrVal" text=""/>
+                                                </m:VBox>
+                                                <m:VBox class="zObjAttr" renderType="Bare">
+                                                    <m:Label text="발주번호" class="zObjAttrLbl"/>
+                                                    <m:Text id="objEbeln" class="zObjAttrVal" text=""/>
+                                                </m:VBox>
+                                                <m:VBox class="zObjAttr" renderType="Bare">
+                                                    <m:Label text="배치번호" class="zObjAttrLbl"/>
+                                                    <m:Text id="objCharg" class="zObjAttrVal" text=""/>
+                                                </m:VBox>
+                                                <m:VBox class="zObjAttr" renderType="Bare">
+                                                    <m:Label text="GR일자" class="zObjAttrLbl"/>
+                                                    <m:Text id="objGrDate" class="zObjAttrVal" text=""/>
+                                                </m:VBox>
+                                                <m:VBox class="zObjAttr" renderType="Bare">
+                                                    <m:Label text="플랜트" class="zObjAttrLbl"/>
+                                                    <m:Text id="objWerks" class="zObjAttrVal" text=""/>
+                                                </m:VBox>
+                                                <m:VBox class="zObjAttr" renderType="Bare">
+                                                    <m:Label text="QI창고" class="zObjAttrLbl"/>
+                                                    <m:Text id="objLgort" class="zObjAttrVal" text=""/>
+                                                </m:VBox>
+                                            </m:HBox>
+                                        </m:VBox>
+
+                                        <!-- 읽기전용 알림 -->
+                                        <m:MessageStrip id="objMsgStrip" text="" type="Information"
+                                            showIcon="true" visible="false"
+                                            class="sapUiSmallMarginBeginEnd sapUiTinyMarginTopBottom"/>
+
+                                        <!-- ══ 탭 바 ══ -->
+                                        <m:IconTabBar
+                                            id="detailTabs"
+                                            class="zDetailTabs"
+                                            selectedKey="results"
+                                            stretchContentHeight="true"
+                                            applyContentPadding="false"
+                                            expandable="false"
+                                            select="onDetailTabSelect">
+
+                                            <m:items>
+
+                                                <!-- ═══ TAB 1: 검사결과 ═══ -->
+                                                <m:IconTabFilter id="tabResults" key="results"
+                                                    icon="sap-icon://inspect" text="검사결과">
+                                                    <m:content>
+                                                        <m:VBox renderType="Bare" class="zTabContent">
+                                                            <!-- 상단: 입력 진행률 + 저장/초기화 -->
+                                                            <m:HBox id="inspSummaryBar" class="zInspSummaryBar"
+                                                                renderType="Bare" alignItems="Center">
+                                                                <m:Label text="입력 진행률" class="zInspProgLbl"/>
+                                                                <m:ProgressIndicator id="inspProgBar" class="zInspProgBar"
+                                                                    percentValue="0" displayValue="0/0" showValue="true"
+                                                                    state="None" width="220px" height="14px"/>
+                                                                <m:ToolbarSpacer/>
+                                                                <m:Button text="로컬 저장" icon="sap-icon://save"
+                                                                    type="Default" enabled="{ui>/editable}"
+                                                                    press="onSaveLocalResults"/>
+                                                                <m:Button text="초기화" icon="sap-icon://clear-all"
+                                                                    type="Transparent" enabled="{ui>/editable}"
+                                                                    press="onClearLocalResults"/>
+                                                            </m:HBox>
+                                                            <!-- 검사항목 (항목 | 기준 | 입력 | 판정) -->
+                                                            <m:ScrollContainer vertical="true" horizontal="false" height="100%">
+                                                                <m:VBox id="inspectionContainer" class="zInspContainer" renderType="Bare"/>
+                                                            </m:ScrollContainer>
+                                                            <!-- 하단 요약 푸터 -->
+                                                            <m:HBox id="inspFooter" class="zInspFooter" renderType="Bare" alignItems="Stretch">
+                                                                <m:VBox class="zInspFootCell" alignItems="Center" justifyContent="Center">
+                                                                    <m:Text id="footPassNum" text="0" class="zInspFootNum pass"/>
+                                                                    <m:Text text="합격" class="zInspFootLbl"/>
+                                                                </m:VBox>
+                                                                <m:VBox class="zInspFootCell" alignItems="Center" justifyContent="Center">
+                                                                    <m:Text id="footFailNum" text="0" class="zInspFootNum fail"/>
+                                                                    <m:Text text="불합격" class="zInspFootLbl"/>
+                                                                </m:VBox>
+                                                                <m:VBox class="zInspFootCell" alignItems="Center" justifyContent="Center">
+                                                                    <m:Text id="footWarnNum" text="0" class="zInspFootNum warn"/>
+                                                                    <m:Text text="주의" class="zInspFootLbl"/>
+                                                                </m:VBox>
+                                                                <m:VBox class="zInspFootCell" alignItems="Center" justifyContent="Center">
+                                                                    <m:Text id="footPendNum" text="0" class="zInspFootNum pend"/>
+                                                                    <m:Text text="미입력" class="zInspFootLbl"/>
+                                                                </m:VBox>
+                                                            </m:HBox>
+                                                        </m:VBox>
+                                                    </m:content>
+                                                </m:IconTabFilter>
+
+                                                <!-- ═══ TAB 2: 판정코드 ═══ -->
+                                                <m:IconTabFilter id="tabUd" key="ud"
+                                                    icon="sap-icon://decision" text="판정코드">
+                                                    <m:content>
+                                                        <m:ScrollContainer vertical="true" horizontal="false" height="100%">
+                                                            <m:VBox class="zTabInner" renderType="Bare">
+                                                                <m:Title text="사용결정 코드 선택" level="H6" titleStyle="H6"
+                                                                    class="sapUiSmallMarginBottom"/>
+                                                                <m:RadioButtonGroup id="udRbGroup"
+                                                                    columns="1" selectedIndex="-1"
+                                                                    enabled="{ui>/editable}"
+                                                                    select="onUdRbSelect">
+                                                                    <m:RadioButton id="udRbA" text="A  합격 — 전량 SL40 → SL10"/>
+                                                                    <m:RadioButton id="udRbP" text="P  부분합격 — 합격수량 직접 입력"/>
+                                                                    <m:RadioButton id="udRbR" text="R  불합격/보류 — 전량 SL40 → SL50"/>
+                                                                </m:RadioButtonGroup>
+                                                                <m:MessageStrip id="udNoSelMsg"
+                                                                    text="위에서 판정 코드를 선택하세요."
+                                                                    type="Information" showIcon="true"
+                                                                    class="sapUiSmallMarginTopBottom"/>
+                                                                <m:MessageStrip id="udSelMsg" text=""
+                                                                    type="Success" showIcon="true"
+                                                                    visible="false" class="sapUiSmallMarginTopBottom"/>
+                                                                <m:HBox renderType="Bare" justifyContent="End"
+                                                                    class="sapUiMediumMarginTop">
+                                                                    <m:Button id="btnUdNext"
+                                                                        text="다음 — 재고처분 입력"
+                                                                        type="Emphasized"
+                                                                        icon="sap-icon://arrow-right"
+                                                                        enabled="false"
+                                                                        press="onUdNext"/>
+                                                                </m:HBox>
+                                                            </m:VBox>
+                                                        </m:ScrollContainer>
+                                                    </m:content>
+                                                </m:IconTabFilter>
+
+                                                <!-- ═══ TAB 3: 재고처분 ═══ -->
+                                                <m:IconTabFilter id="tabQty" key="qty"
+                                                    icon="sap-icon://batch-payments" text="재고처분">
+                                                    <m:content>
+                                                        <m:ScrollContainer vertical="true" horizontal="false" height="100%">
+                                                            <m:VBox class="zTabInner" renderType="Bare">
+                                                                <m:VBox class="zDispCard" renderType="Bare">
+                                                                    <m:HBox renderType="Bare" alignItems="Center" class="zDispTitleRow">
+                                                                        <m:Title text="입고 수량 정보" level="H6" titleStyle="H6" class="zDispTitle"/>
+                                                                        <m:ToolbarSpacer/>
+                                                                        <m:ObjectStatus id="dispUdCode" text="판정코드 미선택" state="None" class="zDispUdCode"/>
+                                                                    </m:HBox>
+                                                                    <m:HBox class="zDispRow" renderType="Bare" alignItems="Center">
+                                                                        <m:Label text="검사 재고 수량" class="zDispLbl"/>
+                                                                        <m:Text id="qtyTotal" class="zDispVal" text=""/>
+                                                                        <m:Text id="qtyUnit" text="" class="sapUiSmallMarginBegin"/>
+                                                                    </m:HBox>
+                                                                </m:VBox>
+                                                                <m:VBox class="zDispCard" renderType="Bare">
+                                                                    <m:Title text="판정코드 기준 수량" level="H6" titleStyle="H6" class="zDispTitle"/>
+                                                                    <m:HBox renderType="Bare" alignItems="Center" justifyContent="SpaceBetween">
+                                                                        <m:VBox renderType="Bare">
+                                                                            <m:HBox class="zDispRow" renderType="Bare" alignItems="Center">
+                                                                                <m:Label text="합격수량 (PassQty)" class="zDispLbl"/>
+                                                                                <m:Input id="dispPassQty" width="120px" type="Number"
+                                                                                    placeholder="0" class="zPassQtyInput"
+                                                                                    enabled="{ui>/editable}"
+                                                                                    liveChange="onDispPassQtyChange"/>
+                                                                                <m:Text id="dispPassQtyUnit" text="" class="sapUiSmallMarginBegin zPassQtyText"/>
+                                                                            </m:HBox>
+                                                                            <m:HBox class="zDispRow" renderType="Bare" alignItems="Center">
+                                                                                <m:Label text="보류수량 (HoldQty)" class="zDispLbl"/>
+                                                                                <m:Input id="dispHoldQty" width="120px" type="Number"
+                                                                                    placeholder="0" class="zHoldQtyInput"
+                                                                                    enabled="{ui>/editable}"
+                                                                                    liveChange="onDispHoldQtyChange"/>
+                                                                                <m:Text id="dispHoldQtyUnit" text="" class="sapUiSmallMarginBegin zHoldQtyText"/>
+                                                                            </m:HBox>
+                                                                        </m:VBox>
+                                                                        <m:Text id="dispQtyValidMsg" text="" class="zHoldQtyText sapUiMediumMarginEnd"/>
+                                                                    </m:HBox>
+                                                                </m:VBox>
+                                                                <m:VBox class="zDispCard" renderType="Bare">
+                                                                    <m:Title text="이동문서 미리보기" level="H6" titleStyle="H6" class="zDispTitle"/>
+                                                                    <m:MessageStrip
+                                                                        text="판정코드를 선택하면 자재문서 이동 흐름이 표시됩니다."
+                                                                        type="Information" showIcon="true"
+                                                                        class="sapUiSmallMarginBottom"/>
+                                                                    <m:List id="movePreviewList" mode="None"
+                                                                        showSeparators="None"
+                                                                        noDataText="판정코드를 먼저 선택하세요."
+                                                                        items="{inspection>/movePreview}">
+                                                                        <m:CustomListItem type="Inactive">
+                                                                            <m:HBox alignItems="Center" renderType="Bare" class="zMoveItem">
+                                                                                <m:ObjectStatus
+                                                                                    text="{inspection>bwart}"
+                                                                                    state="{inspection>state}"
+                                                                                    inverted="true"/>
+                                                                                <m:Text text="{inspection>label}"
+                                                                                    class="sapUiSmallMarginBeginEnd zMoveLbl"/>
+                                                                                <m:ToolbarSpacer/>
+                                                                                <m:Text text="{inspection>qty}" class="zMoveQty"/>
+                                                                                <m:Text text="{inspection>unit}" class="sapUiSmallMarginBegin"/>
+                                                                            </m:HBox>
+                                                                        </m:CustomListItem>
+                                                                    </m:List>
+                                                                </m:VBox>
+                                                                <m:HBox renderType="Bare" justifyContent="End"
+                                                                    class="sapUiSmallMarginTop sapUiSmallMarginBottom">
+                                                                    <m:Button id="btnConfirmUD"
+                                                                        text="품질판정 확정 (재고이동 포함)"
+                                                                        type="Emphasized" icon="sap-icon://complete"
+                                                                        enabled="false" press="onConfirmUD"/>
+                                                                </m:HBox>
+                                                            </m:VBox>
+                                                        </m:ScrollContainer>
+                                                    </m:content>
+                                                </m:IconTabFilter>
+
+                                                <!-- ═══ TAB 4: 이동이력 ═══ -->
+                                                <m:IconTabFilter id="tabHist" key="hist"
+                                                    icon="sap-icon://activity-individual" text="이동이력">
+                                                    <m:content>
+                                                        <m:VBox renderType="Bare" class="zTabContent">
+                                                            <m:Toolbar height="2.5rem" style="Clear">
+                                                                <m:Text id="histCountTxt" text="이동 0건" class="sapMLabel"/>
+                                                                <m:ToolbarSpacer/>
+                                                                <m:Button id="btnLoadHist" text="이력 조회"
+                                                                    type="Default" icon="sap-icon://refresh"
+                                                                    press="onLoadHistTab"/>
+                                                            </m:Toolbar>
+                                                            <m:VBox id="histEmpty" class="zEmpty"
+                                                                alignItems="Center" justifyContent="Center">
+                                                                <core:Icon src="sap-icon://history" size="2.5rem" color="#cccccc"/>
+                                                                <m:Title text="재고처분 이력 없음" level="H6" titleStyle="H6" class="zEmptyTitle"/>
+                                                                <m:Text text="아직 재고이동 이력이 없습니다. ('이력 조회' 버튼으로 다시 조회할 수 있습니다.)" class="zEmptyText"/>
+                                                            </m:VBox>
+                                                            <m:ScrollContainer id="histScroll"
+                                                                vertical="true" horizontal="false"
+                                                                height="100%" visible="false">
+                                                                <m:VBox id="histFlow" class="zHistFlow zTabInner"/>
+                                                            </m:ScrollContainer>
+                                                        </m:VBox>
+                                                    </m:content>
+                                                </m:IconTabFilter>
+
+                                            </m:items>
+
+                                        </m:IconTabBar>
+
+                                    </m:VBox>
+                                    <!-- /detailContent -->
+
+                                </m:VBox>
+                                <!-- /detailCol -->
+
+                            </m:HBox>
+                            <!-- /splitRow -->
+
+                        </m:VBox>
+                </m:Page>
+                <!-- /pageJudge -->
+
+                <!-- ════ PAGE 2: 이력조회 ════ -->
+                <m:Page id="pageHistory" showHeader="true" title="이력조회"
+                    enableScrolling="false"
+                    showNavButton="true" navButtonPress="onNavBack">
+                        <m:HBox renderType="Bare" height="100%">
+                            <m:VBox class="zWlCol" renderType="Bare">
+                                <m:HBox class="zWlHeader" renderType="Bare" alignItems="Center">
+                                    <m:Text class="zWlTitle" text="로트 선택"/>
+                                </m:HBox>
+                                <m:ScrollContainer vertical="true" horizontal="false" height="100%">
+                                    <m:List id="histLotList" noDataText="로트가 없습니다."
+                                        mode="SingleSelectMaster"
+                                        selectionChange="onHistLotSelect"
+                                        itemPress="onHistLotSelect">
+                                    </m:List>
+                                </m:ScrollContainer>
+                            </m:VBox>
+                            <m:VBox renderType="Bare" class="zDetailCol">
+                                <!-- 초기: 로트 미선택 -->
+                                <m:VBox id="histDetailEmpty" class="zEmpty"
+                                    alignItems="Center" justifyContent="Center">
+                                    <core:Icon src="sap-icon://history" size="4rem" color="#cccccc"/>
+                                    <m:Title text="로트를 선택하세요" level="H5" titleStyle="H5" class="zEmptyTitle"/>
+                                    <m:Text text="좌측에서 로트를 선택하면 이동이력이 표시됩니다." class="zEmptyText"/>
+                                </m:VBox>
+                                <!-- 데이터 없음 -->
+                                <m:VBox id="histDetailNoData" class="zEmpty" visible="false"
+                                    alignItems="Center" justifyContent="Center">
+                                    <core:Icon src="sap-icon://document" size="4rem" color="#cccccc"/>
+                                    <m:Title text="이동이력 없음" level="H5" titleStyle="H5" class="zEmptyTitle"/>
+                                    <m:Text text="해당 로트의 재고 이동 기록이 없습니다. 판정 완료 후 이력이 생성됩니다." class="zEmptyText"/>
+                                </m:VBox>
+                                <!-- 이력 카드 목록 -->
+                                <m:ScrollContainer id="histDetailScroll"
+                                    vertical="true" horizontal="false"
+                                    height="100%" visible="false">
+                                    <m:VBox id="histDetailFlow" class="zHistFlow zTabInner"/>
+                                </m:ScrollContainer>
+                            </m:VBox>
+                        </m:HBox>
+                </m:Page>
+                <!-- /pageHistory -->
+
+            </m:NavContainer>
+        </tnt:mainContents>
+
+    </tnt:ToolPage>
+
+</mvc:View>
